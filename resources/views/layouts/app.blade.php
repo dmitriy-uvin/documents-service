@@ -21,8 +21,9 @@
         <?php
             $user = \Illuminate\Support\Facades\Auth::user();
         ?>
-        <header-component :auth-data="{{ json_encode($user) }}"></header-component>
-
+        @if(\Illuminate\Support\Facades\Request::route()->getName() !== 'login')
+            <header-component :auth-data="{{ json_encode($user) }}"></header-component>
+        @endif
         <main class="py-4">
             @yield('content')
         </main>

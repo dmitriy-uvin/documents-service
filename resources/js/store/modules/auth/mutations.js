@@ -9,5 +9,6 @@ export default {
     },
     [mutations.LOG_OUT]: state => {
         state.isLoggedIn = false;
+        state.user = null;
     }
 }

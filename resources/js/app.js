@@ -12,11 +12,11 @@ Vue.use(Buefy, {
 });
 Vue.use(Vuelidate);
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('dashboard-component', require('./components/dashboard/DashboardComponent.vue').default);
 Vue.component('header-component', require('./components/parts/Header.vue').default);
 
 // Auth Components
-Vue.component('login', require('./components/auth/Login.vue').default);
+Vue.component('login-component', require('./components/auth/Login.vue').default);
 
 
 const app = new Vue({

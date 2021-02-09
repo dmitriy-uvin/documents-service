@@ -1,13 +1,14 @@
 @extends('layouts.app')
 
-@section('title') Dashboard @endsection
+@section('title') Личный кабинет @endsection
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <example-component></example-component>
-        </div>
+    <div class="">
+        <?php
+        $user = \Illuminate\Support\Facades\Auth::user();
+        ?>
+        <dashboard-component :user="{{ json_encode($user) }}"></dashboard-component>
     </div>
 </div>
 @endsection

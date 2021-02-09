@@ -3,5 +3,5 @@
 @section('title') Авторизация @endsection
 
 @section('content')
-    <login></login>
+    <login-component></login-component>
 @endsection
