@@ -10,6 +10,7 @@
                 <section>
                     <b-table
                         :data="users"
+                        v-if="users.length"
                         :bordered="false"
                         :hoverable="true"
                         :mobile-cards="true"
@@ -88,11 +89,14 @@
                         <b-table-column v-slot="props" label="Действия">
                             <b-button type="is-warning" size="is-small"
                                       icon-right="lock" />
+
                             <b-button type="is-danger" size="is-small"
-                                      icon-right="trash" />
+                                      icon-right="trash" @click="onDeleteUser(props.row.id)"/>
+
                             <b-tooltip label="Просмотреть пользователя"
                                        type="is-dark"
                                        position="is-top">
+
                                 <b-button type="is-info" size="is-small"
                                           icon-right="eye" @click="goToUser(props.row.id)"
                                 />
@@ -103,7 +107,7 @@
                             <b-tag type="is-danger" v-if="props.row.is_blocked" class="cursor-pointer">
                                 <b-icon icon="times-circle" class="mr-1"></b-icon>Blocked
                             </b-tag>
-                            <b-tag type="is-success" else class="cursor-pointer">
+                            <b-tag type="is-success" v-else class="cursor-pointer">
                                 <b-icon icon="check-circle" class="mr-1"></b-icon>Active
                             </b-tag>
                         </b-table-column>
@@ -117,24 +121,67 @@
                 </section>
             </div>
         </div>
+        <DeleteUserModalConfirmation
+            :visible="modalVisible"
+            :id="userId"
+            @close="modalVisible = false"
+            @delete-user="deleteUser"
+        />
     </div>
 </template>
 
 <script>
+import DeleteUserModalConfirmation from "../modal/DeleteUserModalConfirmation";
+import EventBus from "../../events/eventBus";
+import userService from "../../services/user/userService";
 export default {
     name: "UsersList",
-    props: ['users'],
+    components: {
+        DeleteUserModalConfirmation
+    },
     data:() => ({
-
+        modalVisible: false,
+        userId: '',
+        users: ''
     }),
+    async mounted() {
+        await this.getUsers();
+        console.log(this.users);
+    },
     methods: {
+        async getUsers() {
+            this.users = await userService.getUsers();
+        },
         goToUser(id) {
             window.location.href = '/users/' + id;
         },
+        onDeleteUser(id) {
+            this.userId = id;
+            this.modalVisible = true;
+        },
+        async deleteUser(id) {
+            try {
+                await userService.deleteUser(id);
+                this.userId = '';
+                this.modalVisible = false;
+                EventBus.$emit('user-deleted');
+                await this.getUsers();
+            } catch (error) {
+                EventBus.$emit('error', error.message);
+            }
+        },
+        async blockUser() {
+            try {
+                await userService.blockUser(id);
+                this.userId = '';
+                this.modalVisible = false;
+                EventBus.$emit('user-blocked');
+                await this.getUsers();
+            } catch (error) {
+                EventBus.$emit('error', error.message);
+            }
+        }
     },
-    computed: {
-
-    }
 }
 </script>
 

@@ -1,6 +1,5 @@
 <template>
     <b-navbar class="container" v-if="isLoggedIn">
-
         <template #start>
             <b-navbar-item href="/documents" has-link :active="isActiveItem('/documents')">
                 <b-icon icon="file" class="mr-1"></b-icon>
@@ -10,8 +9,17 @@
                 <b-icon icon="users" class="mr-1"></b-icon>
                 Пользователи
             </b-navbar-item>
-            <b-navbar-item href="#">
+            <b-navbar-item href="/physical" has-link :active="isActiveItem('/physical')">
+                <b-icon icon="gavel" class="mr-1"></b-icon>
                 Физические лица
+            </b-navbar-item>
+            <b-navbar-item href="/tasks" has-link :active="isActiveItem('/tasks')">
+                <b-icon icon="tasks" class="mr-1"></b-icon>
+                Задания
+            </b-navbar-item>
+            <b-navbar-item href="/history" has-link :active="isActiveItem('/history')">
+                <b-icon icon="history" class="mr-1"></b-icon>
+                История
             </b-navbar-item>
             <b-navbar-item
                 href="/editor"

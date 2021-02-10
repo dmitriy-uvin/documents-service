@@ -22,17 +22,18 @@ Auth::routes();
 Route::group([
     'middleware' => 'auth'
 ], function () {
+
+
     Route::get('/documents', [\App\Http\Controllers\DocumentsController::class, 'index'])
         ->name('documents');
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])
         ->name('home');
 
-
-    Route::get('/users', [\App\Http\Controllers\UsersController::class, 'usersList'])->name('users');
-    Route::get('/users/{id}', [\App\Http\Controllers\UsersController::class, 'getUserById'])->name('users.id');
-
-
+    Route::get('/users', [\App\Http\Controllers\UsersController::class, 'usersList'])->name('users.view');
+    Route::get('/users/all', [\App\Http\Controllers\UsersController::class, 'getAllUsers'])->name('users.all');
+    Route::get('/users/{id}', [\App\Http\Controllers\UsersController::class, 'getUserById'])
+        ->name('users.id');
 
     Route::group([
         'middleware' => 'admin.or.developer'
@@ -42,8 +43,13 @@ Route::group([
 
         Route::post('/users/manager', [\App\Http\Controllers\UsersController::class, 'createManager'])
             ->name('users.add.manager');
-    });
 
+        Route::delete('/users/{id}', [\App\Http\Controllers\UsersController::class, 'deleteUser'])
+            ->name('users.delete');
+
+        Route::delete('/users/block/{id}', [\App\Http\Controllers\UsersController::class, 'blockUser'])
+            ->name('users.block');
+    });
 });
 
 

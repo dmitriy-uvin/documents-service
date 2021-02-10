@@ -4,5 +4,25 @@ export default {
         type: 'is-success',
         position: 'is-bottom',
         duration: 2500
+    },
+    'user-deleted': {
+        message: 'Пользователь успешно удален!',
+        type: 'is-success',
+        position: 'is-bottom',
+        duration: 2500
+    },
+    'user-blocked': {
+        message: 'Пользователь успешно заблокирован!',
+        type: 'is-warning',
+        position: 'is-bottom',
+        duration: 2500
+    },
+    error(message) {
+        return {
+            message,
+            type: 'is-danger',
+            position: 'is-top',
+            duration: 2500
+        }
     }
 }

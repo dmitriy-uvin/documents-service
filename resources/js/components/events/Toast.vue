@@ -1,5 +1,4 @@
 <template>
-    <span></span>
 </template>
 
 <script>
@@ -10,6 +9,12 @@ export default {
     created() {
         EventBus.$on('manager-added', function () {
             this.$buefy.toast.open(eventsList['manager-added'])
+        });
+        EventBus.$on('user-deleted', function () {
+            this.$buefy.toast.open(eventsList['user-deleted'])
+        });
+        EventBus.$on('error', function (message) {
+            this.$buefy.toast.open(eventsList.error(message));
         });
     }
 }

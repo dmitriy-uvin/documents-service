@@ -7,6 +7,18 @@
                         Авторизация
                     </div>
                     <div class="card-body">
+                        <div class="errors mb-3" v-if="Object.keys(errors).length">
+                            <div v-for="errorType in errors">
+                                <b-message
+                                    type="is-danger"
+                                    v-for="(errorMessage, index) in errorType"
+                                    :key="index"
+                                    size="is-small"
+                                >
+                                    {{ errorMessage }}
+                                </b-message>
+                            </div>
+                        </div>
                         <form @submit.prevent="login">
                             <div class="form-group row">
                                 <label for="email" class="col-md-4 col-form-label text-md-right">E-mail</label>
@@ -94,7 +106,8 @@ export default {
             email: '',
             password: '',
             remember: false
-        }
+        },
+        errors: []
     }),
     methods: {
         ...mapActions('auth', {
@@ -108,7 +121,7 @@ export default {
                     this.$v.$reset();
                     window.location.href = '/';
                 } catch (error) {
-                    console.log(error);
+                    this.errors = error.errors;
                 }
             }
         }

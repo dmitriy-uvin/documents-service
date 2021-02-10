@@ -18,6 +18,8 @@
 </head>
 <body>
     <div id="app">
+        <modal></modal>
+        <toast-notifications></toast-notifications>
         <?php
             $user = \Illuminate\Support\Facades\Auth::user();
         ?>
@@ -26,7 +28,7 @@
         @endif
         <main class="py-4">
             @yield('content')
-            <toast-notifications></toast-notifications>
+
         </main>
     </div>
 </body>

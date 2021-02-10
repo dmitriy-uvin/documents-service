@@ -31,6 +31,8 @@ Vue.component('documents-page', require('./components/documents/DocumentsPage.vu
 // Events
 Vue.component('toast-notifications', require('./components/events/Toast.vue').default);
 
+// Modal
+Vue.component('modal', require('./components/modal/Modal.vue').default);
 
 const app = new Vue({
     el: '#app',

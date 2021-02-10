@@ -5,7 +5,7 @@
 @section('content')
     <div class="container">
         <div class="">
-            <users-list :users="{{ json_encode($users) }}"></users-list>
+            <users-list></users-list>
         </div>
     </div>
 @endsection

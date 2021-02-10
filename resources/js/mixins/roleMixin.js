@@ -7,7 +7,7 @@ export default {
             authUser: getterTypes.GET_USER_DATA
         }),
         developerOrAdministrator() {
-            return this.authUser.role[0].alias === ('developer' || 'administrator');
+            return this.authUser.role[0].alias === 'developer' || this.authUser.role[0].alias === 'administrator';
         },
         canAddNewDocumentType() {
             return this.authUser.role[0].alias === 'developer';

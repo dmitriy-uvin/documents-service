@@ -145,7 +145,7 @@ export default {
                     EventBus.$emit('manager-added');
                 } catch (error) {
                     this.newUser.loading = false;
-                    console.log(error);
+                    EventBus.$emit('error', error.message);
                 }
             }
         },
