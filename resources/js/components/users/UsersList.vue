@@ -87,8 +87,12 @@
                             </span>
                         </b-table-column>
                         <b-table-column v-slot="props" label="Действия">
-                            <b-button type="is-warning" size="is-small"
-                                      icon-right="lock" />
+                            <b-button
+                                type="is-warning"
+                                size="is-small"
+                                icon-right="lock"
+                                @click="changeUserBlockStatus(props.row.id, props.row.is_blocked)"
+                            />
 
                             <b-button type="is-danger" size="is-small"
                                       icon-right="trash" @click="onDeleteUser(props.row.id)"/>
@@ -167,17 +171,22 @@ export default {
                 EventBus.$emit('user-deleted');
                 await this.getUsers();
             } catch (error) {
+                this.userId = '';
+                this.modalVisible = false;
                 EventBus.$emit('error', error.message);
             }
         },
-        async blockUser() {
+        async changeUserBlockStatus(id, status) {
             try {
-                await userService.blockUser(id);
+                await userService.changeUserBlockStatus(id);
                 this.userId = '';
                 this.modalVisible = false;
-                EventBus.$emit('user-blocked');
+                if (status) EventBus.$emit('user-unblocked');
+                else EventBus.$emit('user-blocked');
                 await this.getUsers();
             } catch (error) {
+                this.userId = '';
+                this.modalVisible = false;
                 EventBus.$emit('error', error.message);
             }
         }

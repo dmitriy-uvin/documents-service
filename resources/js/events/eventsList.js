@@ -17,6 +17,12 @@ export default {
         position: 'is-bottom',
         duration: 2500
     },
+    'user-unblocked': {
+        message: 'Пользователь успешно разблокирован!',
+        type: 'is-warning',
+        position: 'is-bottom',
+        duration: 2500
+    },
     error(message) {
         return {
             message,

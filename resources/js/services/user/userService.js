@@ -7,7 +7,7 @@ export default {
     async deleteUser(userId) {
         return await axiosService.delete('/users/' + userId);
     },
-    async blockUser(userId) {
+    async changeUserBlockStatus(userId) {
         return await axiosService.put('/users/block/' + userId);
     },
     async getUsers() {

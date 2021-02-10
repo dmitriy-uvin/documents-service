@@ -84,32 +84,35 @@ class UsersController extends Controller
     public function deleteUser(string $id)
     {
         $user = User::find($id);
-        $user->is_blocked = true;
-        $user->save();
 
-//        if (!$user) {
-//            throw new UserNotFoundException();
-//        }
-//
-//        if ((int)$id === (int)Auth::id()) {
-//            throw new DeleteYourselfException();
-//        }
-//
-//        if ($user->getRole()->alias === Auth::user()->getRole()->alias) {
-//            throw new DeleteUserWithSameRoleException();
-//        }
-//
-//        if ($user->getRole()->alias === Roles::DEVELOPER_ALIAS && Auth::user()->getRole()->alias === Roles::ADMINISTRATOR_ALIAS) {
-//            throw new DeleteDeveloperException();
-//        }
-//
-//        $user->delete();
+        if (!$user) {
+            throw new UserNotFoundException();
+        }
 
-//        return redirect()->route('users');
+        if ((int)$id === (int)Auth::id()) {
+            throw new DeleteYourselfException();
+        }
+
+        if ($user->getRole()->alias === Auth::user()->getRole()->alias) {
+            throw new DeleteUserWithSameRoleException();
+        }
+
+        if ($user->getRole()->alias === Roles::DEVELOPER_ALIAS && Auth::user()->getRole()->alias === Roles::ADMINISTRATOR_ALIAS) {
+            throw new DeleteDeveloperException();
+        }
+
+        $user->delete();
     }
 
-    public function blockUser(string $id)
+    public function changeUserBlockStatus(string $id)
     {
+        $user = User::find($id);
 
+        if (!$user) {
+            throw new UserNotFoundException();
+        }
+
+        $user->is_blocked = !$user->is_blocked;
+        $user->save();
     }
 }

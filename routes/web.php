@@ -47,7 +47,7 @@ Route::group([
         Route::delete('/users/{id}', [\App\Http\Controllers\UsersController::class, 'deleteUser'])
             ->name('users.delete');
 
-        Route::delete('/users/block/{id}', [\App\Http\Controllers\UsersController::class, 'blockUser'])
+        Route::put('/users/block/{id}', [\App\Http\Controllers\UsersController::class, 'changeUserBlockStatus'])
             ->name('users.block');
     });
 });

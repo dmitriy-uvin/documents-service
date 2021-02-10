@@ -91,6 +91,7 @@ import { validationMixin } from 'vuelidate';
 import { required, minLength, email } from 'vuelidate/lib/validators';
 import * as actions from '../../store/modules/auth/types/actions';
 import { mapActions } from 'vuex';
+import EventBus from '../../events/eventBus';
 
 export default {
     name: "Login",
@@ -121,7 +122,11 @@ export default {
                     this.$v.$reset();
                     window.location.href = '/';
                 } catch (error) {
-                    this.errors = error.errors;
+                    if (!error.errors) {
+                        EventBus.$emit('error', error.message);
+                    } else {
+                        this.errors = error.errors;
+                    }
                 }
             }
         }

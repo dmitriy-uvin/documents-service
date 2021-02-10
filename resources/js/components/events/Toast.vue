@@ -13,6 +13,12 @@ export default {
         EventBus.$on('user-deleted', function () {
             this.$buefy.toast.open(eventsList['user-deleted'])
         });
+        EventBus.$on('user-blocked', function () {
+            this.$buefy.toast.open(eventsList['user-blocked'])
+        });
+        EventBus.$on('user-unblocked', function () {
+            this.$buefy.toast.open(eventsList['user-unblocked'])
+        });
         EventBus.$on('error', function (message) {
             this.$buefy.toast.open(eventsList.error(message));
         });

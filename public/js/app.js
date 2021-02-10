@@ -1858,10 +1858,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vuelidate__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuelidate */ "./node_modules/vuelidate/lib/index.js");
-/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modules/vuelidate/lib/validators/index.js");
+/* harmony import */ var vuelidate__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuelidate */ "./node_modules/vuelidate/lib/index.js");
+/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modules/vuelidate/lib/validators/index.js");
 /* harmony import */ var _store_modules_auth_types_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../store/modules/auth/types/actions */ "./resources/js/store/modules/auth/types/actions.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _events_eventBus__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../events/eventBus */ "./resources/js/events/eventBus.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -1966,18 +1967,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Login",
-  mixins: [vuelidate__WEBPACK_IMPORTED_MODULE_2__.validationMixin],
+  mixins: [vuelidate__WEBPACK_IMPORTED_MODULE_3__.validationMixin],
   validations: {
     loginData: {
       email: {
-        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_3__.required,
-        email: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_3__.email
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_4__.required,
+        email: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_4__.email
       },
       password: {
-        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_3__.required,
-        minLength: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_3__.minLength)(8)
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_4__.required,
+        minLength: (0,vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_4__.minLength)(8)
       }
     }
   },
@@ -1991,7 +1993,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       errors: []
     };
   },
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapActions)('auth', {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('auth', {
     loginAction: _store_modules_auth_types_actions__WEBPACK_IMPORTED_MODULE_1__.LOGIN
   })), {}, {
     login: function login() {
@@ -2023,7 +2025,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               case 9:
                 _context.prev = 9;
                 _context.t0 = _context["catch"](2);
-                _this.errors = _context.t0.errors;
+
+                if (!_context.t0.errors) {
+                  _events_eventBus__WEBPACK_IMPORTED_MODULE_2__.default.$emit('error', _context.t0.message);
+                } else {
+                  _this.errors = _context.t0.errors;
+                }
 
               case 12:
               case "end":
@@ -2513,6 +2520,12 @@ __webpack_require__.r(__webpack_exports__);
     _events_eventBus__WEBPACK_IMPORTED_MODULE_0__.default.$on('user-deleted', function () {
       this.$buefy.toast.open(_events_eventsList__WEBPACK_IMPORTED_MODULE_1__.default["user-deleted"]);
     });
+    _events_eventBus__WEBPACK_IMPORTED_MODULE_0__.default.$on('user-blocked', function () {
+      this.$buefy.toast.open(_events_eventsList__WEBPACK_IMPORTED_MODULE_1__.default["user-blocked"]);
+    });
+    _events_eventBus__WEBPACK_IMPORTED_MODULE_0__.default.$on('user-unblocked', function () {
+      this.$buefy.toast.open(_events_eventsList__WEBPACK_IMPORTED_MODULE_1__.default["user-unblocked"]);
+    });
     _events_eventBus__WEBPACK_IMPORTED_MODULE_0__.default.$on('error', function (message) {
       this.$buefy.toast.open(_events_eventsList__WEBPACK_IMPORTED_MODULE_1__.default.error(message));
     });
@@ -2989,6 +3002,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -3076,15 +3093,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _this3.getUsers();
 
               case 8:
-                _context3.next = 13;
+                _context3.next = 15;
                 break;
 
               case 10:
                 _context3.prev = 10;
                 _context3.t0 = _context3["catch"](0);
+                _this3.userId = '';
+                _this3.modalVisible = false;
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_2__.default.$emit('error', _context3.t0.message);
 
-              case 13:
+              case 15:
               case "end":
                 return _context3.stop();
             }
@@ -3092,7 +3111,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee3, null, [[0, 10]]);
       }))();
     },
-    blockUser: function blockUser() {
+    changeUserBlockStatus: function changeUserBlockStatus(id, status) {
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
@@ -3102,25 +3121,27 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context4.prev = 0;
                 _context4.next = 3;
-                return _services_user_userService__WEBPACK_IMPORTED_MODULE_3__.default.blockUser(id);
+                return _services_user_userService__WEBPACK_IMPORTED_MODULE_3__.default.changeUserBlockStatus(id);
 
               case 3:
                 _this4.userId = '';
                 _this4.modalVisible = false;
-                _events_eventBus__WEBPACK_IMPORTED_MODULE_2__.default.$emit('user-blocked');
+                if (status) _events_eventBus__WEBPACK_IMPORTED_MODULE_2__.default.$emit('user-unblocked');else _events_eventBus__WEBPACK_IMPORTED_MODULE_2__.default.$emit('user-blocked');
                 _context4.next = 8;
                 return _this4.getUsers();
 
               case 8:
-                _context4.next = 13;
+                _context4.next = 15;
                 break;
 
               case 10:
                 _context4.prev = 10;
                 _context4.t0 = _context4["catch"](0);
+                _this4.userId = '';
+                _this4.modalVisible = false;
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_2__.default.$emit('error', _context4.t0.message);
 
-              case 13:
+              case 15:
               case "end":
                 return _context4.stop();
             }
@@ -3249,6 +3270,12 @@ __webpack_require__.r(__webpack_exports__);
   },
   'user-blocked': {
     message: 'Пользователь успешно заблокирован!',
+    type: 'is-warning',
+    position: 'is-bottom',
+    duration: 2500
+  },
+  'user-unblocked': {
+    message: 'Пользователь успешно разблокирован!',
     type: 'is-warning',
     position: 'is-bottom',
     duration: 2500
@@ -3468,7 +3495,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee2);
     }))();
   },
-  blockUser: function blockUser(userId) {
+  changeUserBlockStatus: function changeUserBlockStatus(userId) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
         while (1) {
@@ -59877,6 +59904,14 @@ var render = function() {
                                       type: "is-warning",
                                       size: "is-small",
                                       "icon-right": "lock"
+                                    },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.changeUserBlockStatus(
+                                          props.row.id,
+                                          props.row.is_blocked
+                                        )
+                                      }
                                     }
                                   }),
                                   _vm._v(" "),
@@ -59924,7 +59959,7 @@ var render = function() {
                           ],
                           null,
                           false,
-                          3792721571
+                          3730622982
                         )
                       }),
                       _vm._v(" "),
