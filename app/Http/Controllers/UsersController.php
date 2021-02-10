@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Constants\Roles;
+use App\Exceptions\User\BlockDeveloperException;
+use App\Exceptions\User\BlockUserWithSameRoleException;
+use App\Exceptions\User\BlockYourselfException;
 use App\Exceptions\User\DeleteDeveloperException;
 use App\Exceptions\User\DeleteUserWithSameRoleException;
 use App\Exceptions\User\DeleteYourselfException;
@@ -85,21 +88,7 @@ class UsersController extends Controller
     {
         $user = User::find($id);
 
-        if (!$user) {
-            throw new UserNotFoundException();
-        }
-
-        if ((int)$id === (int)Auth::id()) {
-            throw new DeleteYourselfException();
-        }
-
-        if ($user->getRole()->alias === Auth::user()->getRole()->alias) {
-            throw new DeleteUserWithSameRoleException();
-        }
-
-        if ($user->getRole()->alias === Roles::DEVELOPER_ALIAS && Auth::user()->getRole()->alias === Roles::ADMINISTRATOR_ALIAS) {
-            throw new DeleteDeveloperException();
-        }
+        $this->isAvailableToBlockOrDeleteUser($user, $id, 'delete');
 
         $user->delete();
     }
@@ -108,11 +97,43 @@ class UsersController extends Controller
     {
         $user = User::find($id);
 
+        $this->isAvailableToBlockOrDeleteUser($user, $id, 'block');
+
+        $user->is_blocked = !$user->is_blocked;
+        $user->save();
+    }
+
+    public function isAvailableToBlockOrDeleteUser($user, $id, string $action)
+    {
         if (!$user) {
             throw new UserNotFoundException();
         }
 
-        $user->is_blocked = !$user->is_blocked;
-        $user->save();
+        if ((int)$id === (int)Auth::id()) {
+            if ($action === 'delete') {
+                throw new DeleteYourselfException();
+            }
+            if ($action === 'block') {
+                throw new BlockYourselfException();
+            }
+        }
+
+        if ($user->getRole()->alias === Auth::user()->getRole()->alias) {
+            if ($action === 'delete') {
+                throw new DeleteUserWithSameRoleException();
+            }
+            if ($action === 'block') {
+                throw new BlockUserWithSameRoleException();
+            }
+        }
+
+        if ($user->getRole()->alias === Roles::DEVELOPER_ALIAS && Auth::user()->getRole()->alias === Roles::ADMINISTRATOR_ALIAS) {
+            if ($action === 'delete') {
+                throw new DeleteDeveloperException();
+            }
+            if ($action === 'block') {
+                throw new BlockDeveloperException();
+            }
+        }
     }
 }
