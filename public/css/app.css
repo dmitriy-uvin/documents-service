@@ -10944,4 +10944,16 @@ a.text-dark:focus {
   }
 }
 
+.toast {
+  flex-basis: unset !important;
+}
+
+.cursor-default {
+  cursor: default;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
 
