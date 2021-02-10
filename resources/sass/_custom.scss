@@ -1,0 +1,11 @@
+.toast {
+    flex-basis: unset !important;
+}
+.cursor {
+    &-default {
+        cursor: default;
+    }
+    &-pointer {
+        cursor: pointer;
+    }
+}

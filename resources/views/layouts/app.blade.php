@@ -26,6 +26,7 @@
         @endif
         <main class="py-4">
             @yield('content')
+            <toast-notifications></toast-notifications>
         </main>
     </div>
 </body>
