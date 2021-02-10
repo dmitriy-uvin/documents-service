@@ -1,49 +1,48 @@
 <template>
     <b-navbar class="container" v-if="isLoggedIn">
-        <template #brand>
-            <b-navbar-item tag="router-link" :to="{ path: '/' }">
-                <img
-                    src="https://raw.githubusercontent.com/buefy/buefy/dev/static/img/buefy-logo.png"
-                    alt="Lightweight UI components for Vue.js based on Bulma"
-                >
-            </b-navbar-item>
-        </template>
+
         <template #start>
-            <b-navbar-item href="#">
+            <b-navbar-item href="/documents" has-link :active="isActiveItem('/documents')">
+                <b-icon icon="file" class="mr-1"></b-icon>
                 Загрузка документов
             </b-navbar-item>
-            <b-navbar-item href="#">
+            <b-navbar-item href="/users" has-link :active="isActiveItem('/users')">
+                <b-icon icon="users" class="mr-1"></b-icon>
                 Пользователи
             </b-navbar-item>
             <b-navbar-item href="#">
                 Физические лица
             </b-navbar-item>
+            <b-navbar-item
+                href="/editor"
+                v-if="developerOrAdministrator"
+                :active="isActiveItem('/editor')"
+            >
+                <b-icon icon="wrench" class="mr-1"></b-icon>
+                Редактор
+            </b-navbar-item>
         </template>
 
         <template #end>
             <b-dropdown
-                v-model="navigationOpen"
                 position="is-bottom-left"
+                append-to-body
+                aria-role="menu"
             >
                 <template #trigger>
                     <a
                         class="navbar-item"
                         role="button"
                     >
-                        <span>{{ authData.name }}</span>
+                        <span>{{ authData.first_name }}</span>
                         <b-icon icon="chevron-down"></b-icon>
                     </a>
                 </template>
                 <b-dropdown-item has-link>
-                    <a href="https://google.com" target="_blank">
-                        <b-icon icon="link"></b-icon>
-                        Google (link)
+                    <a href="/home">
+                        <b-icon icon="user"></b-icon>
+                        Профиль
                     </a>
-                </b-dropdown-item>
-                <hr class="dropdown-divider">
-                <b-dropdown-item>
-                    <b-icon icon="user"></b-icon>
-                    Профиль
                 </b-dropdown-item>
                 <b-dropdown-item @click="logout">
                     <b-icon icon="times"></b-icon>
@@ -59,11 +58,12 @@ import * as getterTypes from '../../store/modules/auth/types/getters';
 import { mapGetters, mapActions } from 'vuex';
 import * as authMutations from '../../store/modules/auth/types/mutations';
 import * as actionTypes from '../../store/modules/auth/types/actions';
+import roleMixin from "../../mixins/roleMixin";
 export default {
     name: "Header",
     data: () => ({
-        navigationOpen: false
     }),
+    mixins: [roleMixin],
     props: ['authData'],
     beforeMount() {
         this.saveUserData();
@@ -83,12 +83,15 @@ export default {
             } catch (error) {
                 console.log(error);
             }
+        },
+        isActiveItem(pathName) {
+            return pathName === window.location.pathname;
         }
     },
     computed: {
         ...mapGetters('auth', {
             isLoggedIn: getterTypes.IS_LOGGED_IN
-        })
+        }),
     }
 }
 </script>

@@ -18,6 +18,19 @@ Vue.component('header-component', require('./components/parts/Header.vue').defau
 // Auth Components
 Vue.component('login-component', require('./components/auth/Login.vue').default);
 
+// Users
+Vue.component('users-list', require('./components/users/UsersList.vue').default);
+Vue.component('user-page', require('./components/users/UserPage.vue').default);
+
+// Editor
+Vue.component('editor-component', require('./components/editor/EditorComponent.vue').default);
+
+// Documents
+Vue.component('documents-page', require('./components/documents/DocumentsPage.vue').default);
+
+// Events
+Vue.component('toast-notifications', require('./components/events/Toast.vue').default);
+
 
 const app = new Vue({
     el: '#app',
