@@ -1,115 +1,117 @@
 <template>
-    <div class="card">
-        <div class="card-header d-block">
-            <h2 class="title is-4 text-center py-3">
-                Редактор
-            </h2>
-        </div>
-        <div class="card-content">
-            <div class="content">
-                <b-tabs v-model="activeTab">
-                    <b-tab-item label="Пользователи">
-                        <h2>Создать руководителя</h2>
-                        <div class="row">
-                            <div class="col-md-3 mt-3">
-                                <b-field label="Имя"
-                                         :type="firstNameErrors.length ? 'is-danger' : ''"
-                                         :message="!firstNameErrors.length ? '' : firstNameErrors[0]"
-                                >
-                                    <b-input v-model="newUser.first_name"></b-input>
-                                </b-field>
-                            </div>
-                            <div class="col-md-3 mt-3">
-                                <b-field label="Фамилия"
-                                         :type="secondNameErrors.length ? 'is-danger' : ''"
-                                         :message="!secondNameErrors.length ? '' : secondNameErrors[0]"
-                                >
-                                    <b-input v-model="newUser.second_name"></b-input>
-                                </b-field>
-                            </div>
-                            <div class="col-md-3 mt-3">
-                                <b-field label="Отчество"
-                                         :type="patronymicErrors.length ? 'is-danger' : ''"
-                                         :message="!patronymicErrors.length ? '' : patronymicErrors[0]"
-                                >
-                                    <b-input v-model="newUser.patronymic"></b-input>
-                                </b-field>
-                            </div>
-                            <div class="col-md-3 mt-3">
-                                <b-field label="Отдел"
-                                         :type="departmentErrors.length ? 'is-danger' : ''"
-                                         :message="!departmentErrors.length ? '' : departmentErrors[0]"
-                                >
-                                    <b-input v-model="newUser.department"></b-input>
-                                </b-field>
-                            </div>
-                            <div class="col-md-3 mt-3">
-                                <b-field label="E-mail"
+    <DefaultLayout>
+        <template v-slot:title>
+            Редактор
+        </template>
+        <template v-slot:content>
+            <b-tabs v-model="activeTab">
+                <b-tab-item label="Пользователи">
+                    <h2>Создать пользователя</h2>
+                    <div class="row">
+                        <div class="col-md-3 mt-3">
+                            <b-field label="Имя"
+                                     :type="firstNameErrors.length ? 'is-danger' : ''"
+                                     :message="!firstNameErrors.length ? '' : firstNameErrors[0]"
+                            >
+                                <b-input v-model="newUser.first_name"></b-input>
+                            </b-field>
+                        </div>
+                        <div class="col-md-3 mt-3">
+                            <b-field label="Фамилия"
+                                     :type="secondNameErrors.length ? 'is-danger' : ''"
+                                     :message="!secondNameErrors.length ? '' : secondNameErrors[0]"
+                            >
+                                <b-input v-model="newUser.second_name"></b-input>
+                            </b-field>
+                        </div>
+                        <div class="col-md-3 mt-3">
+                            <b-field label="Отчество"
+                                     :type="patronymicErrors.length ? 'is-danger' : ''"
+                                     :message="!patronymicErrors.length ? '' : patronymicErrors[0]"
+                            >
+                                <b-input v-model="newUser.patronymic"></b-input>
+                            </b-field>
+                        </div>
+                        <div class="col-md-3 mt-3">
+                            <b-field label="Отдел"
+                                     :type="departmentErrors.length ? 'is-danger' : ''"
+                                     :message="!departmentErrors.length ? '' : departmentErrors[0]"
+                            >
+                                <b-input v-model="newUser.department"></b-input>
+                            </b-field>
+                        </div>
+                        <div class="col-md-3 mt-3">
+                            <b-field label="E-mail"
                                      :type="emailErrors.length ? 'is-danger' : ''"
                                      :message="!emailErrors.length ? '' : emailErrors[0]"
-                                >
-                                    <b-input type="email" v-model="newUser.email"></b-input>
-                                </b-field>
-                            </div>
-                            <div class="col-md-3 mt-3">
-                                <b-field label="Пароль"
-                                    :type="passwordErrors.length ? 'is-danger' : ''"
-                                    :message="!passwordErrors.length ? '' : passwordErrors[0]"
-                                >
-                                    <b-input type="password" password-reveal
-                                             v-model="newUser.password"
-                                    >
-                                    </b-input>
-                                </b-field>
-                            </div>
-                            <div class="col-md-3 mt-3">
-                                <b-field
-                                    label="Роль">
-                                    <b-select
-                                        placeholder="Выберите роль"
-                                        expanded
-                                        v-model="newUser.role"
-                                        required
-                                    >
-                                        <option value="manager">Руководитель</option>
-                                        <option value="administrator">Администратор</option>
-                                        <option value="developer" v-if="isDeveloper">Разработчик</option>
-                                    </b-select>
-                                </b-field>
-                            </div>
+                            >
+                                <b-input type="email" v-model="newUser.email"></b-input>
+                            </b-field>
                         </div>
-                        <div class="buttons mt-3">
-                            <b-button
-                                type="is-primary"
-                                :loading="newUser.loading"
-                                @click="addManager"
-                            >Создать</b-button>
+                        <div class="col-md-3 mt-3">
+                            <b-field label="Пароль"
+                                     :type="passwordErrors.length ? 'is-danger' : ''"
+                                     :message="!passwordErrors.length ? '' : passwordErrors[0]"
+                            >
+                                <b-input type="password" password-reveal
+                                         v-model="newUser.password"
+                                >
+                                </b-input>
+                            </b-field>
                         </div>
-                    </b-tab-item>
+                        <div class="col-md-3 mt-3">
+                            <b-field
+                                label="Роль"
+                                :type="roleErrors.length ? 'is-danger' : ''"
+                                :message="!roleErrors.length ? '' : roleErrors[0]"
+                            >
+                                <b-select
+                                    placeholder="Выберите роль"
+                                    expanded
+                                    v-model="newUser.role"
+                                >
+                                    <option value="manager">Руководитель</option>
+                                    <option value="administrator">Администратор</option>
+                                    <option value="developer" v-if="isDeveloper">Разработчик</option>
+                                </b-select>
+                            </b-field>
+                        </div>
+                    </div>
+                    <div class="buttons mt-3">
+                        <b-button
+                            type="is-primary"
+                            :loading="newUser.loading"
+                            @click="addManager"
+                        >Создать</b-button>
+                    </div>
+                </b-tab-item>
 
-                    <b-tab-item label="Типы документов">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <b-field label="Название">
-                                    <b-input v-model="newDocument.name"></b-input>
-                                </b-field>
-                            </div>
-                            <div class="col-md-3">
-                                <b-field label="Alias">
-                                    <b-input v-model="newDocument.alias"></b-input>
-                                </b-field>
-                            </div>
-                            <div class="col-md-3">
-                                <b-field label="Тип">
-                                    <b-input v-model="newDocument.type"></b-input>
-                                </b-field>
-                            </div>
+                <b-tab-item label="Физические лица">
+                    <h2>Создать физическое лицо</h2>
+                </b-tab-item>
+
+                <b-tab-item label="Типы документов">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <b-field label="Название">
+                                <b-input v-model="newDocument.name"></b-input>
+                            </b-field>
                         </div>
-                    </b-tab-item>
-                </b-tabs>
-            </div>
-        </div>
-    </div>
+                        <div class="col-md-3">
+                            <b-field label="Alias">
+                                <b-input v-model="newDocument.alias"></b-input>
+                            </b-field>
+                        </div>
+                        <div class="col-md-3">
+                            <b-field label="Тип">
+                                <b-input v-model="newDocument.type"></b-input>
+                            </b-field>
+                        </div>
+                    </div>
+                </b-tab-item>
+            </b-tabs>
+        </template>
+    </DefaultLayout>
 </template>
 
 <script>
@@ -118,6 +120,7 @@ import userService from "../../services/user/userService";
 import { validationMixin } from 'vuelidate';
 import { required, minLength, email } from 'vuelidate/lib/validators';
 import roleMixin from "../../mixins/roleMixin";
+import DefaultLayout from "../layouts/DefaultLayout";
 export default {
     name: "EditorComponent",
     mixins: [validationMixin, roleMixin],
@@ -131,6 +134,9 @@ export default {
             department: { required },
             role: { required }
         }
+    },
+    components: {
+        DefaultLayout
     },
     data: () => ({
         activeTab: 0,
@@ -188,6 +194,15 @@ export default {
                 errors.push('Имя обязательное поле');
             return errors;
         },
+        roleErrors() {
+            const errors = [];
+            if (!this.$v.newUser['role'].$dirty) {
+                return errors;
+            }
+            !this.$v.newUser['role'].required &&
+            errors.push('Роль обязательное поле');
+            return errors;
+        },
         secondNameErrors() {
             const errors = [];
             if (!this.$v.newUser['second_name'].$dirty) {
@@ -212,7 +227,7 @@ export default {
                 return errors;
             }
             !this.$v.newUser['department'].required &&
-            errors.push('Отедл обязательное поле');
+            errors.push('Отдел обязательное поле');
             return errors;
         },
         emailErrors() {

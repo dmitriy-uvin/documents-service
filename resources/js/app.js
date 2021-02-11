@@ -20,6 +20,7 @@ Vue.component('login-component', require('./components/auth/Login.vue').default)
 
 // Users
 Vue.component('users-list', require('./components/users/UsersList.vue').default);
+Vue.component('individual-list', require('./components/individual/IndividualList.vue').default);
 Vue.component('user-page', require('./components/users/UserPage.vue').default);
 
 // Editor
@@ -33,6 +34,10 @@ Vue.component('toast-notifications', require('./components/events/Toast.vue').de
 
 // Modal
 Vue.component('modal', require('./components/modal/Modal.vue').default);
+
+//
+Vue.component('history', require('./components/history/HistoryComponent.vue').default);
+Vue.component('tasks', require('./components/tasks/TasksComponent.vue').default);
 
 const app = new Vue({
     el: '#app',

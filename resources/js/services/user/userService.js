@@ -13,5 +13,9 @@ export default {
     async getUsers() {
         const response = await axiosService.get('/users/all');
         return response?.data;
+    },
+    async getIndividualUsers() {
+        const response = await axiosService.get('/individuals/all');
+        return response?.data;
     }
 }

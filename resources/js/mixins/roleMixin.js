@@ -14,6 +14,9 @@ export default {
         },
         isDeveloper() {
             return this.authUser.role[0].alias === 'developer';
+        },
+        isWorker() {
+            return this.authUser.role[0].alias === 'worker';
         }
     }
 }

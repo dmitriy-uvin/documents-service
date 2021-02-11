@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('title') Пользователи @endsection
+@section('title') История @endsection
 
 @section('content')
     <div class="container">
-        <users-list></users-list>
+        <history></history>
     </div>
 @endsection

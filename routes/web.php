@@ -22,7 +22,13 @@ Auth::routes();
 Route::group([
     'middleware' => 'auth'
 ], function () {
+    Route::get('/history', [\App\Http\Controllers\HistoryController::class, 'index'])->name('history');
+    Route::get('/tasks', [\App\Http\Controllers\TasksController::class, 'index'])->name('tasks');
 
+    Route::get('/individuals', [\App\Http\Controllers\IndividualsController::class, 'individualsView'])
+        ->name('individuals.view');
+
+    Route::get('/individuals/all', [\App\Http\Controllers\IndividualsController::class, 'getIndividuals']);
 
     Route::get('/documents', [\App\Http\Controllers\DocumentsController::class, 'index'])
         ->name('documents');

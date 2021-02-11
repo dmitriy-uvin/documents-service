@@ -24,7 +24,7 @@ class UsersController extends Controller
     public function addUser(AddUserRequest $request)
     {
         if (!is_null(User::where('email', '=', $request->email)->get())) {
-
+            throw new UserWithEmailAlreadyExistsException();
         }
 
         $user = new User();
@@ -103,7 +103,7 @@ class UsersController extends Controller
         $user->save();
     }
 
-    public function isAvailableToBlockOrDeleteUser($user, $id, string $action)
+    protected function isAvailableToBlockOrDeleteUser($user, $id, string $action)
     {
         if (!$user) {
             throw new UserNotFoundException();

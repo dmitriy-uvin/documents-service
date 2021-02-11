@@ -9,7 +9,7 @@
                 <b-icon icon="users" class="mr-1"></b-icon>
                 Пользователи
             </b-navbar-item>
-            <b-navbar-item href="/physical" has-link :active="isActiveItem('/physical')">
+            <b-navbar-item href="/individuals" has-link :active="isActiveItem('/individuals')">
                 <b-icon icon="gavel" class="mr-1"></b-icon>
                 Физические лица
             </b-navbar-item>
