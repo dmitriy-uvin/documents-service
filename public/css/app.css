@@ -10956,4 +10956,14 @@ a.text-dark:focus {
   cursor: pointer;
 }
 
+.is-256x256 {
+  width: 256px;
+  height: 256px;
+}
+
+.image-256x256 {
+  max-width: 256px;
+  max-height: 256px;
+}
+
 

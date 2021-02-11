@@ -41,6 +41,9 @@ Route::group([
     Route::get('/users/{id}', [\App\Http\Controllers\UsersController::class, 'getUserById'])
         ->name('users.id');
 
+    Route::post('/documents/upload', [\App\Http\Controllers\DocumentsController::class, 'uploadDocuments'])
+        ->name('documents.upload');
+
     Route::group([
         'middleware' => 'admin.or.developer'
     ], function () {

@@ -31,5 +31,8 @@
 
         </main>
     </div>
+    <script>
+        window.csrfToken = <?php echo json_encode(csrf_token()); ?>
+    </script>
 </body>
 </html>
