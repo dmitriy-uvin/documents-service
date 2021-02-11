@@ -33,7 +33,7 @@
                             width="40"
                             v-slot="props"
                         >
-                            <b-tag type="is-warning" else>
+                            <b-tag else :class="'is-' + props.row.role[0].alias">
                                 {{ props.row.role[0].name }}
                             </b-tag>
                         </b-table-column>
@@ -194,8 +194,19 @@ export default {
 }
 </script>
 
-<style scoped>
-.blocked {
-
+<style scoped lang="scss">
+.is {
+    &-developer {
+        background-color: green;
+        color: #fff;
+    }
+    &-manager {
+        background-color: orange;
+        color: #fff;
+    }
+    &-administrator {
+        background-color: blue;
+        color: #fff;
+    }
 }
 </style>

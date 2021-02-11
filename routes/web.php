@@ -41,8 +41,8 @@ Route::group([
         Route::get('editor', [\App\Http\Controllers\EditorController::class, 'index'])
             ->name('editor');
 
-        Route::post('/users/manager', [\App\Http\Controllers\UsersController::class, 'createManager'])
-            ->name('users.add.manager');
+        Route::post('/users', [\App\Http\Controllers\UsersController::class, 'createUser'])
+            ->name('users.add');
 
         Route::delete('/users/{id}', [\App\Http\Controllers\UsersController::class, 'deleteUser'])
             ->name('users.delete');

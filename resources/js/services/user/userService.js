@@ -1,8 +1,8 @@
 import axiosService from "../axiosService";
 
 export default {
-    async addManager(userData) {
-        return await axiosService.post('/users/manager', userData);
+    async addUser(userData) {
+        return await axiosService.post('/users', userData);
     },
     async deleteUser(userId) {
         return await axiosService.delete('/users/' + userId);

@@ -12,7 +12,7 @@ use App\Exceptions\User\DeleteYourselfException;
 use App\Exceptions\User\UserNotFoundException;
 use App\Exceptions\User\UserWithEmailAlreadyExistsException;
 use App\Http\Requests\AddUserRequest;
-use App\Http\Requests\CreateManagerRequest;
+use App\Http\Requests\CreateUserRequest;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -63,7 +63,7 @@ class UsersController extends Controller
     }
 
 
-    public function createManager(CreateManagerRequest $request)
+    public function createUser(CreateUserRequest $request)
     {
         $user = User::where('email', '=', $request->email)->get()->first();
         if ($user) {
@@ -79,7 +79,7 @@ class UsersController extends Controller
         $user->unhashed_password = $request->password;
         $user->department = $request->department;
         $user->save();
-        $user->role()->attach(Role::where('alias', '=', Roles::MANAGER_ALIAS)->get()->first());
+        $user->role()->attach(Role::where('alias', '=', $request->role)->get()->first());
 
         return redirect()->route('editor');
     }

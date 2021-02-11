@@ -62,6 +62,21 @@
                                     </b-input>
                                 </b-field>
                             </div>
+                            <div class="col-md-3 mt-3">
+                                <b-field
+                                    label="Роль">
+                                    <b-select
+                                        placeholder="Выберите роль"
+                                        expanded
+                                        v-model="newUser.role"
+                                        required
+                                    >
+                                        <option value="manager">Руководитель</option>
+                                        <option value="administrator">Администратор</option>
+                                        <option value="developer" v-if="isDeveloper">Разработчик</option>
+                                    </b-select>
+                                </b-field>
+                            </div>
                         </div>
                         <div class="buttons mt-3">
                             <b-button
@@ -102,9 +117,10 @@ import EventBus from "../../events/eventBus";
 import userService from "../../services/user/userService";
 import { validationMixin } from 'vuelidate';
 import { required, minLength, email } from 'vuelidate/lib/validators';
+import roleMixin from "../../mixins/roleMixin";
 export default {
     name: "EditorComponent",
-    mixins: [validationMixin],
+    mixins: [validationMixin, roleMixin],
     validations: {
         newUser: {
             first_name: { required },
@@ -112,7 +128,8 @@ export default {
             patronymic: { required },
             email: { required, email },
             password: { required, minLength: minLength(8) },
-            department: { required }
+            department: { required },
+            role: { required }
         }
     },
     data: () => ({
@@ -124,6 +141,7 @@ export default {
             email: '',
             password: '',
             department: '',
+            role: '',
             loading: false
         },
         newDocument: {
@@ -138,7 +156,7 @@ export default {
             if (!this.$v.$invalid) {
                 try {
                     this.newUser.loading = true;
-                    await userService.addManager(this.newUser);
+                    await userService.addUser(this.newUser);
                     this.newUser.loading = false;
                     this.clearNewUser();
                     this.$v.$reset();

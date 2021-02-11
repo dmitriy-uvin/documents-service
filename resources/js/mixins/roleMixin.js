@@ -10,6 +10,9 @@ export default {
             return this.authUser.role[0].alias === 'developer' || this.authUser.role[0].alias === 'administrator';
         },
         canAddNewDocumentType() {
+            return this.isDeveloper;
+        },
+        isDeveloper() {
             return this.authUser.role[0].alias === 'developer';
         }
     }
