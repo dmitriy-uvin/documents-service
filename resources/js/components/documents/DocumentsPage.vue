@@ -5,38 +5,6 @@
         </template>
 
         <template v-slot:content>
-<!--            <b-field class="d-flex justify-content-center">-->
-<!--                <b-upload v-model="dropFiles"-->
-<!--                          multiple expanded-->
-<!--                          drag-drop class="d-flex"-->
-<!--                >-->
-<!--                    <section class="section">-->
-<!--                        <div class="content has-text-centered">-->
-<!--                            <p>-->
-<!--                                <b-icon-->
-<!--                                    icon="upload"-->
-<!--                                    size="is-large">-->
-<!--                                </b-icon>-->
-<!--                            </p>-->
-<!--                            <p>Выберите файлы для распознавания</p>-->
-<!--                        </div>-->
-<!--                    </section>-->
-<!--                </b-upload>-->
-<!--            </b-field>-->
-<!--            <div class="d-flex justify-content-center">-->
-<!--                <div class="tags d-flex">-->
-<!--                    <span v-for="(file, index) in dropFiles"-->
-<!--                          :key="index"-->
-<!--                          class="tag is-primary"-->
-<!--                    >-->
-<!--                        {{ file.name }}-->
-<!--                        <button class="delete is-small"-->
-<!--                                type="button"-->
-<!--                                @click="deleteDropFile(index)">-->
-<!--                        </button>-->
-<!--                    </span>-->
-<!--                </div>-->
-<!--            </div>-->
             <div class="multiple-upload">
                 <div class="dropzone"
                     :class="{ 'dropzone-active' : dropzoneActive }"
@@ -59,10 +27,22 @@
                         style="display: none;"
                         v-on:change="onChange"
                     >
-                <div class="previews d-flex justify-content-center" v-if="imagesPreviews.length">
-                    <figure class="image mt-0 mb-0" v-for="imagePreview in imagesPreviews">
-                        <img :src="imagePreview" class="image-256x256" alt="imagePreview" />
-                    </figure>
+                <div class="previews" v-if="imagesPreviews.length || filesPreviews.length">
+                    <div
+                        class="files-previews d-flex justify-content-center mb-3"
+                        v-if="filesPreviews.length"
+                    >
+                        <div class="file-preview mr-2" v-for="filePreview in filesPreviews">
+                            {{ filePreview }}
+                        </div>
+                    </div>
+                    <div class="images-previews d-flex justify-content-center">
+                        <figure v-if="imagesPreviews.length"
+                                class="image mt-0 mb-0"
+                                v-for="imagePreview in imagesPreviews">
+                            <img :src="imagePreview" class="image-256x256" alt="imagePreview" />
+                        </figure>
+                    </div>
                 </div>
             </div>
             <div class="buttons d-flex justify-content-center">
@@ -117,18 +97,17 @@ export default {
             '.tiff',
             '.gif',
             '.djvu'
-        ]
+        ],
+        filesPreviews: []
     }),
     components: {
         DefaultLayout,
     },
     methods: {
-        deleteDropFile(index) {
-            this.dropFiles.splice(index, 1);
-        },
         clearFiles() {
             this.dropFiles = [];
             this.imagesPreviews = [];
+            this.filesPreviews = [];
             this.dropzoneActive = false;
         },
         onChange(event) {
@@ -175,6 +154,8 @@ export default {
                     reader.onloadend = function() {
                         previews.push(reader.result);
                     }
+                } else {
+                    this.filesPreviews.push(file.name);
                 }
             });
             this.imagesPreviews = previews;
@@ -213,5 +194,11 @@ export default {
         font-size: 16px;
         line-height: 19px;
     }
+}
+.file-preview {
+    background: lightblue;
+    border: 1px solid blue;
+    padding: 10px;
+    border-radius: 40px;
 }
 </style>

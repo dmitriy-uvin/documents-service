@@ -2238,26 +2238,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -2269,19 +2249,18 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       uploadLoading: false,
       dropzoneActive: false,
       imagesPreviews: [],
-      availableTypes: ['image/jpeg', 'image/png', 'application/pdf', '.bmp', '.tiff', '.gif', '.djvu']
+      availableTypes: ['image/jpeg', 'image/png', 'application/pdf', '.bmp', '.tiff', '.gif', '.djvu'],
+      filesPreviews: []
     };
   },
   components: {
     DefaultLayout: _layouts_DefaultLayout__WEBPACK_IMPORTED_MODULE_1__.default
   },
   methods: {
-    deleteDropFile: function deleteDropFile(index) {
-      this.dropFiles.splice(index, 1);
-    },
     clearFiles: function clearFiles() {
       this.dropFiles = [];
       this.imagesPreviews = [];
+      this.filesPreviews = [];
       this.dropzoneActive = false;
     },
     onChange: function onChange(event) {
@@ -2338,6 +2317,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       this.makePreviews(event.dataTransfer.files);
     },
     makePreviews: function makePreviews(files) {
+      var _this2 = this;
+
       var previews = _toConsumableArray(this.imagesPreviews);
 
       _toConsumableArray(files).map(function (file) {
@@ -2349,6 +2330,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           reader.onloadend = function () {
             previews.push(reader.result);
           };
+        } else {
+          _this2.filesPreviews.push(file.name);
         }
       });
 
@@ -26076,7 +26059,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".dropzone[data-v-5359e1b5] {\n  border: 8px dashed #aaa;\n  box-sizing: border-box;\n  border-radius: 156px;\n  height: 264px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-direction: column;\n  cursor: pointer;\n  color: #aaa;\n  margin-bottom: 24px;\n  position: relative;\n  transition: all 0.5s ease;\n}\n.dropzone-active[data-v-5359e1b5] {\n  border: 8px dashed #000;\n  color: #000;\n}\n.dropzone-title[data-v-5359e1b5] {\n  font-weight: 500;\n  font-size: 36px;\n  line-height: 42px;\n  margin-bottom: 12px;\n}\n.dropzone-subtitle[data-v-5359e1b5] {\n  font-weight: 500;\n  font-size: 16px;\n  line-height: 19px;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".dropzone[data-v-5359e1b5] {\n  border: 8px dashed #aaa;\n  box-sizing: border-box;\n  border-radius: 156px;\n  height: 264px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-direction: column;\n  cursor: pointer;\n  color: #aaa;\n  margin-bottom: 24px;\n  position: relative;\n  transition: all 0.5s ease;\n}\n.dropzone-active[data-v-5359e1b5] {\n  border: 8px dashed #000;\n  color: #000;\n}\n.dropzone-title[data-v-5359e1b5] {\n  font-weight: 500;\n  font-size: 36px;\n  line-height: 42px;\n  margin-bottom: 12px;\n}\n.dropzone-subtitle[data-v-5359e1b5] {\n  font-weight: 500;\n  font-size: 16px;\n  line-height: 19px;\n}\n.file-preview[data-v-5359e1b5] {\n  background: lightblue;\n  border: 1px solid blue;\n  padding: 10px;\n  border-radius: 40px;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -59625,7 +59608,7 @@ var render = function() {
       {
         key: "title",
         fn: function() {
-          return [_vm._v("\n            Загрузка документов\n        ")]
+          return [_vm._v("\n        Загрузка документов\n    ")]
         },
         proxy: true
       },
@@ -59657,7 +59640,7 @@ var render = function() {
                 [
                   _c("div", { staticClass: "dropzone-title" }, [
                     _vm._v(
-                      "\n                        Выберите файлы для распознавания\n                    "
+                      "\n                    Выберите файлы для распознавания\n                "
                     )
                   ]),
                   _vm._v(" "),
@@ -59681,20 +59664,54 @@ var render = function() {
                 on: { change: _vm.onChange }
               }),
               _vm._v(" "),
-              _vm.imagesPreviews.length
-                ? _c(
-                    "div",
-                    { staticClass: "previews d-flex justify-content-center" },
-                    _vm._l(_vm.imagesPreviews, function(imagePreview) {
-                      return _c("figure", { staticClass: "image mt-0 mb-0" }, [
-                        _c("img", {
-                          staticClass: "image-256x256",
-                          attrs: { src: imagePreview, alt: "imagePreview" }
-                        })
-                      ])
-                    }),
-                    0
-                  )
+              _vm.imagesPreviews.length || _vm.filesPreviews.length
+                ? _c("div", { staticClass: "previews" }, [
+                    _vm.filesPreviews.length
+                      ? _c(
+                          "div",
+                          {
+                            staticClass:
+                              "files-previews d-flex justify-content-center mb-3"
+                          },
+                          _vm._l(_vm.filesPreviews, function(filePreview) {
+                            return _c(
+                              "div",
+                              { staticClass: "file-preview mr-2" },
+                              [
+                                _vm._v(
+                                  "\n                        " +
+                                    _vm._s(filePreview) +
+                                    "\n                    "
+                                )
+                              ]
+                            )
+                          }),
+                          0
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "images-previews d-flex justify-content-center"
+                      },
+                      _vm._l(_vm.imagesPreviews, function(imagePreview) {
+                        return _vm.imagesPreviews.length
+                          ? _c("figure", { staticClass: "image mt-0 mb-0" }, [
+                              _c("img", {
+                                staticClass: "image-256x256",
+                                attrs: {
+                                  src: imagePreview,
+                                  alt: "imagePreview"
+                                }
+                              })
+                            ])
+                          : _vm._e()
+                      }),
+                      0
+                    )
+                  ])
                 : _vm._e()
             ]),
             _vm._v(" "),
@@ -59734,7 +59751,7 @@ var render = function() {
                           },
                           [
                             _vm._v(
-                              "\n                            Загрузить\n                        "
+                              "\n                        Загрузить\n                    "
                             )
                           ]
                         )
@@ -59755,7 +59772,7 @@ var render = function() {
                               },
                               [
                                 _vm._v(
-                                  "\n                            Очистить\n                        "
+                                  "\n                        Очистить\n                    "
                                 )
                               ]
                             )
