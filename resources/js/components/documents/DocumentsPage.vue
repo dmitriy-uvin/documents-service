@@ -3,29 +3,33 @@
         <template v-slot:title>
             Загрузка документов
         </template>
-
         <template v-slot:content>
             <div class="multiple-upload">
-                <div class="dropzone"
+                <label class="dropzone"
                     :class="{ 'dropzone-active' : dropzoneActive }"
                     @drop.prevent="onDrop"
                     @dragover.prevent="onDropzoneHover"
                     @dragleave.prevent="onDropzoneLeave"
+                    for="file-uploader"
                 >
-                    <div class="dropzone-title">
+                    <span class="dropzone-title">
                         Выберите файлы для распознавания
-                    </div>
-                    <div class="dropzone-subtitle">или просто перетащите их сюда</div>
+                    </span>
+                    <span class="dropzone-subtitle">или просто перетащите их сюда</span>
+                </label>
+                <div class="text-center user-select-none">
+                    Форматы JPEG, PNG, BMP, TIFF, GIF, PDF, DJVU — весом&nbsp;до&nbsp;10&nbsp;МБ.<br>
+                    Поддерживаются многостраничные файлы и&nbsp;распознавание&nbsp;нескольких&nbsp;документов в одном файле.
                 </div>
                     <input
                         id="file-uploader"
-                        accept="image/jpeg, image/png, .bmp, .tiff, .gif, .djvu, .pdf"
+                        :accept="availableTypes"
                         multiple=""
                         type="file"
                         autocomplete="off"
                         tabindex="-1"
                         style="display: none;"
-                        v-on:change="onChange"
+                        @change="onChange"
                     >
                 <div class="previews" v-if="imagesPreviews.length || filesPreviews.length">
                     <div
@@ -91,14 +95,17 @@ export default {
         imagesPreviews: [],
         availableTypes: [
             'image/jpeg',
+            'image/jpg',
             'image/png',
             'application/pdf',
-            '.bmp',
-            '.tiff',
-            '.gif',
-            '.djvu'
+            'image/bmp',
+            'image/tiff',
+            'image/gif',
+            'image/vnd.djvu',
+            'image/djvu'
         ],
-        filesPreviews: []
+        filesPreviews: [],
+        filesNames: []
     }),
     components: {
         DefaultLayout,
@@ -112,25 +119,33 @@ export default {
         },
         onChange(event) {
             this.addFiles(event.target.files);
-            this.makePreviews(event.target.files);
         },
         addFiles(files) {
-            this.dropFiles.push(...files);
+            [...files].map(file => {
+                if (this.availableTypes.includes(file.type)) {
+                    if (!this.filesNames.includes(file.name)) {
+                        this.dropFiles.push(file);
+                    }
+                }
+            });
+            this.makePreviews();
         },
         async uploadDocuments() {
-            try {
-                this.uploadLoading = true;
-                const formData = new FormData();
-                this.dropFiles.map(file => {
-                    formData.append('documents[]', file);
-                });
-                console.log(this.dropFiles);
-                // await documentService.uploadDocuments(formData);
-                this.uploadLoading = false;
-            } catch (error) {
-                this.uploadLoading = false;
-                console.log(error);
-                EventBus.$emit('error', error.message);
+            if (this.dropFiles.length) {
+                try {
+                    this.uploadLoading = true;
+                    const formData = new FormData();
+                    this.dropFiles.map(file => {
+                        formData.append('documents[]', file);
+                    });
+                    console.log(this.dropFiles);
+                    // await documentService.uploadDocuments(formData);
+                    this.uploadLoading = false;
+                } catch (error) {
+                    this.uploadLoading = false;
+                    console.log(error);
+                    EventBus.$emit('error', error.message);
+                }
             }
         },
         onDropzoneHover() {
@@ -140,25 +155,25 @@ export default {
             this.dropzoneActive = false;
         },
         onDrop(event) {
-            this.addFiles(event.dataTransfer.files)
-            this.makePreviews(event.dataTransfer.files);
+            this.addFiles(event.dataTransfer.files);
         },
-        makePreviews(files) {
-            const previews = [
-                ...this.imagesPreviews
-            ];
-            [...files].map(file => {
+        makePreviews() {
+            const previews = [];
+            const filesPreviews = [];
+            this.dropFiles.map(file => {
                 const reader = new FileReader();
-                if (file.type === 'image/jpeg' || file.type === 'image/png') {
+                console.log(file);
+                if (file.type.includes('image/') && (!file.type.includes('tiff') && !file.type.includes('djvu'))) {
                     reader.readAsDataURL(file);
                     reader.onloadend = function() {
                         previews.push(reader.result);
                     }
                 } else {
-                    this.filesPreviews.push(file.name);
+                    filesPreviews.push(file.name);
                 }
             });
             this.imagesPreviews = previews;
+            this.filesPreviews = filesPreviews;
         }
     }
 }
@@ -179,6 +194,12 @@ export default {
     margin-bottom: 24px;
     position: relative;
     transition: all .5s ease;
+    user-select: none;
+    &:hover {
+        border: 8px dashed #000;
+        color: #000;
+        transition: all .5s ease;
+    }
     &-active {
         border: 8px dashed #000;
         color: #000;

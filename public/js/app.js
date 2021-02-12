@@ -2238,6 +2238,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -2249,8 +2253,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       uploadLoading: false,
       dropzoneActive: false,
       imagesPreviews: [],
-      availableTypes: ['image/jpeg', 'image/png', 'application/pdf', '.bmp', '.tiff', '.gif', '.djvu'],
-      filesPreviews: []
+      availableTypes: ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf', 'image/bmp', 'image/tiff', 'image/gif', 'image/vnd.djvu', 'image/djvu'],
+      filesPreviews: [],
+      filesNames: []
     };
   },
   components: {
@@ -2265,15 +2270,22 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     },
     onChange: function onChange(event) {
       this.addFiles(event.target.files);
-      this.makePreviews(event.target.files);
     },
     addFiles: function addFiles(files) {
-      var _this$dropFiles;
+      var _this = this;
 
-      (_this$dropFiles = this.dropFiles).push.apply(_this$dropFiles, _toConsumableArray(files));
+      _toConsumableArray(files).map(function (file) {
+        if (_this.availableTypes.includes(file.type)) {
+          if (!_this.filesNames.includes(file.name)) {
+            _this.dropFiles.push(file);
+          }
+        }
+      });
+
+      this.makePreviews();
     },
     uploadDocuments: function uploadDocuments() {
-      var _this = this;
+      var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
         var formData;
@@ -2281,21 +2293,23 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                try {
-                  _this.uploadLoading = true;
-                  formData = new FormData();
+                if (_this2.dropFiles.length) {
+                  try {
+                    _this2.uploadLoading = true;
+                    formData = new FormData();
 
-                  _this.dropFiles.map(function (file) {
-                    formData.append('documents[]', file);
-                  });
+                    _this2.dropFiles.map(function (file) {
+                      formData.append('documents[]', file);
+                    });
 
-                  console.log(_this.dropFiles); // await documentService.uploadDocuments(formData);
+                    console.log(_this2.dropFiles); // await documentService.uploadDocuments(formData);
 
-                  _this.uploadLoading = false;
-                } catch (error) {
-                  _this.uploadLoading = false;
-                  console.log(error);
-                  _events_eventBus__WEBPACK_IMPORTED_MODULE_3__.default.$emit('error', error.message);
+                    _this2.uploadLoading = false;
+                  } catch (error) {
+                    _this2.uploadLoading = false;
+                    console.log(error);
+                    _events_eventBus__WEBPACK_IMPORTED_MODULE_3__.default.$emit('error', error.message);
+                  }
                 }
 
               case 1:
@@ -2314,28 +2328,26 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     },
     onDrop: function onDrop(event) {
       this.addFiles(event.dataTransfer.files);
-      this.makePreviews(event.dataTransfer.files);
     },
-    makePreviews: function makePreviews(files) {
-      var _this2 = this;
-
-      var previews = _toConsumableArray(this.imagesPreviews);
-
-      _toConsumableArray(files).map(function (file) {
+    makePreviews: function makePreviews() {
+      var previews = [];
+      var filesPreviews = [];
+      this.dropFiles.map(function (file) {
         var reader = new FileReader();
+        console.log(file);
 
-        if (file.type === 'image/jpeg' || file.type === 'image/png') {
+        if (file.type.includes('image/') && !file.type.includes('tiff') && !file.type.includes('djvu')) {
           reader.readAsDataURL(file);
 
           reader.onloadend = function () {
             previews.push(reader.result);
           };
         } else {
-          _this2.filesPreviews.push(file.name);
+          filesPreviews.push(file.name);
         }
       });
-
       this.imagesPreviews = previews;
+      this.filesPreviews = filesPreviews;
     }
   }
 });
@@ -26059,7 +26071,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".dropzone[data-v-5359e1b5] {\n  border: 8px dashed #aaa;\n  box-sizing: border-box;\n  border-radius: 156px;\n  height: 264px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-direction: column;\n  cursor: pointer;\n  color: #aaa;\n  margin-bottom: 24px;\n  position: relative;\n  transition: all 0.5s ease;\n}\n.dropzone-active[data-v-5359e1b5] {\n  border: 8px dashed #000;\n  color: #000;\n}\n.dropzone-title[data-v-5359e1b5] {\n  font-weight: 500;\n  font-size: 36px;\n  line-height: 42px;\n  margin-bottom: 12px;\n}\n.dropzone-subtitle[data-v-5359e1b5] {\n  font-weight: 500;\n  font-size: 16px;\n  line-height: 19px;\n}\n.file-preview[data-v-5359e1b5] {\n  background: lightblue;\n  border: 1px solid blue;\n  padding: 10px;\n  border-radius: 40px;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".dropzone[data-v-5359e1b5] {\n  border: 8px dashed #aaa;\n  box-sizing: border-box;\n  border-radius: 156px;\n  height: 264px;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-direction: column;\n  cursor: pointer;\n  color: #aaa;\n  margin-bottom: 24px;\n  position: relative;\n  transition: all 0.5s ease;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n}\n.dropzone[data-v-5359e1b5]:hover {\n  border: 8px dashed #000;\n  color: #000;\n  transition: all 0.5s ease;\n}\n.dropzone-active[data-v-5359e1b5] {\n  border: 8px dashed #000;\n  color: #000;\n}\n.dropzone-title[data-v-5359e1b5] {\n  font-weight: 500;\n  font-size: 36px;\n  line-height: 42px;\n  margin-bottom: 12px;\n}\n.dropzone-subtitle[data-v-5359e1b5] {\n  font-weight: 500;\n  font-size: 16px;\n  line-height: 19px;\n}\n.file-preview[data-v-5359e1b5] {\n  background: lightblue;\n  border: 1px solid blue;\n  padding: 10px;\n  border-radius: 40px;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -59618,10 +59630,11 @@ var render = function() {
           return [
             _c("div", { staticClass: "multiple-upload" }, [
               _c(
-                "div",
+                "label",
                 {
                   staticClass: "dropzone",
                   class: { "dropzone-active": _vm.dropzoneActive },
+                  attrs: { for: "file-uploader" },
                   on: {
                     drop: function($event) {
                       $event.preventDefault()
@@ -59638,24 +59651,33 @@ var render = function() {
                   }
                 },
                 [
-                  _c("div", { staticClass: "dropzone-title" }, [
+                  _c("span", { staticClass: "dropzone-title" }, [
                     _vm._v(
                       "\n                    Выберите файлы для распознавания\n                "
                     )
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "dropzone-subtitle" }, [
+                  _c("span", { staticClass: "dropzone-subtitle" }, [
                     _vm._v("или просто перетащите их сюда")
                   ])
                 ]
               ),
               _vm._v(" "),
+              _c("div", { staticClass: "text-center user-select-none" }, [
+                _vm._v(
+                  "\n                Форматы JPEG, PNG, BMP, TIFF, GIF, PDF, DJVU — весом до 10 МБ."
+                ),
+                _c("br"),
+                _vm._v(
+                  "\n                Поддерживаются многостраничные файлы и распознавание нескольких документов в одном файле.\n            "
+                )
+              ]),
+              _vm._v(" "),
               _c("input", {
                 staticStyle: { display: "none" },
                 attrs: {
                   id: "file-uploader",
-                  accept:
-                    "image/jpeg, image/png, .bmp, .tiff, .gif, .djvu, .pdf",
+                  accept: _vm.availableTypes,
                   multiple: "",
                   type: "file",
                   autocomplete: "off",

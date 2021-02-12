@@ -18,24 +18,29 @@ class DocumentsController extends Controller
     public function uploadDocuments(Request $request)
     {
         $documents = $request->file('documents');
-        $names = $this->saveFiles($documents);
+        $types = [];
+        foreach ($documents as $document) {
+            $types[] = [
+                'mime_type' => $document->getMimeType(),
+                'client_mime_type' => $document->getClientMimeType()
+            ];
+        }
+//        $names = $this->saveFiles($documents);
+//
+//        $photo = fopen(storage_path('app/public/documents/'). $names[0], 'r');
+//
+//        $response = Http::attach(
+//            'image', $photo, 'photo.jpg'
+//        )->post('https://latest.dbrain.io/classify?token=DEMOTOKEN&async=true');
+//
+//        $task_id = $response->json('task_id');
+//
+//        $response2 = Http::get(
+//            "https://latest.dbrain.io/result/602656947fbcce9031b83a93?token=DEMOTOKEN"
+//        )->json();
 
-        $uploadedFile = new \Symfony\Component\HttpFoundation\File\UploadedFile(
-            storage_path('app/public/documents/') . $names[0],
-            '123.jpeg'
-        );
-
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'multipart/form-data'
-        ])->post('https://latest.dbrain.io/classify?token=DEMOTOKEN&async=true',
-        [
-            [
-                'image' => $request->file('documents')[0]
-            ]
-        ]);
-
-
+        return response()->json($types);
+        dd($response2);
     }
 
     private function saveFiles(array $files): array
