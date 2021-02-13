@@ -10966,4 +10966,8 @@ a.text-dark:focus {
   max-height: 256px;
 }
 
+nav.steps > ul.step-items > li.step-item > a.step-link:hover {
+  text-decoration: none;
+}
+
 
