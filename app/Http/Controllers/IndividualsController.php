@@ -26,21 +26,6 @@ class IndividualsController extends Controller
 
     public function save(Request $request)
     {
-        /*
-         * 1. Создать Individual $individual
-         * 2. Проверить на существование DocumentType - $documentType
-         * - Создать если не существует
-         * 3. Проверить на существования полей FieldTypes к данному DocumentType
-         * - Создать если нету
-         * 4. Создать Document - $document
-         * 5. Создать DocumentImage - $documentImage
-         * 6. Создать Fields - $fields
-         * 7. Document
-         *
-         * $taskKey
-         * $documentType
-         * $fields -> $fieldType -> $value
-         */
         $payloadData = $request->payloadData;
         foreach ($payloadData as $dbrainTaskKey => $value) {
             $individual = new Individual();

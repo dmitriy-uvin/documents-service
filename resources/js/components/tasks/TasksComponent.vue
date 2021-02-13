@@ -8,7 +8,7 @@
             <div class="row">
                 <div v-for="task in tasks" @key="task.id" class="col-md-4 mb-2">
                     <b-message>
-                        <b>#{{ task.id }}</b><br>{{ task.created_at }}<br>
+                        <b>#{{ task.id }}</b><br>{{ createdAt(task.created_at) }}<br>
                         <b>{{ authorName(task) }}</b>, <u>{{ task.author.role[0].name }}</u><br>
                         Cоздал задание на {{ taskName(task) }}<br>
                         <b>DBrain TaskId:</b><br>
@@ -25,6 +25,7 @@
 <script>
 import taskService from "../../services/task/taskService";
 import DefaultLayout from "../layouts/DefaultLayout";
+import moment from 'moment';
 export default {
     name: "TasksComponent",
     components: {
@@ -41,6 +42,9 @@ export default {
         console.log(this.tasks);
     },
     methods: {
+        createdAt(time) {
+            return moment(time).format('DD-MM-yyyy, HH:mm:ss');
+        },
         taskName(task) {
             return task.type === 'classify' ? 'классификацию' : 'распознавание';
         },
