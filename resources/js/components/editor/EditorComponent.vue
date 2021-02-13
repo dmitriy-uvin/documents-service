@@ -86,28 +86,10 @@
                     </div>
                 </b-tab-item>
 
-                <b-tab-item label="Физические лица">
-                    <h2>Создать физическое лицо</h2>
-                </b-tab-item>
-
                 <b-tab-item label="Типы документов">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <b-field label="Название">
-                                <b-input v-model="newDocument.name"></b-input>
-                            </b-field>
-                        </div>
-                        <div class="col-md-3">
-                            <b-field label="Alias">
-                                <b-input v-model="newDocument.alias"></b-input>
-                            </b-field>
-                        </div>
-                        <div class="col-md-3">
-                            <b-field label="Тип">
-                                <b-input v-model="newDocument.type"></b-input>
-                            </b-field>
-                        </div>
-                    </div>
+                    <b-message type="is-warning">
+                        В разработке!
+                    </b-message>
                 </b-tab-item>
             </b-tabs>
         </template>

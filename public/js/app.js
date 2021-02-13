@@ -2842,24 +2842,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -82646,85 +82628,18 @@ var render = function() {
                   )
                 ]),
                 _vm._v(" "),
-                _c("b-tab-item", { attrs: { label: "Физические лица" } }, [
-                  _c("h2", [_vm._v("Создать физическое лицо")])
-                ]),
-                _vm._v(" "),
-                _c("b-tab-item", { attrs: { label: "Типы документов" } }, [
-                  _c("div", { staticClass: "row" }, [
-                    _c(
-                      "div",
-                      { staticClass: "col-md-3" },
-                      [
-                        _c(
-                          "b-field",
-                          { attrs: { label: "Название" } },
-                          [
-                            _c("b-input", {
-                              model: {
-                                value: _vm.newDocument.name,
-                                callback: function($$v) {
-                                  _vm.$set(_vm.newDocument, "name", $$v)
-                                },
-                                expression: "newDocument.name"
-                              }
-                            })
-                          ],
-                          1
-                        )
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "col-md-3" },
-                      [
-                        _c(
-                          "b-field",
-                          { attrs: { label: "Alias" } },
-                          [
-                            _c("b-input", {
-                              model: {
-                                value: _vm.newDocument.alias,
-                                callback: function($$v) {
-                                  _vm.$set(_vm.newDocument, "alias", $$v)
-                                },
-                                expression: "newDocument.alias"
-                              }
-                            })
-                          ],
-                          1
-                        )
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "col-md-3" },
-                      [
-                        _c(
-                          "b-field",
-                          { attrs: { label: "Тип" } },
-                          [
-                            _c("b-input", {
-                              model: {
-                                value: _vm.newDocument.type,
-                                callback: function($$v) {
-                                  _vm.$set(_vm.newDocument, "type", $$v)
-                                },
-                                expression: "newDocument.type"
-                              }
-                            })
-                          ],
-                          1
-                        )
-                      ],
-                      1
-                    )
-                  ])
-                ])
+                _c(
+                  "b-tab-item",
+                  { attrs: { label: "Типы документов" } },
+                  [
+                    _c("b-message", { attrs: { type: "is-warning" } }, [
+                      _vm._v(
+                        "\n                    В разработке!\n                "
+                      )
+                    ])
+                  ],
+                  1
+                )
               ],
               1
             )

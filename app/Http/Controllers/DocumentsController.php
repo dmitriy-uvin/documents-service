@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\DocumentTypes;
 use App\Constants\TaskConstants;
 use App\Events\TestEvent;
+use App\Exceptions\Document\NotRecognizableDocumentTypeException;
 use App\Exceptions\Task\TaskNotFoundException;
 use App\Models\Task;
 use GuzzleHttp\Client;
@@ -86,6 +88,10 @@ class DocumentsController extends Controller
 
         if (!$task) {
             throw new TaskNotFoundException();
+        }
+
+        if (!in_array($task->document_type, array_keys(DocumentTypes::recognizableDocumentTypes()))) {
+            throw new NotRecognizableDocumentTypeException();
         }
 
         $document = fopen(storage_path('app/public/' . $task->document_path), 'r');

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Document;
 use App\Models\DocumentImage;
-use App\Models\DocumentType;
 use App\Models\Field;
 use App\Models\Individual;
 use App\Models\Task;
