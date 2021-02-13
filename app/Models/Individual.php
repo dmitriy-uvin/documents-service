@@ -11,14 +11,13 @@ class Individual extends Model
 
     protected $table = 'individuals';
 
-    protected $fillable = [
-        'name',
-        'surname',
-        'patronymic'
-    ];
-
     protected $casts = [
         'create_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    public function documents()
+    {
+        return $this->hasMany(Document::class);
+    }
 }

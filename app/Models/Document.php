@@ -8,4 +8,28 @@ use Illuminate\Database\Eloquent\Model;
 class Document extends Model
 {
     use HasFactory;
+
+    protected $table = 'documents';
+
+    protected $fillable = [
+        'individual_id',
+        'type'
+    ];
+
+    public function individual()
+    {
+        return $this->belongsTo(Individual::class);
+    }
+
+    public function fields()
+    {
+        return $this->hasMany(Field::class);
+    }
+
+    public function documentImage()
+    {
+        return $this->hasMany(
+            DocumentImage::class
+        );
+    }
 }
