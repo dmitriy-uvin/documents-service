@@ -23,26 +23,32 @@ Route::group([
     'middleware' => 'auth'
 ], function () {
     Route::get('/history', [\App\Http\Controllers\HistoryController::class, 'index'])->name('history');
+
     Route::get('/tasks', [\App\Http\Controllers\TasksController::class, 'index'])->name('tasks');
-
-    Route::get('/individuals', [\App\Http\Controllers\IndividualsController::class, 'individualsView'])
-        ->name('individuals.view');
-
-    Route::get('/individuals/all', [\App\Http\Controllers\IndividualsController::class, 'getIndividuals']);
-
-    Route::get('/documents', [\App\Http\Controllers\DocumentsController::class, 'index'])
-        ->name('documents');
+    Route::get('/tasks/all', [\App\Http\Controllers\TasksController::class, 'getAllTasks'])
+        ->name('tasks.all');
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])
         ->name('home');
-
     Route::get('/users', [\App\Http\Controllers\UsersController::class, 'usersList'])->name('users.view');
     Route::get('/users/all', [\App\Http\Controllers\UsersController::class, 'getAllUsers'])->name('users.all');
     Route::get('/users/{id}', [\App\Http\Controllers\UsersController::class, 'getUserById'])
         ->name('users.id');
 
+    Route::get('/documents', [\App\Http\Controllers\DocumentsController::class, 'index'])
+        ->name('documents');
     Route::post('/documents/upload', [\App\Http\Controllers\DocumentsController::class, 'uploadDocuments'])
         ->name('documents.upload');
+    Route::post('/documents/classify/tasks', [\App\Http\Controllers\DocumentsController::class, 'getClassifyTasks'])
+        ->name('documents.classify.tasks');
+    Route::post('/documents/recognize/task/{id}', [\App\Http\Controllers\DocumentsController::class, 'getRecognizeTask'])
+        ->name('documents.recognize.task.id');
+
+    Route::get('/individuals', [\App\Http\Controllers\IndividualsController::class, 'individualsView'])
+        ->name('individuals.view');
+    Route::get('/individuals/all', [\App\Http\Controllers\IndividualsController::class, 'getIndividuals']);
+    Route::post('/individuals/create', [\App\Http\Controllers\IndividualsController::class, 'save'])
+        ->name('individuals.create');
 
     Route::group([
         'middleware' => 'admin.or.developer'
@@ -52,10 +58,8 @@ Route::group([
 
         Route::post('/users', [\App\Http\Controllers\UsersController::class, 'createUser'])
             ->name('users.add');
-
         Route::delete('/users/{id}', [\App\Http\Controllers\UsersController::class, 'deleteUser'])
             ->name('users.delete');
-
         Route::put('/users/block/{id}', [\App\Http\Controllers\UsersController::class, 'changeUserBlockStatus'])
             ->name('users.block');
     });

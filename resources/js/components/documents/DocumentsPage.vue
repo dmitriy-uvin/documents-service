@@ -4,80 +4,30 @@
             Загрузка документов
         </template>
         <template v-slot:content>
-            <div class="multiple-upload">
-                <label class="dropzone"
-                    :class="{ 'dropzone-active' : dropzoneActive }"
-                    @drop.prevent="onDrop"
-                    @dragover.prevent="onDropzoneHover"
-                    @dragleave.prevent="onDropzoneLeave"
-                    for="file-uploader"
+            <b-steps
+                v-model="activeStep"
+                :has-navigation="false"
+            >
+                <b-step-item
+                    label="Загрузка документов"
+                    step="1"
+                    :clickable="false"
+                    class="mt-4"
                 >
-                    <span class="dropzone-title">
-                        Выберите файлы для распознавания
-                    </span>
-                    <span class="dropzone-subtitle">или просто перетащите их сюда</span>
-                </label>
-                <div class="text-center user-select-none">
-                    Форматы JPEG, PNG, BMP, TIFF, GIF, PDF, DJVU — весом&nbsp;до&nbsp;10&nbsp;МБ.<br>
-                    Поддерживаются многостраничные файлы и&nbsp;распознавание&nbsp;нескольких&nbsp;документов в одном файле.
-                </div>
-                    <input
-                        id="file-uploader"
-                        :accept="availableTypes"
-                        multiple=""
-                        type="file"
-                        autocomplete="off"
-                        tabindex="-1"
-                        style="display: none;"
-                        @change="onChange"
-                    >
-                <div class="previews" v-if="imagesPreviews.length || filesPreviews.length">
-                    <div
-                        class="files-previews d-flex justify-content-center mb-3"
-                        v-if="filesPreviews.length"
-                    >
-                        <div class="file-preview mr-2" v-for="filePreview in filesPreviews">
-                            {{ filePreview }}
-                        </div>
-                    </div>
-                    <div class="images-previews d-flex justify-content-center">
-                        <figure v-if="imagesPreviews.length"
-                                class="image mt-0 mb-0"
-                                v-for="imagePreview in imagesPreviews">
-                            <img :src="imagePreview" class="image-256x256" alt="imagePreview" />
-                        </figure>
-                    </div>
-                </div>
-            </div>
-            <div class="buttons d-flex justify-content-center">
-                <div
-                    class="mt-3 row"
-                    :class="{ 'col-md-6': dropFiles.length, 'col-md-3': !dropFiles.length }"
+                    <UploadDocuments @upload-documents="uploadDocuments" />
+                </b-step-item>
+                <b-step-item
+                    label="Обработка"
+                    step="2"
+                    :clickable="false"
+                    class="mt-4"
                 >
-                    <div
-                        class="col-md-6"
-                        :class="{ 'col-md-6': dropFiles.length, 'col-md-12': !dropFiles.length }"
-                    >
-                        <b-button
-                            type="is-primary"
-                            expanded
-                            @click="uploadDocuments"
-                            :loading="uploadLoading"
-                        >
-                            Загрузить
-                        </b-button>
-                    </div>
-                    <div class="col-md-6" v-if="dropFiles.length">
-                        <b-button
-                            type="is-danger"
-                            expanded
-                            @click="clearFiles"
-                        >
-                            Очистить
-                        </b-button>
-                    </div>
-                </div>
-            </div>
+                    <ClassificationComponent
+                        :details="classifiedDetails"
+                        @recognize="onRecognize"
+                    />
+                </b-step-item>
+            </b-steps>
         </template>
     </DefaultLayout>
 </template>
@@ -86,96 +36,48 @@
 import DefaultLayout from "../layouts/DefaultLayout";
 import documentService from "../../services/document/documentService";
 import EventBus from "../../events/eventBus";
+import UploadDocuments from "./UploadDocuments";
+import ClassificationComponent from "../classification/ClassificationComponent";
+import roleMixin from "../../mixins/roleMixin";
 export default {
     name: "DocumentsPage",
     data: () => ({
-        dropFiles: [],
+        activeStep: 0,
         uploadLoading: false,
-        dropzoneActive: false,
-        imagesPreviews: [],
-        availableTypes: [
-            'image/jpeg',
-            'image/jpg',
-            'image/png',
-            'application/pdf',
-            'image/bmp',
-            'image/tiff',
-            'image/gif',
-            'image/vnd.djvu',
-            'image/djvu'
-        ],
-        filesPreviews: [],
-        filesNames: []
+        classifiedDetails: []
     }),
+    mixins: [roleMixin],
     components: {
         DefaultLayout,
+        UploadDocuments,
+        ClassificationComponent
     },
     methods: {
-        clearFiles() {
-            this.dropFiles = [];
-            this.imagesPreviews = [];
-            this.filesPreviews = [];
-            this.dropzoneActive = false;
-        },
-        onChange(event) {
-            this.addFiles(event.target.files);
-        },
-        addFiles(files) {
-            [...files].map(file => {
-                if (this.availableTypes.includes(file.type)) {
-                    if (!this.filesNames.includes(file.name)) {
-                        this.dropFiles.push(file);
-                    }
-                }
-            });
-            this.makePreviews();
-        },
-        async uploadDocuments() {
-            if (this.dropFiles.length) {
-                try {
-                    this.uploadLoading = true;
-                    const formData = new FormData();
-                    this.dropFiles.map(file => {
-                        formData.append('documents[]', file);
-                    });
-                    console.log(this.dropFiles);
-                    // await documentService.uploadDocuments(formData);
-                    this.uploadLoading = false;
-                } catch (error) {
-                    this.uploadLoading = false;
-                    console.log(error);
-                    EventBus.$emit('error', error.message);
-                }
+        async uploadDocuments(files) {
+            try {
+                this.uploadLoading = true;
+                const formData = new FormData();
+                files.map(file => {
+                    formData.append('documents[]', file);
+                });
+                const response = await documentService.classifyDocuments(formData);
+                this.classifiedDetails = _.groupBy(response, 'task_id');
+                this.uploadLoading = false;
+                this.activeStep = 1;
+            } catch (error) {
+                this.uploadLoading = false;
+                EventBus.$emit('error', error.message);
             }
         },
-        onDropzoneHover() {
-            this.dropzoneActive = true;
-        },
-        onDropzoneLeave() {
-            this.dropzoneActive = false;
-        },
-        onDrop(event) {
-            this.addFiles(event.dataTransfer.files);
-        },
-        makePreviews() {
-            const previews = [];
-            const filesPreviews = [];
-            this.dropFiles.map(file => {
-                const reader = new FileReader();
-                console.log(file);
-                if (file.type.includes('image/') && (!file.type.includes('tiff') && !file.type.includes('djvu'))) {
-                    reader.readAsDataURL(file);
-                    reader.onloadend = function() {
-                        previews.push(reader.result);
-                    }
-                } else {
-                    filesPreviews.push(file.name);
-                }
-            });
-            this.imagesPreviews = previews;
-            this.filesPreviews = filesPreviews;
+        async onRecognize(taskId) {
+            try {
+                console.log(taskId);
+                await documentService.recognizeTask(taskId);
+            } catch (error) {
+                EventBus.$emit('error', error.message);
+            }
         }
-    }
+    },
 }
 </script>
 

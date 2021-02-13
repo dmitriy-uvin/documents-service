@@ -46,9 +46,12 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $user = User::where('email', '=', $request->email)->get()->first();
-        if ($user->is_blocked) {
-            throw new UserBlockedException();
+        if ($user) {
+            if ($user->is_blocked) {
+                throw new UserBlockedException();
+            }
         }
+
         return $this->parentLogin($request);
     }
 

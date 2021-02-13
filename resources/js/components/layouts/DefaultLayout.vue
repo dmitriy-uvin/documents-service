@@ -9,7 +9,7 @@
             </h2>
         </div>
         <div class="card-content">
-            <div class="content">
+            <div class="">
                 <slot name="content"></slot>
             </div>
         </div>
