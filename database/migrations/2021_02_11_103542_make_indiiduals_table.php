@@ -15,9 +15,6 @@ class MakeIndiidualsTable extends Migration
     {
         Schema::create('individuals', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
-            $table->string('surname');
-            $table->string('patronymic');
             $table->timestamps();
         });
     }
