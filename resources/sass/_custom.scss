@@ -42,3 +42,40 @@ nav.steps > ul.step-items > li.step-item > a.step-link:hover {
         background: #2ac178;
     }
 }
+
+.dropzone {
+    border: 8px dashed #aaa;
+    box-sizing: border-box;
+    border-radius: 156px;
+    height: 264px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    cursor: pointer;
+    color: #aaa;
+    margin-bottom: 24px;
+    position: relative;
+    transition: all .5s ease;
+    user-select: none;
+    &:hover {
+        border: 8px dashed #000;
+        color: #000;
+        transition: all .5s ease;
+    }
+    &-active {
+        border: 8px dashed #000;
+        color: #000;
+    }
+    &-title {
+        font-weight: 500;
+        font-size: 36px;
+        line-height: 42px;
+        margin-bottom: 12px;
+    }
+    &-subtitle {
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 19px;
+    }
+}

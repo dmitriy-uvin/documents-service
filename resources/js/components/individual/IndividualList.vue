@@ -5,7 +5,34 @@
         </template>
         <template v-slot:content>
             <b-loading :is-full-page="true" v-model="isLoading"></b-loading>
-            <section>
+            <section v-if="!isLoading">
+                <div class="search-block row">
+                    <div class="col-md-3">
+                        <b-field label="Поиск физ. лиц">
+
+                        </b-field>
+                        <input
+                            id="fullname"
+                            name="fullname"
+                            placeholder="Иванов Иван Иванович"
+                        />
+                    </div>
+                    <div class="col-md-3">
+                        <b-field label="СНИЛС">
+                            <b-input placeholder="626-029-036 22"></b-input>
+                        </b-field>
+                    </div>
+                    <div class="col-md-3">
+                        <b-field label="Паспорт гражданина РФ">
+                            <b-input placeholder="Номер паспорта"></b-input>
+                        </b-field>
+                    </div>
+                    <div class="col-md-3">
+                        <b-field label="ИНН">
+                            <b-input placeholder="1234567890"></b-input>
+                        </b-field>
+                    </div>
+                </div>
                 <b-table
                     v-if="users.length && !isWorker"
                     :data="users"
@@ -54,7 +81,7 @@
                         </div>
                     </template>
                 </b-table>
-                <b-message type="is-danger" v-else-if="isWorker">
+                <b-message type="is-danger" v-if="isWorker">
                     Вы не можете просмотреть список существующих физических лиц.
                     Вы можете использовать поиск, чтобы найти нужное Вам лицо!
                 </b-message>
@@ -63,6 +90,7 @@
                 </b-message>
             </section>
         </template>
+
     </DefaultLayout>
 </template>
 
@@ -72,6 +100,7 @@ import DefaultLayout from "../layouts/DefaultLayout";
 import datetimeMixin from "../../mixins/datetimeMixin";
 import individualsMixin from "../../mixins/individualsMixin";
 import individualService from "../../services/individual/individualService";
+
 export default {
     name: "PhysicalList",
     mixins: [roleMixin, datetimeMixin, individualsMixin],
@@ -85,10 +114,10 @@ export default {
     async mounted() {
         this.users = await individualService.getIndividualUsers();
         this.isLoading = false;
-        console.log(this.users);
     }
 }
 </script>
+
 
 <style scoped>
 

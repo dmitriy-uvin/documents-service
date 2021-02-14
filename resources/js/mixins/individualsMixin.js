@@ -106,6 +106,12 @@ export default {
         },
         getFieldNameByKey(key) {
             return fieldTypes.all[key] ? fieldTypes.all[key] : key;
+        },
+        cannotBeRecognized(key) {
+            return Object.keys(documentTypes.notRecognizable).includes(key);
+        },
+        canBeRecognized(key) {
+            return Object.keys(documentTypes.recognizable).includes(key);
         }
     }
 }

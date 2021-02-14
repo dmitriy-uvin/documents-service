@@ -38,7 +38,7 @@
                                     class="confidence-badge"
                                     :class="'confidence-' + getLevelOfConfidence(field.confidence)"
                                 >
-                                    {{ field.confidence }}
+                                    {{ field.confidence.toFixed(2) }}
                                 </span>
                             </div>
                         </div>

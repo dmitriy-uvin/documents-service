@@ -72,4 +72,20 @@ class IndividualsController extends Controller
             }
         }
     }
+
+    public function uploadDocuments(Request $request)
+    {
+        $individual = Individual::find($request->individual_id);
+        if (!$individual) {
+            throw new IndividualNotFoundException();
+        }
+
+        /*
+         * 1. Загружаем документы
+         * 2. Отправляем на классификацию
+         * 3. Отдаем классифицированные документы
+         * 4. Если документы уже существует у юзера, то либо оставляем старую, либо меняем старую на новую
+         * 5. Отправляем результат на распознавание и сохранаяем документ
+         */
+    }
 }

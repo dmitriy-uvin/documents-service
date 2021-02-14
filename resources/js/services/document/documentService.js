@@ -14,6 +14,11 @@ export default {
     },
     async saveIndividual(payload) {
         return await axiosService.post('/individuals/create', payload);
+    },
+    async replaceDocument(payload) {
+        return await axiosService.post('/documents/replace', payload);
+    },
+    async saveDocumentForIndividual(payload) {
+        return await axiosService.post('/documents/individuals/add', payload);
     }
-
 }

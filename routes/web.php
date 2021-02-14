@@ -43,6 +43,10 @@ Route::group([
         ->name('documents.classify.tasks');
     Route::post('/documents/recognize/task/{id}', [\App\Http\Controllers\DocumentsController::class, 'getRecognizeTask'])
         ->name('documents.recognize.task.id');
+    Route::post('/documents/replace', [\App\Http\Controllers\DocumentsController::class, 'replaceDocument'])
+        ->name('documents.replace');
+    Route::post('/documents/individuals/add', [\App\Http\Controllers\DocumentsController::class, 'addDocumentForIndividual'])
+        ->name('documents.individuals.add');
 
     Route::get('/individuals', [\App\Http\Controllers\IndividualsController::class, 'individualsView'])
         ->name('individuals.view');
@@ -53,6 +57,8 @@ Route::group([
         ->name('individuals.id.view');
     Route::get('/individuals/get/{id}', [\App\Http\Controllers\IndividualsController::class, 'getIndividualById'])
         ->name('individuals.id');
+    Route::post('/individuals/documents', [\App\Http\Controllers\IndividualsController::class, 'uploadDocuments'])
+        ->name('individuals.documents');
 
     Route::group([
         'middleware' => 'admin.or.developer'
