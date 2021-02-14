@@ -30,5 +30,13 @@ export default {
             position: 'is-top',
             duration: 2500
         }
+    },
+    success(message) {
+        return {
+            message,
+            type: 'is-success',
+            position: 'is-top',
+            duration: 2500
+        }
     }
 }

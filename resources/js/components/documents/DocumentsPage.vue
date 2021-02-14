@@ -14,7 +14,10 @@
                     :clickable="false"
                     class="mt-4"
                 >
-                    <UploadDocuments @upload-documents="uploadDocuments" />
+                    <UploadDocuments
+                        @upload-documents="uploadDocuments"
+                        :loading="uploadLoading"
+                    />
                 </b-step-item>
                 <b-step-item
                     label="Обработка"

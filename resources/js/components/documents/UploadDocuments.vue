@@ -7,9 +7,9 @@
                @dragleave.prevent="onDropzoneLeave"
                for="file-uploader"
         >
-                    <span class="dropzone-title">
-                        Выберите файлы для распознавания
-                    </span>
+            <span class="dropzone-title">
+                Выберите файлы для распознавания
+            </span>
             <span class="dropzone-subtitle">или просто перетащите их сюда</span>
         </label>
         <div class="text-center user-select-none">
@@ -44,29 +44,26 @@
             </div>
         </div>
 
-        <div class="buttons d-flex justify-content-center">
-            <div
-                class="mt-3 row"
-                :class="{ 'col-md-6': dropFiles.length, 'col-md-3': !dropFiles.length }"
-            >
-                <div
-                    class="col-md-6"
-                    :class="{ 'col-md-6': dropFiles.length, 'col-md-12': !dropFiles.length }"
-                >
+        <div class="buttons d-flex justify-content-center" v-if="dropFiles.length">
+            <div class="mt-3 row col-md-6">
+                <div class="col-md-6">
                     <b-button
                         type="is-primary"
                         expanded
                         @click="onUploadDocuments"
-                        :loading="uploadLoading"
+                        :loading="loading"
+                        :disabled="loading"
                     >
                         Загрузить
                     </b-button>
                 </div>
-                <div class="col-md-6" v-if="dropFiles.length">
+                <div class="col-md-6">
                     <b-button
                         type="is-danger"
                         expanded
                         @click="clearFiles"
+                        :loading="loading"
+                        :disabled="loading"
                     >
                         Очистить
                     </b-button>
@@ -98,11 +95,13 @@ export default {
         filesPreviews: [],
         filesNames: []
     }),
+    props: ['loading'],
     methods: {
         clearFiles() {
             this.dropFiles = [];
             this.imagesPreviews = [];
             this.filesPreviews = [];
+            this.filesNames = [];
             this.dropzoneActive = false;
         },
         onChange(event) {

@@ -25,9 +25,10 @@
 <script>
 import taskService from "../../services/task/taskService";
 import DefaultLayout from "../layouts/DefaultLayout";
-import moment from 'moment';
+import datetimeMixin from "../../mixins/datetimeMixin";
 export default {
     name: "TasksComponent",
+    mixins: [datetimeMixin],
     components: {
         DefaultLayout
     },
@@ -42,9 +43,6 @@ export default {
         console.log(this.tasks);
     },
     methods: {
-        createdAt(time) {
-            return moment(time).format('DD-MM-yyyy, HH:mm:ss');
-        },
         taskName(task) {
             return task.type === 'classify' ? 'классификацию' : 'распознавание';
         },

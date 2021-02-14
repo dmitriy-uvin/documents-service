@@ -47,10 +47,15 @@
                     <b-button type="is-info"
                               @click="onRecognize(task.id, taskKey)"
                               :loading="recognizedData[taskKey][task.id].loading"
-                              v-else
+                              v-else-if="Object.keys(recognizableDocTypes).includes(task.document_type)"
                     >
                         Распознать
                     </b-button>
+                    <div class="text-danger"
+                         v-if="!Object.keys(recognizableDocTypes).includes(task.document_type)"
+                    >
+                        Документ не может быть распознан!
+                    </div>
                 </div>
             </div>
             <b-button
@@ -67,11 +72,13 @@
 <script>
 import documentService from "../../services/document/documentService";
 import EventBus from "../../events/eventBus";
+import documentTypes from "../../constants/documentTypes";
 export default {
     name: "ClassificationComponent",
     props: ['details'],
     data: () => ({
-        recognizedData: {}
+        recognizedData: {},
+        recognizableDocTypes: documentTypes.recognizable
     }),
     watch: {
         details() {
@@ -95,24 +102,6 @@ export default {
         async saveIndividual(taskKey) {
             try {
                 const payloadRecognizedData = {};
-                // Object.keys(this.recognizedData[taskKey]).map(key => {
-                //     if (this.recognizedData[key].items) {
-                //         if (payloadRecognizedData[taskKey]) {
-                //             payloadRecognizedData[taskKey].push({
-                //                 document_type: this.recognizedData[key].items[0].doc_type,
-                //                 fields: this.recognizedData[key].items[0].fields,
-                //                 id: key
-                //             })
-                //         } else {
-                //             payloadRecognizedData[taskKey] = {
-                //                 document_type: this.recognizedData[key].items[0].doc_type,
-                //                 fields: this.recognizedData[key].items[0].fields,
-                //                 id: key
-                //             }
-                //         }
-                //
-                //     }
-                // });
                 Object.keys(this.recognizedData).map(mainKey => {
                     Object.keys(this.recognizedData[mainKey]).map(task => {
                         if (!payloadRecognizedData[mainKey]) {
@@ -191,20 +180,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.confidence-badge {
-    padding: 4px 9px;
-    border-radius: 18px;
-    color: #fff;
-}
-.confidence {
-    &-low {
-        background: gray;
-    }
-    &-middle {
-        background: #02c5e0;
-    }
-    &-high {
-        background: #2ac178;
-    }
-}
+
 </style>

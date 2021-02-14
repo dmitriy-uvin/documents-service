@@ -4,6 +4,7 @@
             Физические лица
         </template>
         <template v-slot:content>
+            <b-loading :is-full-page="true" v-model="isLoading"></b-loading>
             <section>
                 <b-table
                     v-if="users.length && !isWorker"
@@ -15,7 +16,6 @@
                     :sort-icon-size="'is-small'"
                     detailed
                     detail-key="id"
-                    @details-open="(row) => $buefy.toast.open(`Expanded ${row.user.first_name}`)"
                     :show-detail-icon="true"
                 >
                     <b-table-column
@@ -30,76 +30,27 @@
                     </b-table-column>
 
                     <b-table-column
-                        label="Роль"
-                        width="40"
+                        field="id"
+                        label="ФИО"
                         v-slot="props"
                     >
-                        <b-tag else :class="'is-' + props.row.role[0].alias">
-                            {{ props.row.role[0].name }}
-                        </b-tag>
+                        <a :href="`/individuals/${props.row.id}`">{{ getFullName(props.row) }}</a>
                     </b-table-column>
 
                     <b-table-column
-                        field="first_name"
-                        label="Имя"
-                        v-slot="props"
-                        sortable
-                    >
-                        {{ props.row.first_name }}
-                    </b-table-column>
-
-                    <b-table-column
-                        field="last_name"
-                        label="Фамилия"
-                        v-slot="props"
-                        sortable
-                    >
-                        {{ props.row.second_name }}
-                    </b-table-column>
-
-                    <b-table-column
-                        field="last_name"
-                        label="Отчество"
-                        v-slot="props"
-                        sortable
-                    >
-                        {{ props.row.patronymic }}
-                    </b-table-column>
-
-                    <b-table-column
-                        field="date"
-                        label="Создан"
-                        centered
+                        field="created_at"
+                        label="Дата создания"
                         v-slot="props"
                         sortable
                     >
                             <span class="tag is-info">
-                                {{ new Date(props.row.created_at).toLocaleDateString() }}
+                                {{ createdAt(props.row.created_at) }}
                             </span>
-                    </b-table-column>
-
-                    <b-table-column
-                        label="Отдел"
-                        v-slot="props"
-                        sortable
-                    >
-                            <span>
-                                {{ props.row.department }}
-                            </span>
-                    </b-table-column>
-
-                    <b-table-column v-slot="props" label="Статус">
-                        <b-tag type="is-danger" v-if="props.row.is_blocked" class="cursor-pointer">
-                            <b-icon icon="times-circle" class="mr-1"></b-icon>Blocked
-                        </b-tag>
-                        <b-tag type="is-success" v-else class="cursor-pointer">
-                            <b-icon icon="check-circle" class="mr-1"></b-icon>Active
-                        </b-tag>
                     </b-table-column>
 
                     <template #footer>
                         <div class="has-text-right">
-                            Пользователей: {{ users.length }}
+                            Физических лиц: {{ users.length }}
                         </div>
                     </template>
                 </b-table>
@@ -107,7 +58,7 @@
                     Вы не можете просмотреть список существующих физических лиц.
                     Вы можете использовать поиск, чтобы найти нужное Вам лицо!
                 </b-message>
-                <b-message type="is-danger" v-else>
+                <b-message type="is-danger" v-else-if="!users.length">
                     Не найдено ни одного физического лица!
                 </b-message>
             </section>
@@ -116,20 +67,25 @@
 </template>
 
 <script>
-import userService from "../../services/user/userService";
 import roleMixin from "../../mixins/roleMixin";
 import DefaultLayout from "../layouts/DefaultLayout";
+import datetimeMixin from "../../mixins/datetimeMixin";
+import individualsMixin from "../../mixins/individualsMixin";
+import individualService from "../../services/individual/individualService";
 export default {
     name: "PhysicalList",
-    mixins: [roleMixin],
+    mixins: [roleMixin, datetimeMixin, individualsMixin],
     components: {
         DefaultLayout
     },
     data: () => ({
-       users: []
+       users: [],
+        isLoading: true
     }),
     async mounted() {
-        this.users = await userService.getIndividualUsers();
+        this.users = await individualService.getIndividualUsers();
+        this.isLoading = false;
+        console.log(this.users);
     }
 }
 </script>

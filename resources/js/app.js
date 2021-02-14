@@ -20,7 +20,12 @@ Vue.component('login-component', require('./components/auth/Login.vue').default)
 
 // Users
 Vue.component('users-list', require('./components/users/UsersList.vue').default);
+
+// Individuals
 Vue.component('individual-list', require('./components/individual/IndividualList.vue').default);
+Vue.component('individual-page', require('./components/individual/IndividualPage.vue').default);
+
+
 Vue.component('user-page', require('./components/users/UserPage.vue').default);
 
 // Editor
