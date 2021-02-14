@@ -7,11 +7,10 @@ use App\Constants\TaskConstants;
 use App\Events\TestEvent;
 use App\Exceptions\Document\NotRecognizableDocumentTypeException;
 use App\Exceptions\Task\TaskNotFoundException;
+use App\Models\Document;
 use App\Models\Task;
-use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -108,6 +107,15 @@ class DocumentsController extends Controller
             $response = Http::get(
                 "{$this->dbrainApiUrl}/result/{$recognizeResponse['task_id']}?token={$this->dbrainToken}"
             )->json();
+        }
+
+        $documents = Document::where('type', '=', $task->document_type)->get()->all();
+        foreach ($documents as $findDoc) {
+            $findFields = $findDoc->fields->map(
+                    fn($field) => [$field->type => $field->value]
+                )
+                ->flatMap(fn($values) => $values)
+                ->all();
         }
 
         return response()->json($response);

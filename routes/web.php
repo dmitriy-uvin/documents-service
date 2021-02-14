@@ -49,6 +49,10 @@ Route::group([
     Route::get('/individuals/all', [\App\Http\Controllers\IndividualsController::class, 'getIndividuals']);
     Route::post('/individuals/create', [\App\Http\Controllers\IndividualsController::class, 'save'])
         ->name('individuals.create');
+    Route::get('/individuals/{id}', [\App\Http\Controllers\IndividualsController::class, 'watchById'])
+        ->name('individuals.id.view');
+    Route::get('/individuals/get/{id}', [\App\Http\Controllers\IndividualsController::class, 'getIndividualById'])
+        ->name('individuals.id');
 
     Route::group([
         'middleware' => 'admin.or.developer'

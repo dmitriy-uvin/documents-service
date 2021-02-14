@@ -16,6 +16,11 @@ class Document extends Model
         'type'
     ];
 
+    protected $with = [
+        'fields',
+        'documentImage'
+    ];
+
     public function individual()
     {
         return $this->belongsTo(Individual::class);

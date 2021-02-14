@@ -25,3 +25,20 @@
 nav.steps > ul.step-items > li.step-item > a.step-link:hover {
     text-decoration: none;
 }
+
+.confidence-badge {
+    padding: 4px 9px;
+    border-radius: 18px;
+    color: #fff;
+}
+.confidence {
+    &-low {
+        background: gray;
+    }
+    &-middle {
+        background: #02c5e0;
+    }
+    &-high {
+        background: #2ac178;
+    }
+}

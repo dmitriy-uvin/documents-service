@@ -16,6 +16,10 @@ class Individual extends Model
         'updated_at' => 'datetime',
     ];
 
+    protected $with = [
+        'documents'
+    ];
+
     public function documents()
     {
         return $this->hasMany(Document::class);

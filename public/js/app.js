@@ -2084,6 +2084,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _services_document_documentService__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../services/document/documentService */ "./resources/js/services/document/documentService.js");
 /* harmony import */ var _events_eventBus__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../events/eventBus */ "./resources/js/events/eventBus.js");
+/* harmony import */ var _constants_documentTypes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../constants/documentTypes */ "./resources/js/constants/documentTypes.js");
 
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -2162,6 +2163,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -2169,7 +2176,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   props: ['details'],
   data: function data() {
     return {
-      recognizedData: {}
+      recognizedData: {},
+      recognizableDocTypes: _constants_documentTypes__WEBPACK_IMPORTED_MODULE_3__.default.recognizable
     };
   },
   watch: {
@@ -2204,25 +2212,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.prev = 0;
-                payloadRecognizedData = {}; // Object.keys(this.recognizedData[taskKey]).map(key => {
-                //     if (this.recognizedData[key].items) {
-                //         if (payloadRecognizedData[taskKey]) {
-                //             payloadRecognizedData[taskKey].push({
-                //                 document_type: this.recognizedData[key].items[0].doc_type,
-                //                 fields: this.recognizedData[key].items[0].fields,
-                //                 id: key
-                //             })
-                //         } else {
-                //             payloadRecognizedData[taskKey] = {
-                //                 document_type: this.recognizedData[key].items[0].doc_type,
-                //                 fields: this.recognizedData[key].items[0].fields,
-                //                 id: key
-                //             }
-                //         }
-                //
-                //     }
-                // });
-
+                payloadRecognizedData = {};
                 Object.keys(_this2.recognizedData).map(function (mainKey) {
                   Object.keys(_this2.recognizedData[mainKey]).map(function (task) {
                     if (!payloadRecognizedData[mainKey]) {
@@ -2408,6 +2398,9 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
 //
 //
 //
@@ -2635,9 +2628,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "UploadDocuments",
   data: function data() {
@@ -2651,11 +2641,13 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       filesNames: []
     };
   },
+  props: ['loading'],
   methods: {
     clearFiles: function clearFiles() {
       this.dropFiles = [];
       this.imagesPreviews = [];
       this.filesPreviews = [];
+      this.filesNames = [];
       this.dropzoneActive = false;
     },
     onChange: function onChange(event) {
@@ -3072,6 +3064,9 @@ __webpack_require__.r(__webpack_exports__);
     _events_eventBus__WEBPACK_IMPORTED_MODULE_0__.default.$on('error', function (message) {
       this.$buefy.toast.open(_events_eventsList__WEBPACK_IMPORTED_MODULE_1__.default.error(message));
     });
+    _events_eventBus__WEBPACK_IMPORTED_MODULE_0__.default.$on('success', function (message) {
+      this.$buefy.toast.open(_events_eventsList__WEBPACK_IMPORTED_MODULE_1__.default.success(message));
+    });
   }
 });
 
@@ -3124,9 +3119,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _services_user_userService__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../services/user/userService */ "./resources/js/services/user/userService.js");
-/* harmony import */ var _mixins_roleMixin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../mixins/roleMixin */ "./resources/js/mixins/roleMixin.js");
-/* harmony import */ var _layouts_DefaultLayout__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../layouts/DefaultLayout */ "./resources/js/components/layouts/DefaultLayout.vue");
+/* harmony import */ var _mixins_roleMixin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../mixins/roleMixin */ "./resources/js/mixins/roleMixin.js");
+/* harmony import */ var _layouts_DefaultLayout__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../layouts/DefaultLayout */ "./resources/js/components/layouts/DefaultLayout.vue");
+/* harmony import */ var _mixins_datetimeMixin__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../mixins/datetimeMixin */ "./resources/js/mixins/datetimeMixin.js");
+/* harmony import */ var _mixins_individualsMixin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../mixins/individualsMixin */ "./resources/js/mixins/individualsMixin.js");
+/* harmony import */ var _services_individual_individualService__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../services/individual/individualService */ "./resources/js/services/individual/individualService.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -3201,6 +3198,79 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+
+
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: "PhysicalList",
+  mixins: [_mixins_roleMixin__WEBPACK_IMPORTED_MODULE_1__.default, _mixins_datetimeMixin__WEBPACK_IMPORTED_MODULE_3__.default, _mixins_individualsMixin__WEBPACK_IMPORTED_MODULE_4__.default],
+  components: {
+    DefaultLayout: _layouts_DefaultLayout__WEBPACK_IMPORTED_MODULE_2__.default
+  },
+  data: function data() {
+    return {
+      users: [],
+      isLoading: true
+    };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return _services_individual_individualService__WEBPACK_IMPORTED_MODULE_5__.default.getIndividualUsers();
+
+            case 2:
+              _this.users = _context.sent;
+              _this.isLoading = false;
+              console.log(_this.users);
+
+            case 5:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }))();
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/individual/IndividualPage.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/individual/IndividualPage.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _layouts_DefaultLayout__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../layouts/DefaultLayout */ "./resources/js/components/layouts/DefaultLayout.vue");
+/* harmony import */ var _services_individual_individualService__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../services/individual/individualService */ "./resources/js/services/individual/individualService.js");
+/* harmony import */ var _mixins_individualsMixin__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../mixins/individualsMixin */ "./resources/js/mixins/individualsMixin.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3254,14 +3324,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "PhysicalList",
-  mixins: [_mixins_roleMixin__WEBPACK_IMPORTED_MODULE_2__.default],
+  name: "IndividualPage",
   components: {
-    DefaultLayout: _layouts_DefaultLayout__WEBPACK_IMPORTED_MODULE_3__.default
+    DefaultLayout: _layouts_DefaultLayout__WEBPACK_IMPORTED_MODULE_1__.default
   },
+  mixins: [_mixins_individualsMixin__WEBPACK_IMPORTED_MODULE_3__.default],
+  props: ['id'],
   data: function data() {
     return {
-      users: []
+      individual: []
     };
   },
   mounted: function mounted() {
@@ -3272,19 +3343,34 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.next = 2;
-              return _services_user_userService__WEBPACK_IMPORTED_MODULE_1__.default.getIndividualUsers();
-
-            case 2:
-              _this.users = _context.sent;
+              _context.prev = 0;
+              _context.next = 3;
+              return _services_individual_individualService__WEBPACK_IMPORTED_MODULE_2__.default.getIndividualUserById(_this.id);
 
             case 3:
+              _this.individual = _context.sent;
+              _context.next = 9;
+              break;
+
+            case 6:
+              _context.prev = 6;
+              _context.t0 = _context["catch"](0);
+              console.log(_context.t0);
+
+            case 9:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee);
+      }, _callee, null, [[0, 6]]);
     }))();
+  },
+  methods: {
+    getLevelOfConfidence: function getLevelOfConfidence(confidence) {
+      if (confidence >= 0 && confidence < 0.49) return 'low';
+      if (confidence >= 0.49 && confidence < 0.7) return 'middle';
+      if (confidence > 0.7) return 'high';
+    }
   }
 });
 
@@ -3632,8 +3718,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _services_task_taskService__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../services/task/taskService */ "./resources/js/services/task/taskService.js");
 /* harmony import */ var _layouts_DefaultLayout__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../layouts/DefaultLayout */ "./resources/js/components/layouts/DefaultLayout.vue");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _mixins_datetimeMixin__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../mixins/datetimeMixin */ "./resources/js/mixins/datetimeMixin.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -3669,6 +3754,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "TasksComponent",
+  mixins: [_mixins_datetimeMixin__WEBPACK_IMPORTED_MODULE_3__.default],
   components: {
     DefaultLayout: _layouts_DefaultLayout__WEBPACK_IMPORTED_MODULE_2__.default
   },
@@ -3704,9 +3790,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }))();
   },
   methods: {
-    createdAt: function createdAt(time) {
-      return moment__WEBPACK_IMPORTED_MODULE_3___default()(time).format('DD-MM-yyyy, HH:mm:ss');
-    },
     taskName: function taskName(task) {
       return task.type === 'classify' ? 'классификацию' : 'распознавание';
     },
@@ -4079,8 +4162,10 @@ vue__WEBPACK_IMPORTED_MODULE_2__.default.component('header-component', __webpack
 
 vue__WEBPACK_IMPORTED_MODULE_2__.default.component('login-component', __webpack_require__(/*! ./components/auth/Login.vue */ "./resources/js/components/auth/Login.vue").default); // Users
 
-vue__WEBPACK_IMPORTED_MODULE_2__.default.component('users-list', __webpack_require__(/*! ./components/users/UsersList.vue */ "./resources/js/components/users/UsersList.vue").default);
+vue__WEBPACK_IMPORTED_MODULE_2__.default.component('users-list', __webpack_require__(/*! ./components/users/UsersList.vue */ "./resources/js/components/users/UsersList.vue").default); // Individuals
+
 vue__WEBPACK_IMPORTED_MODULE_2__.default.component('individual-list', __webpack_require__(/*! ./components/individual/IndividualList.vue */ "./resources/js/components/individual/IndividualList.vue").default);
+vue__WEBPACK_IMPORTED_MODULE_2__.default.component('individual-page', __webpack_require__(/*! ./components/individual/IndividualPage.vue */ "./resources/js/components/individual/IndividualPage.vue").default);
 vue__WEBPACK_IMPORTED_MODULE_2__.default.component('user-page', __webpack_require__(/*! ./components/users/UserPage.vue */ "./resources/js/components/users/UserPage.vue").default); // Editor
 
 vue__WEBPACK_IMPORTED_MODULE_2__.default.component('editor-component', __webpack_require__(/*! ./components/editor/EditorComponent.vue */ "./resources/js/components/editor/EditorComponent.vue").default); // Documents
@@ -4129,6 +4214,497 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'; // 
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/constants/documentTypes.js":
+/*!*************************************************!*\
+  !*** ./resources/js/constants/documentTypes.js ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  recognizable: {
+    "bank_card": "Банковская карта",
+    "birth_certificate": "Свидетельство о рождении",
+    "death_certificate": "Свидетельство о смерти",
+    "divorce_certificate": "Свидетельство о расторжении брака",
+    "driver_license_1999_paper_back": "Водительское Удостоверение: бумажный образец 1999 года (обратная сторона)",
+    "driver_license_1999_paper_front": "Водительское Удостоверение: бумажный образец 1999 года (лицевая сторона)",
+    "driver_license_1999_plastic_front": "Водительское Удостоверение: пластиковый образец 1999 года (лицевая сторона)",
+    "driver_license_2011_back": "Водительское Удостоверение: образец 2011 года (обратная сторона)",
+    "driver_license_2011_front": "Водительское Удостоверение: образец 2011/2014 года (лицевая сторона)",
+    "driver_license_2014_back": "Водительское Удостоверение: образец 2014 года (обратная сторона)",
+    "health_insurance_certficate_moscow_card_front": "Полис ОМС: пластиковый образец Москвы (лицевая сторона)",
+    "health_insurance_certificate_card_back": "Полис ОМС: пластиковый образец (обратная сторона)",
+    "health_insurance_certificate_card_front": "Полис ОМС: пластиковый образец (лицевая сторона)",
+    "health_insurance_certificate_paper_front": "Полис ОМС: бумажный образец (лицевая сторона)",
+    "inn_person": "ИНН физлица",
+    "insurance_plastic": "СНИЛС: пластиковый образец, лицевая сторона",
+    "kgz_passport_main": "Паспорт гражданина Киргизии: главный разворот",
+    "kgz_passport_plastic_blue": "Паспорт гражданина Киргизии: голубой образец",
+    "kgz_passport_plastic_red": "Паспорт гражданина Киргизии: красный образец",
+    "kz_id_1994_back": "Паспорт гражданина Казахстана, ID-Карта, 1994, задняя сторона",
+    "kz_id_1994_front": "Паспорт гражданина Казахстана, ID-Карта, 1994, передняя сторона",
+    "kz_id_2008_back": "Паспорт гражданина Казахстана: образец 2008 года, задняя сторона",
+    "kz_id_2008_front": "Паспорт гражданина Казахстана: образец 2008 года, передняя сторона",
+    "kz_id_2014_back": "Паспорт гражданина Казахстана, ID-Карта, 2014, задняя сторона",
+    "kz_id_2014_front": "Паспорт гражданина Казахстана, ID-Карта, 2014, передняя сторона",
+    "marriage_certificate": "Свидетельство о заключении брака",
+    "migration_card": "Миграционная карта РФ",
+    "ndfl2": "Справка по форме 2НДФЛ",
+    "ogrn": "ОГРН",
+    "passport_main": "Паспорт гражданина РФ: главный разворот, печатный образец",
+    "passport_main_handwritten": "Паспорт гражданина РФ: главный разворот, рукописный образец",
+    "passport_registration": "Паспорт гражданина РФ: страница «Место жительства»",
+    "pts_back": "Паспорт ТС: образец 2006 года, обратная сторона",
+    "pts_front": "Паспорт ТС: образец 2006 года, лицевая сторона",
+    "rus_invoice": "Счет-фактура",
+    "rus_passport_global_2007_main": "Заграничный паспорт гражданина РФ: образец 2007 года, главный разворот",
+    "rus_passport_global_2014_main": "Заграничный паспорт гражданина РФ: образец 2014 года, главный разворот",
+    "rus_work_patent": "Патент на работу: образец ФМС РФ",
+    "snils_front": "СНИЛС: устаревший образец, лицевая сторона",
+    "tjk_passport_main": "Паспорт гражданина Таджикистана: главный разворот",
+    "traffic_accident_notice_back": "Извещение о ДТП: обратная сторона",
+    "traffic_accident_notice_front": "Извещение о ДТП: лицевая сторона",
+    "ukr_passport_2016_back": "Паспорт гражданина Украины: образец 2016 года, задняя сторона",
+    "ukr_passport_2016_front": "Паспорт гражданина Украины: образец 2016 года, лицевая сторона",
+    "ukr_passport_main_1994_printed": "Паспорт гражданина Украины: образец 1994 года, главный разворот",
+    "uzb_passport_main": "Паспорт гражданина Узбекистана: главный разворот",
+    "vehicle_registration_certificate_back": "Свидетельство о регистрации ТС: обратная сторона",
+    "vehicle_registration_certificate_front": "Свидетельство о регистрации ТС: лицевая сторона"
+  },
+  notRecognizable: {
+    "driver_license_1999_plastic_back": "Водительское Удостоверение: пластиковый образец 1999 года (обратная сторона)",
+    "inn_organisation": "ИНН юрлица",
+    "military_id": "Военный билет РФ",
+    "mts_acts": "Акт",
+    "not_document": "Не является документом",
+    "ogrnip": "ОГРНИП",
+    "other": "Форма документа не определена",
+    "passport_blank_page": "Паспорт РФ: пустая страница",
+    "passport_children": "Паспорт РФ: страница Дети",
+    "passport_last_rf": "Паспорт РФ: задний разворот",
+    "passport_marriage": "Паспорт РФ: страница «Семейное положение»",
+    "passport_military": "Паспорт РФ: страница «Воинская обязанность»",
+    "passport_previous_docs": "Паспорт РФ: страница «Сведения о ранее выданных паспортах»",
+    "passport_zero_page": "Паспорт РФ: передний разворот",
+    "registration_certificate": "Сертификат о регистрации права",
+    "snils_back": "СНИЛС: устаревший образец, обратная сторона"
+  },
+  all: {
+    "driver_license_1999_plastic_back": "Водительское Удостоверение: пластиковый образец 1999 года (обратная сторона)",
+    "inn_organisation": "ИНН юрлица",
+    "military_id": "Военный билет РФ",
+    "mts_acts": "Акт",
+    "not_document": "Не является документом",
+    "ogrnip": "ОГРНИП",
+    "other": "Форма документа не определена",
+    "passport_blank_page": "Паспорт РФ: пустая страница",
+    "passport_children": "Паспорт РФ: страница Дети",
+    "passport_last_rf": "Паспорт РФ: задний разворот",
+    "passport_marriage": "Паспорт РФ: страница «Семейное положение»",
+    "passport_military": "Паспорт РФ: страница «Воинская обязанность»",
+    "passport_previous_docs": "Паспорт РФ: страница «Сведения о ранее выданных паспортах»",
+    "passport_zero_page": "Паспорт РФ: передний разворот",
+    "registration_certificate": "Сертификат о регистрации права",
+    "snils_back": "СНИЛС: устаревший образец, обратная сторона",
+    "bank_card": "Банковская карта",
+    "birth_certificate": "Свидетельство о рождении",
+    "death_certificate": "Свидетельство о смерти",
+    "divorce_certificate": "Свидетельство о расторжении брака",
+    "driver_license_1999_paper_back": "Водительское Удостоверение: бумажный образец 1999 года (обратная сторона)",
+    "driver_license_1999_paper_front": "Водительское Удостоверение: бумажный образец 1999 года (лицевая сторона)",
+    "driver_license_1999_plastic_front": "Водительское Удостоверение: пластиковый образец 1999 года (лицевая сторона)",
+    "driver_license_2011_back": "Водительское Удостоверение: образец 2011 года (обратная сторона)",
+    "driver_license_2011_front": "Водительское Удостоверение: образец 2011/2014 года (лицевая сторона)",
+    "driver_license_2014_back": "Водительское Удостоверение: образец 2014 года (обратная сторона)",
+    "health_insurance_certficate_moscow_card_front": "Полис ОМС: пластиковый образец Москвы (лицевая сторона)",
+    "health_insurance_certificate_card_back": "Полис ОМС: пластиковый образец (обратная сторона)",
+    "health_insurance_certificate_card_front": "Полис ОМС: пластиковый образец (лицевая сторона)",
+    "health_insurance_certificate_paper_front": "Полис ОМС: бумажный образец (лицевая сторона)",
+    "inn_person": "ИНН физлица",
+    "insurance_plastic": "СНИЛС: пластиковый образец, лицевая сторона",
+    "kgz_passport_main": "Паспорт гражданина Киргизии: главный разворот",
+    "kgz_passport_plastic_blue": "Паспорт гражданина Киргизии: голубой образец",
+    "kgz_passport_plastic_red": "Паспорт гражданина Киргизии: красный образец",
+    "kz_id_1994_back": "Паспорт гражданина Казахстана, ID-Карта, 1994, задняя сторона",
+    "kz_id_1994_front": "Паспорт гражданина Казахстана, ID-Карта, 1994, передняя сторона",
+    "kz_id_2008_back": "Паспорт гражданина Казахстана: образец 2008 года, задняя сторона",
+    "kz_id_2008_front": "Паспорт гражданина Казахстана: образец 2008 года, передняя сторона",
+    "kz_id_2014_back": "Паспорт гражданина Казахстана, ID-Карта, 2014, задняя сторона",
+    "kz_id_2014_front": "Паспорт гражданина Казахстана, ID-Карта, 2014, передняя сторона",
+    "marriage_certificate": "Свидетельство о заключении брака",
+    "migration_card": "Миграционная карта РФ",
+    "ndfl2": "Справка по форме 2НДФЛ",
+    "ogrn": "ОГРН",
+    "passport_main": "Паспорт гражданина РФ: главный разворот, печатный образец",
+    "passport_main_handwritten": "Паспорт гражданина РФ: главный разворот, рукописный образец",
+    "passport_registration": "Паспорт гражданина РФ: страница «Место жительства»",
+    "pts_back": "Паспорт ТС: образец 2006 года, обратная сторона",
+    "pts_front": "Паспорт ТС: образец 2006 года, лицевая сторона",
+    "rus_invoice": "Счет-фактура",
+    "rus_passport_global_2007_main": "Заграничный паспорт гражданина РФ: образец 2007 года, главный разворот",
+    "rus_passport_global_2014_main": "Заграничный паспорт гражданина РФ: образец 2014 года, главный разворот",
+    "rus_work_patent": "Патент на работу: образец ФМС РФ",
+    "snils_front": "СНИЛС: устаревший образец, лицевая сторона",
+    "tjk_passport_main": "Паспорт гражданина Таджикистана: главный разворот",
+    "traffic_accident_notice_back": "Извещение о ДТП: обратная сторона",
+    "traffic_accident_notice_front": "Извещение о ДТП: лицевая сторона",
+    "ukr_passport_2016_back": "Паспорт гражданина Украины: образец 2016 года, задняя сторона",
+    "ukr_passport_2016_front": "Паспорт гражданина Украины: образец 2016 года, лицевая сторона",
+    "ukr_passport_main_1994_printed": "Паспорт гражданина Украины: образец 1994 года, главный разворот",
+    "uzb_passport_main": "Паспорт гражданина Узбекистана: главный разворот",
+    "vehicle_registration_certificate_back": "Свидетельство о регистрации ТС: обратная сторона",
+    "vehicle_registration_certificate_front": "Свидетельство о регистрации ТС: лицевая сторона"
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/constants/fieldTypes.js":
+/*!**********************************************!*\
+  !*** ./resources/js/constants/fieldTypes.js ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  all: {
+    "number": "Номер",
+    "month": "Expiration Date: month",
+    "year": "Год изготовления ТС",
+    "cardholder_name": "Cardholder name",
+    "born_full_name": "ФИО родившегося",
+    "date_of_birth": "Дата рождения",
+    "father_full_name": "ФИО (отец)",
+    "mother_full_name": "ФИО (мать)",
+    "place_of_birth": "Место рождения",
+    "record_number": "Record No.",
+    "issuer": "Орган выдачи, номер",
+    "doc_series": "Серия ПТС",
+    "doc_number": "Номер ПТС",
+    "full_name": "Полное наименование юрлица",
+    "date_of_death": "Дата смерти",
+    "place_of_death": "Место смерти",
+    "spouse_1_full_name": "ФИО супруга",
+    "spouse_1_date_of_birth": "Дата рождения супруга",
+    "spouse_2_full_name": "ФИО супруги",
+    "spouse_2_date_of_birth": "Дата рождения супруги",
+    "date_of_divorce": "Дата расторжения брака",
+    "category_a": "Категория A",
+    "category_b": "Категория B",
+    "category_c": "Категория C",
+    "category_d": "Категория D",
+    "category_e": "Категория E",
+    "special_marks": "Особые отметки",
+    "series_top": "Серия СТС (верхняя часть)",
+    "number_top": "Номер СТС (верхняя часть)",
+    "series_bottom": "Серия СТС (нижняя часть)",
+    "number_bottom": "Номер СТС (нижняя часть)",
+    "surname": "Собственник: фамилия (на английском)",
+    "name": "Собственник: имя (на английском)",
+    "third_name": "Отчество",
+    "date_of_issue": "Дата выдачи",
+    "valid_before": "Действителен до",
+    "category_a_begin": "Категория A: начало действия",
+    "category_a_end": "Категория A: конец действия",
+    "category_b_begin": "Категория B: начало действия",
+    "category_c_begin": "Категория C: начало действия",
+    "category_b_end": "Категория B: конец действия",
+    "category_c_end": "Категория C: конец действия",
+    "category_d_begin": "Категория D: начало действия",
+    "category_d_end": "Категория D: конец действия",
+    "category_be_begin": "Категория Be: начало действия",
+    "category_be_end": "Категория Be: конец действия",
+    "category_ce_begin": "Категория Ce: начало действия",
+    "category_ce_end": "Категория Ce: конец действия",
+    "category_de_begin": "Категория De: начало действия",
+    "category_de_end": "Категория De: конец действия",
+    "category_tm_begin": "Категория Tm: начало действия",
+    "category_tm_end": "Категория Tm: конец действия",
+    "category_tb_begin": "Категория Tb: начало действия",
+    "category_tb_end": "Категория Tb: конец действия",
+    "series_number": "Серия и номер документа",
+    "patronymic": "Patronymic",
+    "date_from": "Дата выдачи",
+    "date_end": "Действительно до",
+    "place_of_issue": "Место выдачи",
+    "category": "Категория ТС",
+    "category_a1_begin": "Категория A1: начало действия",
+    "category_a1_end": "Категория A1: конец действия",
+    "category_b1_begin": "Категория B1: начало действия",
+    "category_b1_end": "Категория B1: конец действия",
+    "category_c1_begin": "Категория C1: начало действия",
+    "category_c1_end": "Категория C1: конец действия",
+    "category_c1e_begin": "Категория C1e: начало действия",
+    "category_d1_begin": "Категория D1: начало действия",
+    "category_c1e_end": "Категория C1e: конец действия",
+    "category_d1_end": "Категория D1: конец действия",
+    "category_d1e_begin": "Категория D1e: начало действия",
+    "category_d1e_end": "Категория D1e: конец действия",
+    "category_m_begin": "Категория M: начало действия",
+    "category_m_end": "Категория M: конец действия",
+    "date_of_expiry": "Дата окончания срока действия",
+    "sex": "Sex",
+    "fio": "ФИО",
+    "date": "Дата выдачи",
+    "inn": "ИНН",
+    "issuer_number": "Номер налогового органа",
+    "series": "Серия",
+    "day_of_birth": "Дата рождения: день",
+    "month_of_birth": "Дата рождения: месяц",
+    "year_of_birth": "Дата рождения: год",
+    "day_of_issue": "Дата регистрации: день",
+    "month_of_issue": "Дата регистрации: месяц",
+    "year_of_issue": "Дата регистрации: год",
+    "nation": "Национальность",
+    "passport_num": "Паспорт №",
+    "personal_number": "Персональный номер",
+    "patron": "Отчество",
+    "document_number": "Серия и номер СТС",
+    "barcode": "Штрихкод, цифровой шифр",
+    "nationality": "Nationality",
+    "address": "Адрес собственника",
+    "personal_id": "Индивидуальный идентификационный номер",
+    "mrz": "MRZ",
+    "date_of_marriage": "Дата заключения брака",
+    "husband_name": "Фамилия 1 (муж)",
+    "wife_name": "Фамилия 2 (жена)",
+    "from": "Срок пребывания от",
+    "statement_year": "Год справки",
+    "doc_date": "Дата формирования справки",
+    "oktmo": "Код по ОКТМО",
+    "phone": "Телефон",
+    "agent_inn": "ИНН",
+    "agent_kpp": "КПП",
+    "agent": "Налоговый агент",
+    "ru_inn": "ИНН в Российской Федерации",
+    "other_name": "Отчество",
+    "status": "Статус налогоплательщика",
+    "citizenship": "Гражданство",
+    "id_code": "Код документа, удост. личность",
+    "id_series_number": "Серия и номер документа",
+    "tax_rate": "Ставка налога",
+    "income_table": "3. Доходы (новая модель)",
+    "top_left_table_0_00_00": "3. Доходы - левая часть таблицы (старая модель)",
+    "top_right_table_0_00_00": "3. Доходы - правая часть таблицы (старая модель)",
+    "middle_0_0_0": "4. Стандартные, социальные и имущественные налоговые вычеты (старая модель)",
+    "bottom_0_0_0": "5. Общие суммы дохода и налога (старая модель)",
+    "tax_total_amount": "Общая сумма налога",
+    "tax_withheld_amount": "Сумма налога удержанная",
+    "short_name": "Сокращенное наименование юрлица (при наличии)",
+    "ogrn": "ОГРН",
+    "issuing_authority": "Орган, выдавший документ",
+    "subdivision_code": "Код подразделения",
+    "first_name": "Имя",
+    "other_names": "Отчество",
+    "series_and_number": "Серия и номер документа",
+    "region": "Район",
+    "region_district": "Район",
+    "locality": "Пункт",
+    "locality_district": "Р-н",
+    "street": "Улица",
+    "house": "Дом",
+    "building": "Корп.",
+    "apartment": "Кв.",
+    "vin": "Номер VIN",
+    "model": "Марка, модель ТС",
+    "type": "Наименование (тип ТС)",
+    "engine_number": "Двигатель №",
+    "chassis": "Шасси (рама)",
+    "cabine": "Кузов, кабина",
+    "color": "Цвет",
+    "engine_power": "Мощность двигателя",
+    "engine_volume": "Рабочий объем двигателя",
+    "engine_type": "Тип двигателя",
+    "max_mass": "Разрешенная max масса",
+    "empty_mass": "Масса без нагрузки",
+    "country": "Страна вывоза ТС",
+    "vehicle_owner": "Наименование ФИО собственника",
+    "seller_name": "Название фирмы продавца",
+    "seller_address": "Адрес продавца",
+    "seller_inn": "ИНН продавца",
+    "seller_kpp": "КПП продавца",
+    "buyer_name": "Название фирмы покупателя",
+    "buyer_address": "Адрес покупателя",
+    "buyer_kpp": "КПП покупателя",
+    "buyer_inn": "ИНН покупателя",
+    "currency_name": "Название валюты",
+    "currency_code": "Код валюты",
+    "table": "Таблица со свойствами проданных товаров",
+    "prints": "Печати",
+    "total_sum": "Общая сумма сделки",
+    "signature": "Подписи",
+    "electronic_signature": "Электронная подпись",
+    "surname_rus": "Собственник: фамилия (на русском)",
+    "surname_eng": "Surname",
+    "name_rus": "Собственник: имя (на русском)",
+    "name_eng": "Name",
+    "sex_rus": "Пол владельца на русском языке",
+    "sex_eng": "Пол владельца транслитерацией",
+    "patter": "Отчество",
+    "itn": "ИНН",
+    "accident_circumstances": "Обстоятельства ДТП",
+    "miscellaneous": "Примечание",
+    "autonomous_moving": "Может ли ТС передвигаться своим ходом?",
+    "accident_place_city": "Место ДТП: город",
+    "accident_place_address": "Место ДТП: адрес",
+    "date_of_accident": "Дата ДТП",
+    "time_of_accident": "Время ДТП",
+    "damaged_vehicles_number": "Количество поврежденных ТС",
+    "injured_people_number": "Количество раненых",
+    "dead_people_number": "Количество погибших",
+    "medical_examination": "Проводилолсь ли мед. осв.",
+    "damage_to_other_property": "Мат. ущерб другому имуществу",
+    "gibdd_report": "Проводилось ли оформление сотр. ГИБДД",
+    "a_vehicle_brand": "А - Марка",
+    "a_vehicle_model": "А - Модель",
+    "a_vin_field": "А - VIN",
+    "a_veh_state_reg_number": "А - ГРН ТС",
+    "a_veh_reg_certificate_series": "А - СТС: серия",
+    "a_veh_reg_certificate_number": "А - СТС: номер",
+    "a_owner_legal_form": "А - Собственник ТС: ОПФ",
+    "a_owner_title": "А - Собственник ТС: наименование",
+    "a_vehicle_owner_surname": "А - Собственник ТС: Фамилия",
+    "a_vehicle_owner_name": "А - Собственник ТС: Имя",
+    "a_vehicle_owner_patronym": "А - Собственник ТС: Отчество",
+    "a_address_owner": "А - Адрес",
+    "a_veh_driver_surname": "А - Водитель ТС: Фамилия",
+    "a_veh_driver_name": "А - Водитель ТС: Имя",
+    "a_veh_driver_patronym": "А - Водитель ТС: Отчество",
+    "a_date_of_birth": "А - Дата рождения",
+    "a_address_driver": "А - Адрес",
+    "a_phone": "А - Телефон",
+    "a_licence_series": "А - ВУ: серия",
+    "a_licence_number": "А - ВУ: номер",
+    "a_licence_category": "А - ВУ: категория",
+    "a_date_of_issue": "А - ВУ: дата выдачи",
+    "a_insurer": "А - Страховщик",
+    "a_policy_series": "А - Страховой полис: серия",
+    "a_policy_number": "А - Страховой полис: номер",
+    "a_first_collision_place": "А - Место первоначального удара",
+    "a_damages_scale_list": "А - Характер и перечень поврежденных деталей и элементов",
+    "b_vehicle_brand": "B - Марка",
+    "b_vehicle_model": "B - Модель",
+    "b_vin_field": "B - VIN",
+    "b_veh_state_reg_number": "B - ГРН ТС",
+    "b_veh_reg_certificate_series": "B - СТС: серия",
+    "b_veh_reg_certificate_number": "B - СТС: номер",
+    "b_owner_legal_form": "B - Собственник ТС: ОПФ",
+    "b_owner_title": "B - Собственник ТС: наименование",
+    "b_vehicle_owner_surname": "B - Собственник ТС: Фамилия",
+    "b_vehicle_owner_name": "B - Собственник ТС: Имя",
+    "b_vehicle_owner_patronym": "B - Собственник ТС: Отчество",
+    "b_address_owner": "B - Адрес",
+    "b_veh_driver_surname": "B - Водитель ТС: Фамилия",
+    "b_veh_driver_name": "B - Водитель ТС: Имя",
+    "b_veh_driver_patronym": "B - Водитель ТС: Отчество",
+    "b_date_of_birth": "B - Дата рождения",
+    "b_address_driver": "B - Адрес",
+    "b_phone": "B - Телефон",
+    "b_licence_series": "B - ВУ: серия",
+    "b_licence_number": "B - ВУ: номер",
+    "b_licence_category": "B - ВУ: категория",
+    "b_date_of_issue": "B - ВУ: дата выдачи",
+    "b_insurer": "B - Страховщик",
+    "b_policy_series": "B - Страховой полис: серия",
+    "b_policy_number": "B - Страховой полис: номер",
+    "b_first_collision_place": "B - Место первоначального удара",
+    "b_damages_scale_list": "B - Характер и перечень поврежденных деталей и элементов",
+    "checkbox_a1_veh_moving": "Пункт 1, сторона А",
+    "checkbox_a2_no_driver": "Пункт 2, сторона А",
+    "checkbox_a3_parking_moving": "Пункт 3, сторона А",
+    "checkbox_a4_driving_out": "Пункт 4, сторона А",
+    "checkbox_a5_driving_in": "Пункт 5, сторона А",
+    "checkbox_a6_driving_straight": "Пункт 6, сторона А",
+    "checkbox_a7_crossway": "Пункт 7, сторона А",
+    "checkbox_a8_into_roundabout": "Пункт 8, сторона А",
+    "checkbox_a9_roundabout": "Пункт 9, сторона А",
+    "checkbox_a10_same_line": "Пункт 10, сторона А",
+    "checkbox_a11_other_line": "Пункт 11, сторона А",
+    "checkbox_a12_change_line": "Пункт 12, сторона А",
+    "checkbox_a13_overtaking": "Пункт 13, сторона А",
+    "checkbox_a14_turning_right": "Пункт 14, сторона А",
+    "checkbox_a15_turning_left": "Пункт 15, сторона А",
+    "checkbox_a16_turning_around": "Пункт 16, сторона А",
+    "checkbox_a17_in_reverse": "Пункт 17, сторона А",
+    "checkbox_a18_oncoming_lane": "Пункт 18, сторона А",
+    "checkbox_a19_left_from_me": "Пункт 19, сторона А",
+    "checkbox_a20_no_priority_sign": "Пункт 20, сторона А",
+    "checkbox_a21_hitting": "Пункт 21, сторона А",
+    "checkbox_a22_stopped": "Пункт 22, сторона А",
+    "checkbox_a23_other": "Пункт 23, сторона А",
+    "checkbox_b1_veh_moving": "Пункт 1, сторона Б",
+    "checkbox_b2_no_driver": "Пункт 2, сторона Б",
+    "checkbox_b3_parking_moving": "Пункт 3, сторона Б",
+    "checkbox_b4_driving_out": "Пункт 4, сторона Б",
+    "checkbox_b5_driving_in": "Пункт 5, сторона Б",
+    "checkbox_b6_driving_straight": "Пункт 6, сторона Б",
+    "checkbox_b7_crossway": "Пункт 7, сторона Б",
+    "checkbox_b8_into_roundabout": "Пункт 8, сторона Б",
+    "checkbox_b9_roundabout": "Пункт 9, сторона Б",
+    "checkbox_b10_same_line": "Пункт 10, сторона Б",
+    "checkbox_b11_other_line": "Пункт 11, сторона Б",
+    "checkbox_b12_change_line": "Пункт 12, сторона Б",
+    "checkbox_b13_overtaking": "Пункт 13, сторона Б",
+    "checkbox_b14_turning_right": "Пункт 14, сторона Б",
+    "checkbox_b15_turning_left": "Пункт 15, сторона Б",
+    "checkbox_b16_turning_around": "Пункт 16, сторона Б",
+    "checkbox_b17_in_reverse": "Пункт 17, сторона Б",
+    "checkbox_b18_oncoming_lane": "Пункт 18, сторона Б",
+    "checkbox_b19_left_from_me": "Пункт 19, сторона Б",
+    "checkbox_b20_no_priority_sign": "Пункт 20, сторона Б",
+    "checkbox_b21_hitting": "Пункт 21, сторона Б",
+    "checkbox_b22_stopped": "Пункт 22, сторона Б",
+    "checkbox_b23_other": "Пункт 23, сторона Б",
+    "differences": "Наличие разногласий",
+    "no_differences": "Отсутствие разногласий",
+    "signature_1": "Подпись №1",
+    "signature_2": "Подпись №2",
+    "rntrc": "РНОКПП. Регистрационный номер учетной карточки налогоплательщика (при наличии)",
+    "surname_ukr": "Прiзвище",
+    "name_ukr": "Iм'я",
+    "third": "По Батьковi",
+    "gender": "Пол",
+    "authority": "Орган, выдавший документ",
+    "patronymic_rus": "Собственник: отчество (на русском)",
+    "city": "Нас. пункт",
+    "house_number": "Дом",
+    "building_number": "Корпус",
+    "apartment_number": "Квартира",
+    "police_unit_code": "Орган, выдавший документ",
+    "province_rus": "Республика, край, область",
+    "province": "Республика, край, область",
+    "legal_name_rus": "Название владельца (юрлицо на русском)",
+    "legal_name": "Название владельца (юрлицо на английском)",
+    "reg_number": "Регистрационный знак",
+    "brand_model_rus": "Марка, модель (на русском)",
+    "brand_model_eng": "Марка, модель (на английском)",
+    "vehicle_type": "Тип ТС",
+    "vehicle_category": "Категория ТС",
+    "release_year": "Год выпуска ТС",
+    "engine_model": "Модель двигателя",
+    "vehicle_chassis": "Шасси №",
+    "vehicle_body": "Кузов №",
+    "engine_kw": "Мощность двигателя, кВт",
+    "engine_hp": "Мощность двигателя, л. с.",
+    "ecologic_class": "Экологический класс",
+    "passport_series": "Паспорт ТС: серия",
+    "passport_number": "Паспорт ТС: номер",
+    "mass": "Масса без нагрузки",
+    "temporary_registration_term": "Срок временной регистрации"
+  }
+});
 
 /***/ }),
 
@@ -4193,6 +4769,125 @@ __webpack_require__.r(__webpack_exports__);
       position: 'is-top',
       duration: 2500
     };
+  },
+  success: function success(message) {
+    return {
+      message: message,
+      type: 'is-success',
+      position: 'is-top',
+      duration: 2500
+    };
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/mixins/datetimeMixin.js":
+/*!**********************************************!*\
+  !*** ./resources/js/mixins/datetimeMixin.js ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  methods: {
+    createdAt: function createdAt(time) {
+      return moment__WEBPACK_IMPORTED_MODULE_0___default()(time).format('DD-MM-yyyy, HH:mm:ss');
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/mixins/individualsMixin.js":
+/*!*************************************************!*\
+  !*** ./resources/js/mixins/individualsMixin.js ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _constants_documentTypes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../constants/documentTypes */ "./resources/js/constants/documentTypes.js");
+/* harmony import */ var _constants_fieldTypes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../constants/fieldTypes */ "./resources/js/constants/fieldTypes.js");
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  methods: {
+    getFullName: function getFullName(individual) {
+      var fioKeys = ['fio', 'cardholder_name', 'born_full_name', 'full_name'];
+      var name = this.getName(individual);
+      var surname = this.getSurname(individual);
+      var patronymic = this.getPatronymic(individual);
+      var fullName = "";
+
+      if (individual.documents) {
+        individual.documents.map(function (document) {
+          document.fields.map(function (field) {
+            if (fioKeys.includes(field.type)) fullName = field.value;
+          });
+        });
+      }
+
+      if (!fullName) {
+        if (!name && !surname && !patronymic) {
+          fullName = "Неизвестно";
+        } else {
+          fullName = name + " " + surname + " " + patronymic;
+        }
+      }
+
+      return fullName;
+    },
+    getName: function getName(individual) {
+      var nameKeys = ['name', 'first_name', 'name_rus', 'name_eng', 'name_ukr', 'a_vehicle_owner_name', 'a_veh_driver_name', 'b_vehicle_owner_name', 'b_veh_driver_name', 'legal_name', 'legal_name_rus'];
+      var name = "";
+
+      if (individual.documents) {
+        individual.documents.map(function (document) {
+          document.fields.map(function (field) {
+            if (nameKeys.includes(field.type)) name = field.value;
+          });
+        });
+      }
+
+      return name;
+    },
+    getSurname: function getSurname(individual) {
+      var surnameKeys = ['surname', 'surname_rus', 'surname_eng', 'surname_ukr', 'a_vehicle_owner_surname', 'a_veh_driver_surname', 'b_vehicle_owner_surname', 'b_veh_driver_surname'];
+      var surname = "";
+      individual.documents.map(function (document) {
+        document.fields.map(function (field) {
+          if (surnameKeys.includes(field.type)) surname = field.value;
+        });
+      });
+      return surname;
+    },
+    getPatronymic: function getPatronymic(individual) {
+      var patronymicKeys = ['third_name', 'patronymic', 'patron', 'other_name', 'other_names', 'patter', 'a_vehicle_owner_patronym', 'a_veh_driver_patronym', 'b_vehicle_owner_patronym', 'b_veh_driver_patronym', 'third'];
+      var patronymic = "";
+      individual.documents.map(function (document) {
+        document.fields.map(function (field) {
+          if (patronymicKeys.includes(field.type)) patronymic = field.value;
+        });
+      });
+      return patronymic;
+    },
+    getDocumentNameByKey: function getDocumentNameByKey(key) {
+      return _constants_documentTypes__WEBPACK_IMPORTED_MODULE_0__.default.all[key] ? _constants_documentTypes__WEBPACK_IMPORTED_MODULE_0__.default.all[key] : key;
+    },
+    getFieldNameByKey: function getFieldNameByKey(key) {
+      return _constants_fieldTypes__WEBPACK_IMPORTED_MODULE_1__.default.all[key] ? _constants_fieldTypes__WEBPACK_IMPORTED_MODULE_1__.default.all[key] : key;
+    }
   }
 });
 
@@ -4438,6 +5133,76 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 /***/ }),
 
+/***/ "./resources/js/services/individual/individualService.js":
+/*!***************************************************************!*\
+  !*** ./resources/js/services/individual/individualService.js ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _axiosService__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../axiosService */ "./resources/js/services/axiosService.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  getIndividualUsers: function getIndividualUsers() {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      var response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return _axiosService__WEBPACK_IMPORTED_MODULE_1__.default.get('/individuals/all');
+
+            case 2:
+              response = _context.sent;
+              return _context.abrupt("return", response === null || response === void 0 ? void 0 : response.data);
+
+            case 4:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }))();
+  },
+  getIndividualUserById: function getIndividualUserById(id) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+      var response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 2;
+              return _axiosService__WEBPACK_IMPORTED_MODULE_1__.default.get('/individuals/get/' + id);
+
+            case 2:
+              response = _context2.sent;
+              return _context2.abrupt("return", response === null || response === void 0 ? void 0 : response.data);
+
+            case 4:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
+    }))();
+  }
+});
+
+/***/ }),
+
 /***/ "./resources/js/services/task/taskService.js":
 /*!***************************************************!*\
   !*** ./resources/js/services/task/taskService.js ***!
@@ -4588,28 +5353,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }
       }, _callee4);
-    }))();
-  },
-  getIndividualUsers: function getIndividualUsers() {
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
-      var response;
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
-        while (1) {
-          switch (_context5.prev = _context5.next) {
-            case 0:
-              _context5.next = 2;
-              return _axiosService__WEBPACK_IMPORTED_MODULE_1__.default.get('/individuals/all');
-
-            case 2:
-              response = _context5.sent;
-              return _context5.abrupt("return", response === null || response === void 0 ? void 0 : response.data);
-
-            case 4:
-            case "end":
-              return _context5.stop();
-          }
-        }
-      }, _callee5);
     }))();
   }
 });
@@ -26565,30 +27308,6 @@ var Plugin = {
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Plugin);
 
-
-
-/***/ }),
-
-/***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/classification/ClassificationComponent.vue?vue&type=style&index=0&id=4a2c410e&scoped=true&lang=scss&":
-/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/classification/ClassificationComponent.vue?vue&type=style&index=0&id=4a2c410e&scoped=true&lang=scss& ***!
-  \************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-/***/ ((module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
-// Imports
-
-var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
-// Module
-___CSS_LOADER_EXPORT___.push([module.id, ".confidence-badge[data-v-4a2c410e] {\n  padding: 4px 9px;\n  border-radius: 18px;\n  color: #fff;\n}\n.confidence-low[data-v-4a2c410e] {\n  background: gray;\n}\n.confidence-middle[data-v-4a2c410e] {\n  background: #02c5e0;\n}\n.confidence-high[data-v-4a2c410e] {\n  background: #2ac178;\n}", ""]);
-// Exports
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
 
 /***/ }),
@@ -79842,36 +80561,6 @@ try {
 
 /***/ }),
 
-/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/classification/ClassificationComponent.vue?vue&type=style&index=0&id=4a2c410e&scoped=true&lang=scss&":
-/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/classification/ClassificationComponent.vue?vue&type=style&index=0&id=4a2c410e&scoped=true&lang=scss& ***!
-  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
-/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_css_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ClassificationComponent_vue_vue_type_style_index_0_id_4a2c410e_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!../../../../node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ClassificationComponent.vue?vue&type=style&index=0&id=4a2c410e&scoped=true&lang=scss& */ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/classification/ClassificationComponent.vue?vue&type=style&index=0&id=4a2c410e&scoped=true&lang=scss&");
-
-            
-
-var options = {};
-
-options.insert = "head";
-options.singleton = false;
-
-var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ClassificationComponent_vue_vue_type_style_index_0_id_4a2c410e_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_1__.default, options);
-
-
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ClassificationComponent_vue_vue_type_style_index_0_id_4a2c410e_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_1__.default.locals || {});
-
-/***/ }),
-
 /***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/documents/DocumentsPage.vue?vue&type=style&index=0&id=5359e1b5&scoped=true&lang=scss&":
 /*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/documents/DocumentsPage.vue?vue&type=style&index=0&id=5359e1b5&scoped=true&lang=scss& ***!
@@ -80323,17 +81012,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _ClassificationComponent_vue_vue_type_template_id_4a2c410e_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ClassificationComponent.vue?vue&type=template&id=4a2c410e&scoped=true& */ "./resources/js/components/classification/ClassificationComponent.vue?vue&type=template&id=4a2c410e&scoped=true&");
 /* harmony import */ var _ClassificationComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ClassificationComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/classification/ClassificationComponent.vue?vue&type=script&lang=js&");
-/* harmony import */ var _ClassificationComponent_vue_vue_type_style_index_0_id_4a2c410e_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ClassificationComponent.vue?vue&type=style&index=0&id=4a2c410e&scoped=true&lang=scss& */ "./resources/js/components/classification/ClassificationComponent.vue?vue&type=style&index=0&id=4a2c410e&scoped=true&lang=scss&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
-;
 
 
 /* normalize component */
-
-var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__.default)(
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
   _ClassificationComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
   _ClassificationComponent_vue_vue_type_template_id_4a2c410e_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render,
   _ClassificationComponent_vue_vue_type_template_id_4a2c410e_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
@@ -80624,6 +81311,45 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
 /* hot reload */
 if (false) { var api; }
 component.options.__file = "resources/js/components/individual/IndividualList.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/individual/IndividualPage.vue":
+/*!***************************************************************!*\
+  !*** ./resources/js/components/individual/IndividualPage.vue ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _IndividualPage_vue_vue_type_template_id_47ff4c63_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./IndividualPage.vue?vue&type=template&id=47ff4c63&scoped=true& */ "./resources/js/components/individual/IndividualPage.vue?vue&type=template&id=47ff4c63&scoped=true&");
+/* harmony import */ var _IndividualPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./IndividualPage.vue?vue&type=script&lang=js& */ "./resources/js/components/individual/IndividualPage.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _IndividualPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _IndividualPage_vue_vue_type_template_id_47ff4c63_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render,
+  _IndividualPage_vue_vue_type_template_id_47ff4c63_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  "47ff4c63",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/individual/IndividualPage.vue"
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
 
 /***/ }),
@@ -81047,6 +81773,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/individual/IndividualPage.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************!*\
+  !*** ./resources/js/components/individual/IndividualPage.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_IndividualPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./IndividualPage.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/individual/IndividualPage.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_IndividualPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
 /***/ "./resources/js/components/layouts/DefaultLayout.vue?vue&type=script&lang=js&":
 /*!************************************************************************************!*\
   !*** ./resources/js/components/layouts/DefaultLayout.vue?vue&type=script&lang=js& ***!
@@ -81156,19 +81898,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_UsersList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./UsersList.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/users/UsersList.vue?vue&type=script&lang=js&");
  /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_UsersList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
-
-/***/ }),
-
-/***/ "./resources/js/components/classification/ClassificationComponent.vue?vue&type=style&index=0&id=4a2c410e&scoped=true&lang=scss&":
-/*!**************************************************************************************************************************************!*\
-  !*** ./resources/js/components/classification/ClassificationComponent.vue?vue&type=style&index=0&id=4a2c410e&scoped=true&lang=scss& ***!
-  \**************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_12_0_rules_0_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_ClassificationComponent_vue_vue_type_style_index_0_id_4a2c410e_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader/dist/cjs.js!../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!../../../../node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ClassificationComponent.vue?vue&type=style&index=0&id=4a2c410e&scoped=true&lang=scss& */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12[0].rules[0].use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/classification/ClassificationComponent.vue?vue&type=style&index=0&id=4a2c410e&scoped=true&lang=scss&");
-
 
 /***/ }),
 
@@ -81360,6 +82089,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_IndividualList_vue_vue_type_template_id_64f9faf2_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_IndividualList_vue_vue_type_template_id_64f9faf2_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./IndividualList.vue?vue&type=template&id=64f9faf2&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/individual/IndividualList.vue?vue&type=template&id=64f9faf2&scoped=true&");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/individual/IndividualPage.vue?vue&type=template&id=47ff4c63&scoped=true&":
+/*!**********************************************************************************************************!*\
+  !*** ./resources/js/components/individual/IndividualPage.vue?vue&type=template&id=47ff4c63&scoped=true& ***!
+  \**********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_IndividualPage_vue_vue_type_template_id_47ff4c63_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_IndividualPage_vue_vue_type_template_id_47ff4c63_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_IndividualPage_vue_vue_type_template_id_47ff4c63_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./IndividualPage.vue?vue&type=template&id=47ff4c63&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/individual/IndividualPage.vue?vue&type=template&id=47ff4c63&scoped=true&");
 
 
 /***/ }),
@@ -81877,7 +82623,10 @@ var render = function() {
                             ],
                             2
                           )
-                        : _c(
+                        : Object.keys(_vm.recognizableDocTypes).includes(
+                            task.document_type
+                          )
+                        ? _c(
                             "b-button",
                             {
                               attrs: {
@@ -81897,6 +82646,17 @@ var render = function() {
                               )
                             ]
                           )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      !Object.keys(_vm.recognizableDocTypes).includes(
+                        task.document_type
+                      )
+                        ? _c("div", { staticClass: "text-danger" }, [
+                            _vm._v(
+                              "\n                    Документ не может быть распознан!\n                "
+                            )
+                          ])
+                        : _vm._e()
                     ],
                     1
                   )
@@ -82073,6 +82833,7 @@ var render = function() {
                   },
                   [
                     _c("UploadDocuments", {
+                      attrs: { loading: _vm.uploadLoading },
                       on: { "upload-documents": _vm.uploadDocuments }
                     })
                   ],
@@ -82150,9 +82911,7 @@ var render = function() {
       },
       [
         _c("span", { staticClass: "dropzone-title" }, [
-          _vm._v(
-            "\n                    Выберите файлы для распознавания\n                "
-          )
+          _vm._v("\n            Выберите файлы для распознавания\n        ")
         ]),
         _vm._v(" "),
         _c("span", { staticClass: "dropzone-subtitle" }, [
@@ -82216,63 +82975,53 @@ var render = function() {
         ])
       : _vm._e(),
     _vm._v(" "),
-    _c("div", { staticClass: "buttons d-flex justify-content-center" }, [
-      _c(
-        "div",
-        {
-          staticClass: "mt-3 row",
-          class: {
-            "col-md-6": _vm.dropFiles.length,
-            "col-md-3": !_vm.dropFiles.length
-          }
-        },
-        [
-          _c(
-            "div",
-            {
-              staticClass: "col-md-6",
-              class: {
-                "col-md-6": _vm.dropFiles.length,
-                "col-md-12": !_vm.dropFiles.length
-              }
-            },
-            [
-              _c(
-                "b-button",
-                {
-                  attrs: {
-                    type: "is-primary",
-                    expanded: "",
-                    loading: _vm.uploadLoading
-                  },
-                  on: { click: _vm.onUploadDocuments }
-                },
-                [_vm._v("\n                    Загрузить\n                ")]
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _vm.dropFiles.length
-            ? _c(
-                "div",
-                { staticClass: "col-md-6" },
-                [
-                  _c(
-                    "b-button",
-                    {
-                      attrs: { type: "is-danger", expanded: "" },
-                      on: { click: _vm.clearFiles }
+    _vm.dropFiles.length
+      ? _c("div", { staticClass: "buttons d-flex justify-content-center" }, [
+          _c("div", { staticClass: "mt-3 row col-md-6" }, [
+            _c(
+              "div",
+              { staticClass: "col-md-6" },
+              [
+                _c(
+                  "b-button",
+                  {
+                    attrs: {
+                      type: "is-primary",
+                      expanded: "",
+                      loading: _vm.loading,
+                      disabled: _vm.loading
                     },
-                    [_vm._v("\n                    Очистить\n                ")]
-                  )
-                ],
-                1
-              )
-            : _vm._e()
-        ]
-      )
-    ])
+                    on: { click: _vm.onUploadDocuments }
+                  },
+                  [_vm._v("\n                    Загрузить\n                ")]
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "col-md-6" },
+              [
+                _c(
+                  "b-button",
+                  {
+                    attrs: {
+                      type: "is-danger",
+                      expanded: "",
+                      loading: _vm.loading,
+                      disabled: _vm.loading
+                    },
+                    on: { click: _vm.clearFiles }
+                  },
+                  [_vm._v("\n                    Очистить\n                ")]
+                )
+              ],
+              1
+            )
+          ])
+        ])
+      : _vm._e()
   ])
 }
 var staticRenderFns = [
@@ -82757,6 +83506,17 @@ var render = function() {
         key: "content",
         fn: function() {
           return [
+            _c("b-loading", {
+              attrs: { "is-full-page": true },
+              model: {
+                value: _vm.isLoading,
+                callback: function($$v) {
+                  _vm.isLoading = $$v
+                },
+                expression: "isLoading"
+              }
+            }),
+            _vm._v(" "),
             _c(
               "section",
               [
@@ -82775,13 +83535,6 @@ var render = function() {
                           "detail-key": "id",
                           "show-detail-icon": true
                         },
-                        on: {
-                          "details-open": function(row) {
-                            return _vm.$buefy.toast.open(
-                              "Expanded " + row.user.first_name
-                            )
-                          }
-                        },
                         scopedSlots: _vm._u(
                           [
                             {
@@ -82790,7 +83543,7 @@ var render = function() {
                                 return [
                                   _c("div", { staticClass: "has-text-right" }, [
                                     _vm._v(
-                                      "\n                        Пользователей: " +
+                                      "\n                        Физических лиц: " +
                                         _vm._s(_vm.users.length) +
                                         "\n                    "
                                     )
@@ -82802,7 +83555,7 @@ var render = function() {
                           ],
                           null,
                           false,
-                          2824324879
+                          524250512
                         )
                       },
                       [
@@ -82836,7 +83589,7 @@ var render = function() {
                         }),
                         _vm._v(" "),
                         _c("b-table-column", {
-                          attrs: { label: "Роль", width: "40" },
+                          attrs: { field: "id", label: "ФИО" },
                           scopedSlots: _vm._u(
                             [
                               {
@@ -82844,16 +83597,15 @@ var render = function() {
                                 fn: function(props) {
                                   return [
                                     _c(
-                                      "b-tag",
+                                      "a",
                                       {
-                                        class: "is-" + props.row.role[0].alias,
-                                        attrs: { else: "" }
+                                        attrs: {
+                                          href: "/individuals/" + props.row.id
+                                        }
                                       },
                                       [
                                         _vm._v(
-                                          "\n                        " +
-                                            _vm._s(props.row.role[0].name) +
-                                            "\n                    "
+                                          _vm._s(_vm.getFullName(props.row))
                                         )
                                       ]
                                     )
@@ -82863,96 +83615,14 @@ var render = function() {
                             ],
                             null,
                             false,
-                            2086301333
+                            1745737634
                           )
                         }),
                         _vm._v(" "),
                         _c("b-table-column", {
                           attrs: {
-                            field: "first_name",
-                            label: "Имя",
-                            sortable: ""
-                          },
-                          scopedSlots: _vm._u(
-                            [
-                              {
-                                key: "default",
-                                fn: function(props) {
-                                  return [
-                                    _vm._v(
-                                      "\n                    " +
-                                        _vm._s(props.row.first_name) +
-                                        "\n                "
-                                    )
-                                  ]
-                                }
-                              }
-                            ],
-                            null,
-                            false,
-                            2675757823
-                          )
-                        }),
-                        _vm._v(" "),
-                        _c("b-table-column", {
-                          attrs: {
-                            field: "last_name",
-                            label: "Фамилия",
-                            sortable: ""
-                          },
-                          scopedSlots: _vm._u(
-                            [
-                              {
-                                key: "default",
-                                fn: function(props) {
-                                  return [
-                                    _vm._v(
-                                      "\n                    " +
-                                        _vm._s(props.row.second_name) +
-                                        "\n                "
-                                    )
-                                  ]
-                                }
-                              }
-                            ],
-                            null,
-                            false,
-                            1570220277
-                          )
-                        }),
-                        _vm._v(" "),
-                        _c("b-table-column", {
-                          attrs: {
-                            field: "last_name",
-                            label: "Отчество",
-                            sortable: ""
-                          },
-                          scopedSlots: _vm._u(
-                            [
-                              {
-                                key: "default",
-                                fn: function(props) {
-                                  return [
-                                    _vm._v(
-                                      "\n                    " +
-                                        _vm._s(props.row.patronymic) +
-                                        "\n                "
-                                    )
-                                  ]
-                                }
-                              }
-                            ],
-                            null,
-                            false,
-                            1237994325
-                          )
-                        }),
-                        _vm._v(" "),
-                        _c("b-table-column", {
-                          attrs: {
-                            field: "date",
-                            label: "Создан",
-                            centered: "",
+                            field: "created_at",
+                            label: "Дата создания",
                             sortable: ""
                           },
                           scopedSlots: _vm._u(
@@ -82965,9 +83635,7 @@ var render = function() {
                                       _vm._v(
                                         "\n                            " +
                                           _vm._s(
-                                            new Date(
-                                              props.row.created_at
-                                            ).toLocaleDateString()
+                                            _vm.createdAt(props.row.created_at)
                                           ) +
                                           "\n                        "
                                       )
@@ -82978,85 +83646,7 @@ var render = function() {
                             ],
                             null,
                             false,
-                            3271374837
-                          )
-                        }),
-                        _vm._v(" "),
-                        _c("b-table-column", {
-                          attrs: { label: "Отдел", sortable: "" },
-                          scopedSlots: _vm._u(
-                            [
-                              {
-                                key: "default",
-                                fn: function(props) {
-                                  return [
-                                    _c("span", [
-                                      _vm._v(
-                                        "\n                            " +
-                                          _vm._s(props.row.department) +
-                                          "\n                        "
-                                      )
-                                    ])
-                                  ]
-                                }
-                              }
-                            ],
-                            null,
-                            false,
-                            3727994242
-                          )
-                        }),
-                        _vm._v(" "),
-                        _c("b-table-column", {
-                          attrs: { label: "Статус" },
-                          scopedSlots: _vm._u(
-                            [
-                              {
-                                key: "default",
-                                fn: function(props) {
-                                  return [
-                                    props.row.is_blocked
-                                      ? _c(
-                                          "b-tag",
-                                          {
-                                            staticClass: "cursor-pointer",
-                                            attrs: { type: "is-danger" }
-                                          },
-                                          [
-                                            _c("b-icon", {
-                                              staticClass: "mr-1",
-                                              attrs: { icon: "times-circle" }
-                                            }),
-                                            _vm._v(
-                                              "Blocked\n                    "
-                                            )
-                                          ],
-                                          1
-                                        )
-                                      : _c(
-                                          "b-tag",
-                                          {
-                                            staticClass: "cursor-pointer",
-                                            attrs: { type: "is-success" }
-                                          },
-                                          [
-                                            _c("b-icon", {
-                                              staticClass: "mr-1",
-                                              attrs: { icon: "check-circle" }
-                                            }),
-                                            _vm._v(
-                                              "Active\n                    "
-                                            )
-                                          ],
-                                          1
-                                        )
-                                  ]
-                                }
-                              }
-                            ],
-                            null,
-                            false,
-                            218027981
+                            3403983093
                           )
                         })
                       ],
@@ -83068,13 +83658,153 @@ var render = function() {
                         "\n                Вы не можете просмотреть список существующих физических лиц.\n                Вы можете использовать поиск, чтобы найти нужное Вам лицо!\n            "
                       )
                     ])
-                  : _c("b-message", { attrs: { type: "is-danger" } }, [
+                  : !_vm.users.length
+                  ? _c("b-message", { attrs: { type: "is-danger" } }, [
                       _vm._v(
                         "\n                Не найдено ни одного физического лица!\n            "
                       )
                     ])
+                  : _vm._e()
               ],
               1
+            )
+          ]
+        },
+        proxy: true
+      }
+    ])
+  })
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/individual/IndividualPage.vue?vue&type=template&id=47ff4c63&scoped=true&":
+/*!*************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/individual/IndividualPage.vue?vue&type=template&id=47ff4c63&scoped=true& ***!
+  \*************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("DefaultLayout", {
+    scopedSlots: _vm._u([
+      {
+        key: "title",
+        fn: function() {
+          return [
+            _vm._v(
+              "\n        " + _vm._s(_vm.getFullName(_vm.individual)) + "\n    "
+            )
+          ]
+        },
+        proxy: true
+      },
+      {
+        key: "content",
+        fn: function() {
+          return [
+            _c(
+              "div",
+              { staticClass: "documents" },
+              _vm._l(_vm.individual.documents, function(document) {
+                return _c(
+                  "div",
+                  {
+                    staticClass: "document row mb-4",
+                    on: { key: document.id }
+                  },
+                  [
+                    _c("div", { staticClass: "col-md-6" }, [
+                      _c("img", {
+                        attrs: {
+                          src: "/storage/" + document.document_image[0].path
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "col-md-6" },
+                      [
+                        _c("h2", { staticClass: "subtitle" }, [
+                          _c("b", [
+                            _vm._v(
+                              _vm._s(_vm.getDocumentNameByKey(document.type))
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "row mb-2" }, [
+                          _c("div", { staticClass: "col-md-4 text-left" }, [
+                            _c("b", [_vm._v("Название поля")])
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "col-md-5 text-right" }, [
+                            _c("b", [_vm._v("Значение")])
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "col-md-3 text-right" }, [
+                            _c("b", [_vm._v("Уверенность")])
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _vm._l(document.fields, function(field) {
+                          return _c("div", { staticClass: "row mb-2" }, [
+                            _c("div", { staticClass: "col-md-4 text-left" }, [
+                              _vm._v(
+                                "\n                            " +
+                                  _vm._s(_vm.getFieldNameByKey(field.type)) +
+                                  "\n                        "
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "col-md-5 text-right" }, [
+                              _vm._v(
+                                "\n                            " +
+                                  _vm._s(field.value) +
+                                  "\n                        "
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "col-md-3 text-right" }, [
+                              _c(
+                                "span",
+                                {
+                                  staticClass: "confidence-badge",
+                                  class:
+                                    "confidence-" +
+                                    _vm.getLevelOfConfidence(field.confidence)
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                " +
+                                      _vm._s(field.confidence) +
+                                      "\n                            "
+                                  )
+                                ]
+                              )
+                            ])
+                          ])
+                        })
+                      ],
+                      2
+                    )
+                  ]
+                )
+              }),
+              0
             )
           ]
         },

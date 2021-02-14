@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\Individual\IndividualNotFoundException;
 use App\Models\Document;
 use App\Models\DocumentImage;
 use App\Models\Field;
@@ -21,6 +22,24 @@ class IndividualsController extends Controller
         return response()->json(
             Individual::all()
         );
+    }
+
+    public function watchById(string $id)
+    {
+        return view('individual', [
+            'id' => $id
+        ]);
+    }
+
+    public function getIndividualById(string $id)
+    {
+        $individual = Individual::find($id);
+
+        if (!$individual) {
+            throw new IndividualNotFoundException();
+        }
+
+        return response()->json($individual);
     }
 
     public function save(Request $request)
