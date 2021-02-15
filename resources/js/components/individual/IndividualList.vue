@@ -97,6 +97,7 @@
                         field="id"
                         label="ФИО"
                         v-slot="props"
+                        centered
                     >
                         <a :href="`/individuals/${props.row.id}`">{{ getFullName(props.row) }}</a>
                     </b-table-column>
@@ -106,6 +107,7 @@
                         label="Дата создания"
                         v-slot="props"
                         sortable
+                        centered
                     >
                             <span class="tag is-info">
                                 {{ createdAt(props.row.created_at) }}
@@ -115,6 +117,7 @@
                     <b-table-column
                         label="Количество документов"
                         v-slot="props"
+                        centered
                     >
                         {{ props.row.documents.length }}
                     </b-table-column>

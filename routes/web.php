@@ -22,16 +22,22 @@ Auth::routes();
 Route::group([
     'middleware' => 'auth'
 ], function () {
-    Route::get('/history', [\App\Http\Controllers\HistoryController::class, 'index'])->name('history');
+    Route::get('/history', [\App\Http\Controllers\HistoryController::class, 'index'])
+        ->name('history');
+    Route::get('/history/all', [\App\Http\Controllers\HistoryController::class, 'getAllHistory'])
+        ->name('history.all');
 
-    Route::get('/tasks', [\App\Http\Controllers\TasksController::class, 'index'])->name('tasks');
+    Route::get('/tasks', [\App\Http\Controllers\TasksController::class, 'index'])
+        ->name('tasks');
     Route::get('/tasks/all', [\App\Http\Controllers\TasksController::class, 'getAllTasks'])
         ->name('tasks.all');
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])
         ->name('home');
-    Route::get('/users', [\App\Http\Controllers\UsersController::class, 'usersList'])->name('users.view');
-    Route::get('/users/all', [\App\Http\Controllers\UsersController::class, 'getAllUsers'])->name('users.all');
+    Route::get('/users', [\App\Http\Controllers\UsersController::class, 'usersList'])
+        ->name('users.view');
+    Route::get('/users/all', [\App\Http\Controllers\UsersController::class, 'getAllUsers'])
+        ->name('users.all');
 
 
     Route::get('/documents', [\App\Http\Controllers\DocumentsController::class, 'index'])
@@ -58,6 +64,9 @@ Route::group([
         ->name('individuals.id');
     Route::post('/individuals/search', [\App\Http\Controllers\IndividualsController::class, 'search'])
         ->name('individuals.search');
+
+    Route::put('/fields/update', [\App\Http\Controllers\DocumentsController::class, 'updateField'])
+        ->name('fields.update');
 
     Route::middleware(['not.worker'])
         ->group(function () {

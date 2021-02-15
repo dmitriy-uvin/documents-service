@@ -6,11 +6,14 @@ use App\Constants\DocumentTypes;
 use App\Constants\TaskConstants;
 use App\Events\TestEvent;
 use App\Exceptions\Document\NotRecognizableDocumentTypeException;
+use App\Exceptions\Field\FieldNotFoundException;
 use App\Exceptions\Individual\IndividualNotFoundException;
 use App\Exceptions\Task\TaskNotFoundException;
 use App\Models\Document;
 use App\Models\DocumentImage;
 use App\Models\Field;
+use App\Models\FieldHistory;
+use App\Models\History;
 use App\Models\Individual;
 use App\Models\Task;
 use Illuminate\Http\Request;
@@ -220,6 +223,33 @@ class DocumentsController extends Controller
             $fieldObj->confidence = $field['confidence'];
             $fieldObj->document()->associate($documentObj);
             $fieldObj->save();
+        }
+
+        return response()->json([
+            "success" => true
+        ]);
+    }
+
+    public function updateField(Request $request)
+    {
+        $field = Field::find($request->field_id);
+
+        if (!$field) {
+            throw new FieldNotFoundException();
+        }
+
+        if ($field->value !== $request->new_value) {
+            $field->value = $request->new_value;
+
+            $fHistory = new FieldHistory();
+            $fHistory->before = $field->getDifference()['before'];
+            $fHistory->after = $field->getDifference()['after'];
+            $fHistory->author()->associate(Auth::id());
+            $fHistory->field()->associate($field);
+            $fHistory->individual()->associate($field->document->individual->id);
+            $fHistory->save();
+
+            $field->save();
         }
 
         return response()->json([

@@ -20,5 +20,8 @@ export default {
     },
     async saveDocumentForIndividual(payload) {
         return await axiosService.post('/documents/individuals/add', payload);
+    },
+    async updateField(payload) {
+        return await axiosService.put('/fields/update', payload);
     }
 }

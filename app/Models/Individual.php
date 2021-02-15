@@ -24,4 +24,9 @@ class Individual extends Model
     {
         return $this->hasMany(Document::class);
     }
+
+    public function history()
+    {
+        return $this->hasMany(FieldHistory::class);
+    }
 }

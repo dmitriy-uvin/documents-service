@@ -3121,7 +3121,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _layouts_DefaultLayout__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../layouts/DefaultLayout */ "./resources/js/components/layouts/DefaultLayout.vue");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _layouts_DefaultLayout__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../layouts/DefaultLayout */ "./resources/js/components/layouts/DefaultLayout.vue");
+/* harmony import */ var _services_history_historyService__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../services/history/historyService */ "./resources/js/services/history/historyService.js");
+/* harmony import */ var _mixins_datetimeMixin__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../mixins/datetimeMixin */ "./resources/js/mixins/datetimeMixin.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3135,10 +3157,40 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "HistoryComponent",
+  mixins: [_mixins_datetimeMixin__WEBPACK_IMPORTED_MODULE_3__.default],
   components: {
-    DefaultLayout: _layouts_DefaultLayout__WEBPACK_IMPORTED_MODULE_0__.default
+    DefaultLayout: _layouts_DefaultLayout__WEBPACK_IMPORTED_MODULE_1__.default
+  },
+  data: function data() {
+    return {
+      historyData: []
+    };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return _services_history_historyService__WEBPACK_IMPORTED_MODULE_2__.default.getAllHistory();
+
+            case 2:
+              _this.historyData = _context.sent;
+
+            case 3:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }))();
   }
 });
 
@@ -3169,6 +3221,9 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
 //
 //
 //
@@ -3552,6 +3607,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_individualsMixin__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../mixins/individualsMixin */ "./resources/js/mixins/individualsMixin.js");
 /* harmony import */ var _services_document_documentService__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../services/document/documentService */ "./resources/js/services/document/documentService.js");
 /* harmony import */ var _events_eventBus__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../events/eventBus */ "./resources/js/events/eventBus.js");
+/* harmony import */ var _mixins_datetimeMixin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../mixins/datetimeMixin */ "./resources/js/mixins/datetimeMixin.js");
+/* harmony import */ var _services_history_historyService__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../services/history/historyService */ "./resources/js/services/history/historyService.js");
 
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -3762,6 +3819,75 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 
 
 
@@ -3772,7 +3898,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   components: {
     DefaultLayout: _layouts_DefaultLayout__WEBPACK_IMPORTED_MODULE_1__.default
   },
-  mixins: [_mixins_individualsMixin__WEBPACK_IMPORTED_MODULE_3__.default],
+  mixins: [_mixins_individualsMixin__WEBPACK_IMPORTED_MODULE_3__.default, _mixins_datetimeMixin__WEBPACK_IMPORTED_MODULE_6__.default],
   props: ['id'],
   data: function data() {
     return {
@@ -3785,7 +3911,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       receivedDetails: false,
       details: [],
       loading: false,
-      tasksLoading: {}
+      tasksLoading: {},
+      editableId: '',
+      editing: false,
+      editableValue: '',
+      editLoading: false,
+      historyData: []
     };
   },
   mounted: function mounted() {
@@ -3829,6 +3960,36 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   methods: {
+    getHistoryForIndividual: function getHistoryForIndividual() {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.prev = 0;
+                _context2.next = 3;
+                return _services_history_historyService__WEBPACK_IMPORTED_MODULE_7__.default.getHistoryForIndividual(_this2.id);
+
+              case 3:
+                _this2.historyData = _context2.sent;
+                _context2.next = 9;
+                break;
+
+              case 6:
+                _context2.prev = 6;
+                _context2.t0 = _context2["catch"](0);
+                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context2.t0.message);
+
+              case 9:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, null, [[0, 6]]);
+      }))();
+    },
     getLevelOfConfidence: function getLevelOfConfidence(confidence) {
       if (confidence >= 0 && confidence < 0.49) return 'low';
       if (confidence >= 0.49 && confidence < 0.7) return 'middle';
@@ -3861,13 +4022,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       if (!this.details.length) this.endUploadingDocuments();
     },
     addFiles: function addFiles(files) {
-      var _this2 = this;
+      var _this3 = this;
 
       _toConsumableArray(files).map(function (file) {
-        if (file.size < _this2.maxFileSize) {
-          if (_this2.availableTypes.includes(file.type)) {
-            if (!_this2.fileNames.includes(file.name)) {
-              _this2.documentFiles.push(file);
+        if (file.size < _this3.maxFileSize) {
+          if (_this3.availableTypes.includes(file.type)) {
+            if (!_this3.fileNames.includes(file.name)) {
+              _this3.documentFiles.push(file);
             }
           }
         }
@@ -3892,72 +4053,72 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       })));
     },
     onUploadDocuments: function onUploadDocuments() {
-      var _this3 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        var formData;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                if (!_this3.documentFiles.length) {
-                  _context2.next = 16;
-                  break;
-                }
-
-                _context2.prev = 1;
-                _this3.loading = true;
-                formData = new FormData();
-
-                _this3.documentFiles.map(function (file) {
-                  formData.append('documents[]', file);
-                });
-
-                _context2.next = 7;
-                return _services_document_documentService__WEBPACK_IMPORTED_MODULE_4__.default.classifyDocuments(formData);
-
-              case 7:
-                _this3.details = _context2.sent;
-                _this3.receivedDetails = true;
-                _this3.loading = false;
-                _context2.next = 16;
-                break;
-
-              case 12:
-                _context2.prev = 12;
-                _context2.t0 = _context2["catch"](1);
-                _this3.loading = false;
-                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context2.t0.message);
-
-              case 16:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2, null, [[1, 12]]);
-      }))();
-    },
-    replaceDocument: function replaceDocument(taskId, docType) {
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
-        var documentId;
+        var formData;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                _context3.prev = 0;
+                if (!_this4.documentFiles.length) {
+                  _context3.next = 16;
+                  break;
+                }
+
+                _context3.prev = 1;
+                _this4.loading = true;
+                formData = new FormData();
+
+                _this4.documentFiles.map(function (file) {
+                  formData.append('documents[]', file);
+                });
+
+                _context3.next = 7;
+                return _services_document_documentService__WEBPACK_IMPORTED_MODULE_4__.default.classifyDocuments(formData);
+
+              case 7:
+                _this4.details = _context3.sent;
+                _this4.receivedDetails = true;
+                _this4.loading = false;
+                _context3.next = 16;
+                break;
+
+              case 12:
+                _context3.prev = 12;
+                _context3.t0 = _context3["catch"](1);
+                _this4.loading = false;
+                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context3.t0.message);
+
+              case 16:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, null, [[1, 12]]);
+      }))();
+    },
+    replaceDocument: function replaceDocument(taskId, docType) {
+      var _this5 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+        var documentId;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.prev = 0;
                 documentId = "";
 
-                _this4.individual.documents.map(function (document) {
+                _this5.individual.documents.map(function (document) {
                   if (document.type === docType) {
                     documentId = document.id;
                   }
                 });
 
-                _this4.makeTaskLoading(taskId, true);
+                _this5.makeTaskLoading(taskId, true);
 
-                _context3.next = 6;
+                _context4.next = 6;
                 return _services_document_documentService__WEBPACK_IMPORTED_MODULE_4__.default.replaceDocument({
                   task_id: taskId,
                   document_id: documentId
@@ -3966,81 +4127,154 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 6:
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('success', 'Документ был успешно заменен!');
 
-                _this4.makeTaskLoading(taskId, false);
-
-                _this4.dontChange(taskId);
-
-                _context3.next = 11;
-                return _services_individual_individualService__WEBPACK_IMPORTED_MODULE_2__.default.getIndividualUserById(_this4.id);
-
-              case 11:
-                _this4.individual = _context3.sent;
-                _context3.next = 18;
-                break;
-
-              case 14:
-                _context3.prev = 14;
-                _context3.t0 = _context3["catch"](0);
-
-                _this4.makeTaskLoading(taskId, false);
-
-                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context3.t0.message);
-
-              case 18:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3, null, [[0, 14]]);
-      }))();
-    },
-    addDocument: function addDocument(taskId) {
-      var _this5 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                _context4.prev = 0;
-
-                _this5.makeTaskLoading(taskId, true);
-
-                _context4.next = 4;
-                return _services_document_documentService__WEBPACK_IMPORTED_MODULE_4__.default.saveDocumentForIndividual({
-                  task_id: taskId,
-                  individual_id: _this5.individual.id
-                });
-
-              case 4:
                 _this5.makeTaskLoading(taskId, false);
-
-                _context4.next = 7;
-                return _services_individual_individualService__WEBPACK_IMPORTED_MODULE_2__.default.getIndividualUserById(_this5.id);
-
-              case 7:
-                _this5.individual = _context4.sent;
 
                 _this5.dontChange(taskId);
 
-                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('success', 'Документ был успешно добавлен!');
-                _context4.next = 16;
+                _context4.next = 11;
+                return _services_individual_individualService__WEBPACK_IMPORTED_MODULE_2__.default.getIndividualUserById(_this5.id);
+
+              case 11:
+                _this5.individual = _context4.sent;
+                _context4.next = 18;
                 break;
 
-              case 12:
-                _context4.prev = 12;
+              case 14:
+                _context4.prev = 14;
                 _context4.t0 = _context4["catch"](0);
 
                 _this5.makeTaskLoading(taskId, false);
 
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context4.t0.message);
 
-              case 16:
+              case 18:
               case "end":
                 return _context4.stop();
             }
           }
-        }, _callee4, null, [[0, 12]]);
+        }, _callee4, null, [[0, 14]]);
+      }))();
+    },
+    addDocument: function addDocument(taskId) {
+      var _this6 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _context5.prev = 0;
+
+                _this6.makeTaskLoading(taskId, true);
+
+                _context5.next = 4;
+                return _services_document_documentService__WEBPACK_IMPORTED_MODULE_4__.default.saveDocumentForIndividual({
+                  task_id: taskId,
+                  individual_id: _this6.individual.id
+                });
+
+              case 4:
+                _this6.makeTaskLoading(taskId, false);
+
+                _context5.next = 7;
+                return _services_individual_individualService__WEBPACK_IMPORTED_MODULE_2__.default.getIndividualUserById(_this6.id);
+
+              case 7:
+                _this6.individual = _context5.sent;
+
+                _this6.dontChange(taskId);
+
+                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('success', 'Документ был успешно добавлен!');
+                _context5.next = 16;
+                break;
+
+              case 12:
+                _context5.prev = 12;
+                _context5.t0 = _context5["catch"](0);
+
+                _this6.makeTaskLoading(taskId, false);
+
+                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context5.t0.message);
+
+              case 16:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5, null, [[0, 12]]);
+      }))();
+    },
+    onEdit: function onEdit(editId, fieldValue) {
+      this.editing = true;
+      this.editableId = editId;
+      this.editableValue = fieldValue;
+    },
+    onSave: function onSave(field) {
+      var _this7 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                if (_this7.editableValue) {
+                  _context6.next = 4;
+                  break;
+                }
+
+                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', 'Поле не может быть пустым!');
+                _context6.next = 28;
+                break;
+
+              case 4:
+                if (!(_this7.editableValue !== field.value)) {
+                  _context6.next = 26;
+                  break;
+                }
+
+                _context6.prev = 5;
+                _this7.editLoading = true;
+                _context6.next = 9;
+                return _services_document_documentService__WEBPACK_IMPORTED_MODULE_4__.default.updateField({
+                  field_id: field.id,
+                  new_value: _this7.editableValue
+                });
+
+              case 9:
+                _this7.editLoading = false;
+                _this7.editing = false;
+                _this7.editableId = '';
+                _context6.next = 14;
+                return _services_individual_individualService__WEBPACK_IMPORTED_MODULE_2__.default.getIndividualUserById(_this7.id);
+
+              case 14:
+                _this7.individual = _context6.sent;
+                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('success', 'Поле успешно обновлено!');
+                _context6.next = 24;
+                break;
+
+              case 18:
+                _context6.prev = 18;
+                _context6.t0 = _context6["catch"](5);
+                _this7.editLoading = false;
+                _this7.editing = false;
+                _this7.editableId = '';
+                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context6.t0.message);
+
+              case 24:
+                _context6.next = 28;
+                break;
+
+              case 26:
+                _this7.editing = false;
+                _this7.editableId = '';
+
+              case 28:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6, null, [[5, 18]]);
       }))();
     }
   },
@@ -5886,6 +6120,74 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }
       }, _callee5);
+    }))();
+  },
+  updateField: function updateField(payload) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
+        while (1) {
+          switch (_context6.prev = _context6.next) {
+            case 0:
+              _context6.next = 2;
+              return _axiosService__WEBPACK_IMPORTED_MODULE_1__.default.put('/fields/update', payload);
+
+            case 2:
+              return _context6.abrupt("return", _context6.sent);
+
+            case 3:
+            case "end":
+              return _context6.stop();
+          }
+        }
+      }, _callee6);
+    }))();
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/services/history/historyService.js":
+/*!*********************************************************!*\
+  !*** ./resources/js/services/history/historyService.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _axiosService__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../axiosService */ "./resources/js/services/axiosService.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  getHistoryForIndividual: function getHistoryForIndividual(id) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      var response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return _axiosService__WEBPACK_IMPORTED_MODULE_1__.default.get('/field-history/individual/' + id);
+
+            case 2:
+              response = _context.sent;
+              return _context.abrupt("return", response === null || response === void 0 ? void 0 : response.data);
+
+            case 4:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
     }))();
   }
 });
@@ -84764,11 +85066,38 @@ var render = function() {
       {
         key: "content",
         fn: function() {
-          return [
-            _c("b-message", { attrs: { type: "is-warning" } }, [
-              _vm._v("В разработке!\n        ")
-            ])
-          ]
+          return _vm._l(_vm.historyData, function(history) {
+            return _c(
+              "div",
+              { staticClass: "mb-3", on: { key: history.id } },
+              [
+                _c("b-message", { attrs: { type: "is-info" } }, [
+                  _vm._v(
+                    "\n                " +
+                      _vm._s(history.user.first_name) +
+                      " (" +
+                      _vm._s(history.user.role[0].name) +
+                      ") отредактировал поле.\n                Было: "
+                  ),
+                  _c("span", { staticClass: "text-success" }, [
+                    _vm._v(_vm._s(JSON.parse(history.before).value))
+                  ]),
+                  _vm._v(",\n                Стало: "),
+                  _c("span", { staticClass: "text-danger" }, [
+                    _vm._v(_vm._s(history.after))
+                  ]),
+                  _c("br"),
+                  _vm._v(" "),
+                  _c("small", [
+                    _c("b", { staticClass: "text-black-50" }, [
+                      _vm._v(_vm._s(_vm.createdAt(history.created_at)))
+                    ])
+                  ])
+                ])
+              ],
+              1
+            )
+          })
         },
         proxy: true
       }
@@ -85122,7 +85451,11 @@ var render = function() {
                             }),
                             _vm._v(" "),
                             _c("b-table-column", {
-                              attrs: { field: "id", label: "ФИО" },
+                              attrs: {
+                                field: "id",
+                                label: "ФИО",
+                                centered: ""
+                              },
                               scopedSlots: _vm._u(
                                 [
                                   {
@@ -85157,7 +85490,8 @@ var render = function() {
                               attrs: {
                                 field: "created_at",
                                 label: "Дата создания",
-                                sortable: ""
+                                sortable: "",
+                                centered: ""
                               },
                               scopedSlots: _vm._u(
                                 [
@@ -85191,7 +85525,10 @@ var render = function() {
                             }),
                             _vm._v(" "),
                             _c("b-table-column", {
-                              attrs: { label: "Количество документов" },
+                              attrs: {
+                                label: "Количество документов",
+                                centered: ""
+                              },
                               scopedSlots: _vm._u(
                                 [
                                   {
@@ -85282,442 +85619,671 @@ var render = function() {
         fn: function() {
           return [
             _c(
-              "div",
-              { staticClass: "documents" },
-              _vm._l(_vm.individual.documents, function(document) {
-                return _c(
-                  "div",
-                  {
-                    staticClass: "document row mb-4",
-                    on: { key: document.id }
-                  },
-                  [
-                    _c("div", { staticClass: "col-md-6" }, [
-                      _c("img", {
-                        attrs: {
-                          src: "/storage/" + document.document_image[0].path
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "col-md-6" },
-                      [
-                        _c("h2", { staticClass: "subtitle" }, [
-                          _c("b", [
-                            _vm._v(
-                              _vm._s(_vm.getDocumentNameByKey(document.type))
-                            )
-                          ])
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "row mb-2" }, [
-                          _c("div", { staticClass: "col-md-4 text-left" }, [
-                            _c("b", [_vm._v("Название поля")])
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "col-md-5 text-right" }, [
-                            _c("b", [_vm._v("Значение")])
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "col-md-3 text-right" }, [
-                            _c("b", [_vm._v("Уверенность")])
-                          ])
-                        ]),
-                        _vm._v(" "),
-                        _vm._l(document.fields, function(field) {
-                          return _c("div", { staticClass: "row mb-2" }, [
-                            _c("div", { staticClass: "col-md-4 text-left" }, [
-                              _vm._v(
-                                "\n                            " +
-                                  _vm._s(_vm.getFieldNameByKey(field.type)) +
-                                  "\n                        "
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "col-md-5 text-right" }, [
-                              _vm._v(
-                                "\n                            " +
-                                  _vm._s(field.value) +
-                                  "\n                        "
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "col-md-3 text-right" }, [
-                              _c(
-                                "span",
-                                {
-                                  staticClass: "confidence-badge",
-                                  class:
-                                    "confidence-" +
-                                    _vm.getLevelOfConfidence(field.confidence)
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                " +
-                                      _vm._s(field.confidence.toFixed(2)) +
-                                      "\n                            "
-                                  )
-                                ]
-                              )
-                            ])
-                          ])
-                        })
-                      ],
-                      2
-                    )
-                  ]
-                )
-              }),
-              0
-            ),
-            _vm._v(" "),
-            _c("hr"),
-            _vm._v(" "),
-            !_vm.receivedDetails
-              ? _c("div", [
-                  _c("div", {}, [
-                    _c(
-                      "label",
-                      {
-                        staticClass: "dropzone",
-                        class: { "dropzone-active": _vm.dropzoneActive },
-                        attrs: { for: "file-uploader" },
-                        on: {
-                          drop: function($event) {
-                            $event.preventDefault()
-                            return _vm.onDrop($event)
-                          },
-                          dragover: function($event) {
-                            $event.preventDefault()
-                            return _vm.onDropzoneHover($event)
-                          },
-                          dragleave: function($event) {
-                            $event.preventDefault()
-                            return _vm.onDropzoneLeave($event)
-                          }
-                        }
-                      },
-                      [
-                        _c("span", { staticClass: "dropzone-title" }, [
-                          _vm._v(
-                            "\n                    Выберите файлы для распознавания\n                "
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("span", { staticClass: "dropzone-subtitle" }, [
-                          _vm._v("или просто перетащите их сюда")
-                        ])
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "text-center user-select-none" }, [
-                      _vm._v(
-                        "\n                    Форматы JPEG, PNG, BMP, TIFF, GIF, PDF, DJVU — весом до 10 МБ."
-                      ),
-                      _c("br"),
-                      _vm._v(
-                        "\n                    Поддерживаются многостраничные файлы и распознавание нескольких документов в одном файле.\n                "
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      staticStyle: { display: "none" },
-                      attrs: {
-                        id: "file-uploader",
-                        accept: _vm.availableTypes,
-                        multiple: "",
-                        type: "file",
-                        autocomplete: "off",
-                        tabindex: "-1"
-                      },
-                      on: { change: _vm.onChange }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _vm.filesPreviews.length
-                    ? _c(
-                        "div",
-                        {
-                          staticClass:
-                            "files-previews d-flex justify-content-center mb-3"
-                        },
-                        _vm._l(_vm.filesPreviews, function(filePreview) {
-                          return _c(
-                            "div",
-                            { staticClass: "file-preview mr-2" },
-                            [
-                              _vm._v(
-                                "\n                    " +
-                                  _vm._s(filePreview) +
-                                  "\n                "
-                              )
-                            ]
-                          )
-                        }),
-                        0
-                      )
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _vm.documentFiles.length
-                    ? _c(
-                        "div",
-                        {
-                          staticClass: "buttons d-flex justify-content-center"
-                        },
-                        [
-                          _c("div", { staticClass: "mt-3 row col-md-6" }, [
-                            _c(
-                              "div",
-                              { staticClass: "col-md-6" },
-                              [
-                                _c(
-                                  "b-button",
-                                  {
-                                    attrs: {
-                                      type: "is-primary",
-                                      expanded: "",
-                                      loading: _vm.loading,
-                                      disabled: _vm.loading
-                                    },
-                                    on: { click: _vm.onUploadDocuments }
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                            Загрузить\n                        "
-                                    )
-                                  ]
-                                )
-                              ],
-                              1
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "div",
-                              { staticClass: "col-md-6" },
-                              [
-                                _c(
-                                  "b-button",
-                                  {
-                                    attrs: {
-                                      type: "is-danger",
-                                      expanded: "",
-                                      loading: _vm.loading,
-                                      disabled: _vm.loading
-                                    },
-                                    on: { click: _vm.clearFiles }
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                            Очистить\n                        "
-                                    )
-                                  ]
-                                )
-                              ],
-                              1
-                            )
-                          ])
-                        ]
-                      )
-                    : _vm._e()
-                ])
-              : _c(
-                  "div",
-                  {},
-                  [
-                    _vm._l(_vm.details, function(task) {
+              "b-tabs",
+              [
+                _c("b-tab-item", { attrs: { label: "Документы" } }, [
+                  _c(
+                    "div",
+                    { staticClass: "documents" },
+                    _vm._l(_vm.individual.documents, function(document) {
                       return _c(
                         "div",
-                        { staticClass: "row mb-2", on: { key: task.id } },
+                        {
+                          staticClass: "document row mb-4",
+                          on: { key: document.id }
+                        },
                         [
-                          _c("div", { staticClass: "col-md-6" }, [
+                          _c("div", { staticClass: "col-md-5" }, [
                             _c("img", {
                               attrs: {
-                                src: "/storage/" + task.document_path,
-                                alt: ""
+                                src:
+                                  "/storage/" + document.document_image[0].path
                               }
                             })
                           ]),
                           _vm._v(" "),
-                          _c("div", { staticClass: "col-md-6" }, [
-                            _c("h2", { staticClass: "subtitle" }, [
-                              _vm._v(
-                                _vm._s(
-                                  _vm.getDocumentNameByKey(task.document_type)
-                                )
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _vm.individualDocumentTypes.includes(
-                              task.document_type
-                            )
-                              ? _c(
-                                  "div",
-                                  [
-                                    _c("p", [
-                                      _c("b", [
-                                        _vm._v(
-                                          "У данного физического лица уже существует документ такого типа!"
-                                        ),
-                                        _c("br"),
-                                        _vm._v(
-                                          "\n                                Заменить его на новый экземпляр?"
-                                        )
-                                      ])
-                                    ]),
-                                    _vm._v(" "),
-                                    _c(
-                                      "b-button",
-                                      {
-                                        attrs: {
-                                          type: "is-warning",
-                                          disabled:
-                                            _vm.tasksLoading[task.id].loading
-                                        },
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.dontChange(task.id)
-                                          }
-                                        }
-                                      },
-                                      [
-                                        _vm._v(
-                                          "\n                            Не заменять\n                        "
-                                        )
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "b-button",
-                                      {
-                                        attrs: {
-                                          type: "is-danger",
-                                          loading:
-                                            _vm.tasksLoading[task.id].loading
-                                        },
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.replaceDocument(
-                                              task.id,
-                                              task.document_type
-                                            )
-                                          }
-                                        }
-                                      },
-                                      [
-                                        _vm._v(
-                                          "\n                            Заменить на новый!\n                        "
-                                        )
-                                      ]
+                          _c(
+                            "div",
+                            { staticClass: "col-md-7" },
+                            [
+                              _c("h2", { staticClass: "subtitle m-0" }, [
+                                _c("b", [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.getDocumentNameByKey(document.type)
                                     )
-                                  ],
-                                  1
-                                )
-                              : _vm.cannotBeRecognized(task.document_type)
-                              ? _c("div", [
-                                  _c("p", { staticClass: "text-danger" }, [
-                                    _c("b", [
-                                      _vm._v(
-                                        "Документ не может быть распознан!"
-                                      )
-                                    ])
-                                  ])
+                                  )
                                 ])
-                              : _vm.canBeRecognized(task.document_type)
-                              ? _c(
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "p",
+                                {
+                                  staticClass:
+                                    "mb-2 text-black-50 font-weight-bold"
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                Добавлено: " +
+                                      _vm._s(
+                                        _vm.createdAt(document.created_at)
+                                      ) +
+                                      "\n                            "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "row mb-2" }, [
+                                _c(
                                   "div",
-                                  [
-                                    _c(
-                                      "p",
-                                      { staticClass: "text-success mb-3" },
-                                      [
-                                        _c("b", [
-                                          _vm._v(
-                                            "Физическое лицо не имеет документа такого типа, добавить?"
+                                  { staticClass: "col-md-4 text-left" },
+                                  [_c("b", [_vm._v("Название поля")])]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  { staticClass: "col-md-4 text-center" },
+                                  [_c("b", [_vm._v("Значение")])]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  { staticClass: "col-md-3 text-right" },
+                                  [_c("b", [_vm._v("Уверенность")])]
+                                ),
+                                _vm._v(" "),
+                                _c("div", {
+                                  staticClass: "col-md-1 text-right"
+                                })
+                              ]),
+                              _vm._v(" "),
+                              _vm._l(document.fields, function(field) {
+                                return _c("div", { staticClass: "row mb-2" }, [
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "col-md-4 d-flex align-items-center"
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                    " +
+                                          _vm._s(
+                                            _vm.getFieldNameByKey(field.type)
+                                          ) +
+                                          "\n                                "
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "col-md-4 d-flex align-items-center justify-content-center"
+                                    },
+                                    [
+                                      _vm.editableId === field.id
+                                        ? _c(
+                                            "b-field",
+                                            [
+                                              _c("b-input", {
+                                                attrs: { value: field.value },
+                                                model: {
+                                                  value: _vm.editableValue,
+                                                  callback: function($$v) {
+                                                    _vm.editableValue = $$v
+                                                  },
+                                                  expression: "editableValue"
+                                                }
+                                              })
+                                            ],
+                                            1
                                           )
-                                        ])
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "b-button",
-                                      {
-                                        attrs: {
-                                          type: "is-danger",
-                                          disabled:
-                                            _vm.tasksLoading[task.id].loading
+                                        : _c("span", [
+                                            _vm._v(_vm._s(field.value))
+                                          ])
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "col-md-3 text-right d-flex align-items-center is-justify-content-flex-end"
+                                    },
+                                    [
+                                      _c(
+                                        "span",
+                                        {
+                                          staticClass: "confidence-badge",
+                                          class:
+                                            "confidence-" +
+                                            _vm.getLevelOfConfidence(
+                                              field.confidence
+                                            )
                                         },
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.dontChange(task.id)
-                                          }
-                                        }
-                                      },
-                                      [
-                                        _vm._v(
-                                          "\n                            Отмена\n                        "
-                                        )
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "b-button",
-                                      {
-                                        attrs: {
-                                          type: "is-success",
-                                          loading:
-                                            _vm.tasksLoading[task.id].loading
-                                        },
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.addDocument(task.id)
-                                          }
-                                        }
-                                      },
-                                      [
-                                        _vm._v(
-                                          "\n                            Добавить\n                        "
-                                        )
-                                      ]
-                                    )
-                                  ],
-                                  1
-                                )
-                              : _vm._e()
-                          ])
+                                        [
+                                          _vm._v(
+                                            "\n                                        " +
+                                              _vm._s(
+                                                field.confidence.toFixed(2)
+                                              ) +
+                                              "\n                                    "
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    { staticClass: "col-md-1" },
+                                    [
+                                      _vm.editing && _vm.editableId === field.id
+                                        ? _c(
+                                            "b-tooltip",
+                                            {
+                                              attrs: {
+                                                label: "Сохранить",
+                                                position: "is-left"
+                                              }
+                                            },
+                                            [
+                                              _c("b-button", {
+                                                attrs: {
+                                                  type: "is-success",
+                                                  "icon-left": "save",
+                                                  loading: _vm.editLoading
+                                                },
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.onSave(field)
+                                                  }
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          )
+                                        : _c(
+                                            "b-tooltip",
+                                            {
+                                              attrs: {
+                                                label: "Отредактировать",
+                                                position: "is-left"
+                                              }
+                                            },
+                                            [
+                                              _c("b-button", {
+                                                attrs: {
+                                                  type: "is-info",
+                                                  "icon-left": "pencil-alt"
+                                                },
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.onEdit(
+                                                      field.id,
+                                                      field.value
+                                                    )
+                                                  }
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          )
+                                    ],
+                                    1
+                                  )
+                                ])
+                              })
+                            ],
+                            2
+                          )
                         ]
                       )
                     }),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "d-flex justify-content-center" },
-                      [
-                        _c(
-                          "div",
-                          { staticClass: "col-md-3" },
-                          [
-                            _c(
-                              "b-button",
+                    0
+                  ),
+                  _vm._v(" "),
+                  _c("hr"),
+                  _vm._v(" "),
+                  !_vm.receivedDetails
+                    ? _c("div", [
+                        _c("div", {}, [
+                          _c(
+                            "label",
+                            {
+                              staticClass: "dropzone",
+                              class: { "dropzone-active": _vm.dropzoneActive },
+                              attrs: { for: "file-uploader" },
+                              on: {
+                                drop: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.onDrop($event)
+                                },
+                                dragover: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.onDropzoneHover($event)
+                                },
+                                dragleave: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.onDropzoneLeave($event)
+                                }
+                              }
+                            },
+                            [
+                              _c("span", { staticClass: "dropzone-title" }, [
+                                _vm._v(
+                                  "\n                    Выберите файлы для распознавания\n                "
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("span", { staticClass: "dropzone-subtitle" }, [
+                                _vm._v("или просто перетащите их сюда")
+                              ])
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            { staticClass: "text-center user-select-none" },
+                            [
+                              _vm._v(
+                                "\n                            Форматы JPEG, PNG, BMP, TIFF, GIF, PDF, DJVU — весом до 10 МБ."
+                              ),
+                              _c("br"),
+                              _vm._v(
+                                "\n                            Поддерживаются многостраничные файлы и распознавание нескольких документов в одном файле.\n                        "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c("input", {
+                            staticStyle: { display: "none" },
+                            attrs: {
+                              id: "file-uploader",
+                              accept: _vm.availableTypes,
+                              multiple: "",
+                              type: "file",
+                              autocomplete: "off",
+                              tabindex: "-1"
+                            },
+                            on: { change: _vm.onChange }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _vm.filesPreviews.length
+                          ? _c(
+                              "div",
                               {
-                                attrs: { type: "is-success", expanded: "" },
-                                on: { click: _vm.endUploadingDocuments }
+                                staticClass:
+                                  "files-previews d-flex justify-content-center mb-3"
+                              },
+                              _vm._l(_vm.filesPreviews, function(filePreview) {
+                                return _c(
+                                  "div",
+                                  { staticClass: "file-preview mr-2" },
+                                  [
+                                    _vm._v(
+                                      "\n                            " +
+                                        _vm._s(filePreview) +
+                                        "\n                        "
+                                    )
+                                  ]
+                                )
+                              }),
+                              0
+                            )
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.documentFiles.length
+                          ? _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "buttons d-flex justify-content-center"
                               },
                               [
-                                _vm._v(
-                                  "\n                        Готово!\n                    "
+                                _c(
+                                  "div",
+                                  { staticClass: "mt-3 row col-md-6" },
+                                  [
+                                    _c(
+                                      "div",
+                                      { staticClass: "col-md-6" },
+                                      [
+                                        _c(
+                                          "b-button",
+                                          {
+                                            attrs: {
+                                              type: "is-primary",
+                                              expanded: "",
+                                              loading: _vm.loading,
+                                              disabled: _vm.loading
+                                            },
+                                            on: { click: _vm.onUploadDocuments }
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                                    Загрузить\n                                "
+                                            )
+                                          ]
+                                        )
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "col-md-6" },
+                                      [
+                                        _c(
+                                          "b-button",
+                                          {
+                                            attrs: {
+                                              type: "is-danger",
+                                              expanded: "",
+                                              loading: _vm.loading,
+                                              disabled: _vm.loading
+                                            },
+                                            on: { click: _vm.clearFiles }
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                                    Очистить\n                                "
+                                            )
+                                          ]
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  ]
                                 )
                               ]
                             )
-                          ],
-                          1
-                        )
-                      ]
-                    )
-                  ],
-                  2
-                )
+                          : _vm._e()
+                      ])
+                    : _c(
+                        "div",
+                        {},
+                        [
+                          _vm._l(_vm.details, function(task) {
+                            return _c(
+                              "div",
+                              { staticClass: "row mb-2", on: { key: task.id } },
+                              [
+                                _c("div", { staticClass: "col-md-6" }, [
+                                  _c("img", {
+                                    attrs: {
+                                      src: "/storage/" + task.document_path,
+                                      alt: ""
+                                    }
+                                  })
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "col-md-6" }, [
+                                  _c("h2", { staticClass: "subtitle" }, [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm.getDocumentNameByKey(
+                                          task.document_type
+                                        )
+                                      )
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _vm.individualDocumentTypes.includes(
+                                    task.document_type
+                                  )
+                                    ? _c(
+                                        "div",
+                                        [
+                                          _c("p", [
+                                            _c("b", [
+                                              _vm._v(
+                                                "У данного физического лица уже существует документ такого типа!"
+                                              ),
+                                              _c("br"),
+                                              _vm._v(
+                                                "\n                                        Заменить его на новый экземпляр?"
+                                              )
+                                            ])
+                                          ]),
+                                          _vm._v(" "),
+                                          _c(
+                                            "b-button",
+                                            {
+                                              attrs: {
+                                                type: "is-warning",
+                                                disabled:
+                                                  _vm.tasksLoading[task.id]
+                                                    .loading
+                                              },
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.dontChange(task.id)
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _vm._v(
+                                                "\n                                    Не заменять\n                                "
+                                              )
+                                            ]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "b-button",
+                                            {
+                                              attrs: {
+                                                type: "is-danger",
+                                                loading:
+                                                  _vm.tasksLoading[task.id]
+                                                    .loading
+                                              },
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.replaceDocument(
+                                                    task.id,
+                                                    task.document_type
+                                                  )
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _vm._v(
+                                                "\n                                    Заменить на новый!\n                                "
+                                              )
+                                            ]
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    : _vm.cannotBeRecognized(task.document_type)
+                                    ? _c("div", [
+                                        _c(
+                                          "p",
+                                          { staticClass: "text-danger" },
+                                          [
+                                            _c("b", [
+                                              _vm._v(
+                                                "Документ не может быть распознан!"
+                                              )
+                                            ])
+                                          ]
+                                        )
+                                      ])
+                                    : _vm.canBeRecognized(task.document_type)
+                                    ? _c(
+                                        "div",
+                                        [
+                                          _c(
+                                            "p",
+                                            {
+                                              staticClass: "text-success mb-3"
+                                            },
+                                            [
+                                              _c("b", [
+                                                _vm._v(
+                                                  "Физическое лицо не имеет документа такого типа, добавить?"
+                                                )
+                                              ])
+                                            ]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "b-button",
+                                            {
+                                              attrs: {
+                                                type: "is-danger",
+                                                disabled:
+                                                  _vm.tasksLoading[task.id]
+                                                    .loading
+                                              },
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.dontChange(task.id)
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _vm._v(
+                                                "\n                                    Отмена\n                                "
+                                              )
+                                            ]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "b-button",
+                                            {
+                                              attrs: {
+                                                type: "is-success",
+                                                loading:
+                                                  _vm.tasksLoading[task.id]
+                                                    .loading
+                                              },
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.addDocument(
+                                                    task.id
+                                                  )
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _vm._v(
+                                                "\n                                    Добавить\n                                "
+                                              )
+                                            ]
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    : _vm._e()
+                                ])
+                              ]
+                            )
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            { staticClass: "d-flex justify-content-center" },
+                            [
+                              _c(
+                                "div",
+                                { staticClass: "col-md-3" },
+                                [
+                                  _c(
+                                    "b-button",
+                                    {
+                                      attrs: {
+                                        type: "is-success",
+                                        expanded: ""
+                                      },
+                                      on: { click: _vm.endUploadingDocuments }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                Готово!\n                            "
+                                      )
+                                    ]
+                                  )
+                                ],
+                                1
+                              )
+                            ]
+                          )
+                        ],
+                        2
+                      )
+                ]),
+                _vm._v(" "),
+                _c("b-tab-item", { attrs: { label: "История" } }, [
+                  _vm.historyData.leth
+                    ? _c(
+                        "div",
+                        { staticClass: "history" },
+                        _vm._l(_vm.historyData, function(history) {
+                          return _c(
+                            "div",
+                            { staticClass: "mb-3", on: { key: history.id } },
+                            [
+                              _c("b-message", { attrs: { type: "is-info" } }, [
+                                _vm._v(
+                                  "\n                            " +
+                                    _vm._s(
+                                      history.author.first_name +
+                                        " " +
+                                        history.author.second_name +
+                                        " " +
+                                        history.author.patronymic
+                                    ) +
+                                    "\n                            (" +
+                                    _vm._s(history.author.role[0].name) +
+                                    ") отредактировал поле.\n                            Было: "
+                                ),
+                                _c("span", { staticClass: "text-success" }, [
+                                  _vm._v(
+                                    _vm._s(JSON.parse(history.before).value)
+                                  )
+                                ]),
+                                _vm._v(
+                                  ",\n                            Стало: "
+                                ),
+                                _c("span", { staticClass: "text-danger" }, [
+                                  _vm._v(_vm._s(history.after))
+                                ]),
+                                _c("br"),
+                                _vm._v(" "),
+                                _c("small", [
+                                  _c("b", { staticClass: "text-black-50" }, [
+                                    _vm._v(
+                                      _vm._s(_vm.createdAt(history.created_at))
+                                    )
+                                  ])
+                                ])
+                              ])
+                            ],
+                            1
+                          )
+                        }),
+                        0
+                      )
+                    : _c(
+                        "div",
+                        {},
+                        [
+                          _c("b-message", { attrs: { type: "is-warning" } }, [
+                            _vm._v("История пуста!")
+                          ])
+                        ],
+                        1
+                      )
+                ])
+              ],
+              1
+            )
           ]
         },
         proxy: true
@@ -86009,9 +86575,7 @@ var render = function() {
                         staticClass: "mr-1",
                         attrs: { icon: "file" }
                       }),
-                      _vm._v(
-                        "\n                Загрузка документов\n            "
-                      )
+                      _vm._v("\n            Загрузка документов\n        ")
                     ],
                     1
                   ),
@@ -86030,7 +86594,7 @@ var render = function() {
                         staticClass: "mr-1",
                         attrs: { icon: "users" }
                       }),
-                      _vm._v("\n                Пользователи\n            ")
+                      _vm._v("\n            Пользователи\n        ")
                     ],
                     1
                   ),
@@ -86049,7 +86613,7 @@ var render = function() {
                         staticClass: "mr-1",
                         attrs: { icon: "gavel" }
                       }),
-                      _vm._v("\n                Физические лица\n            ")
+                      _vm._v("\n            Физические лица\n        ")
                     ],
                     1
                   ),
@@ -86068,7 +86632,26 @@ var render = function() {
                         staticClass: "mr-1",
                         attrs: { icon: "tasks" }
                       }),
-                      _vm._v("\n                Задания\n            ")
+                      _vm._v("\n            Задания\n        ")
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "b-navbar-item",
+                    {
+                      attrs: {
+                        href: "/history",
+                        "has-link": "",
+                        active: _vm.isActiveItem("/history")
+                      }
+                    },
+                    [
+                      _c("b-icon", {
+                        staticClass: "mr-1",
+                        attrs: { icon: "history" }
+                      }),
+                      _vm._v("\n            История\n        ")
                     ],
                     1
                   ),
@@ -86087,7 +86670,7 @@ var render = function() {
                             staticClass: "mr-1",
                             attrs: { icon: "wrench" }
                           }),
-                          _vm._v("\n                Редактор\n            ")
+                          _vm._v("\n            Редактор\n        ")
                         ],
                         1
                       )
@@ -86150,7 +86733,7 @@ var render = function() {
                           [
                             _c("b-icon", { attrs: { icon: "user" } }),
                             _vm._v(
-                              "\n                        Профиль\n                    "
+                              "\n                    Профиль\n                "
                             )
                           ],
                           1
@@ -86162,9 +86745,7 @@ var render = function() {
                         { on: { click: _vm.logout } },
                         [
                           _c("b-icon", { attrs: { icon: "times" } }),
-                          _vm._v(
-                            "\n                    Выйти\n                "
-                          )
+                          _vm._v("\n                Выйти\n            ")
                         ],
                         1
                       )
@@ -86178,7 +86759,7 @@ var render = function() {
           ],
           null,
           false,
-          728416806
+          3036160574
         )
       })
     : _vm._e()
