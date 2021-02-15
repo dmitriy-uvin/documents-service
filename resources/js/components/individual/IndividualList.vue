@@ -7,32 +7,69 @@
             <b-loading :is-full-page="true" v-model="isLoading"></b-loading>
             <section v-if="!isLoading">
                 <div class="search-block row">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <b-field label="Поиск физ. лиц">
-
+                            <dadata-suggestions
+                                v-model="search.textString"
+                                :fullInfo.sync="search.object"
+                                field-value="unrestricted_value"
+                                id="dadata-input"
+                                class="input"
+                            />
                         </b-field>
-                        <input
-                            id="fullname"
-                            name="fullname"
-                            placeholder="Иванов Иван Иванович"
-                        />
                     </div>
                     <div class="col-md-3">
                         <b-field label="СНИЛС">
-                            <b-input placeholder="626-029-036 22"></b-input>
+                            <b-input
+                                placeholder="626-029-036 22"
+                                v-model="search.snilsNumber"
+                            ></b-input>
                         </b-field>
                     </div>
                     <div class="col-md-3">
-                        <b-field label="Паспорт гражданина РФ">
-                            <b-input placeholder="Номер паспорта"></b-input>
+                        <b-field id="passport-label" label="123">
+                            <b-input
+                                placeholder="8914 935349"
+                                v-model="search.passportNumber"
+                            ></b-input>
                         </b-field>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <b-field label="ИНН">
-                            <b-input placeholder="1234567890"></b-input>
+                            <b-input
+                                placeholder="1234567890"
+                                v-model="search.innNumber"
+                            ></b-input>
                         </b-field>
                     </div>
                 </div>
+                <div class="d-flex justify-content-end my-3">
+                    <div class="col-md-2 pr-0">
+                        <b-button
+                            expanded
+                            type="is-danger"
+                            icon-left="times"
+                            @click="clearSearch"
+                            v-if="!searchClear"
+                            :loading="searchLoading"
+                        >
+                            Очистить
+                        </b-button>
+                    </div>
+                    <div class="col-md-2 pr-0">
+                        <b-button
+                            expanded
+                            type="is-primary"
+                            icon-left="search"
+                            @click="onSearch"
+                            :loading="searchLoading"
+                            :disabled="searchClear"
+                        >
+                            Найти
+                        </b-button>
+                    </div>
+                </div>
+
                 <b-table
                     v-if="users.length && !isWorker"
                     :data="users"
@@ -75,6 +112,27 @@
                             </span>
                     </b-table-column>
 
+                    <b-table-column
+                        label="Количество документов"
+                        v-slot="props"
+                    >
+                        {{ props.row.documents.length }}
+                    </b-table-column>
+
+                    <template #detail="props">
+                        <article class="">
+                            <h3 class="subtitle"><b>Документы</b></h3>
+                            <ul>
+                                <li
+                                    v-for="document in props.row.documents"
+                                    @key="document.id"
+                                >
+                                    {{ getDocumentNameByKey(document.type) }}
+                                </li>
+                            </ul>
+                        </article>
+                    </template>
+
                     <template #footer>
                         <div class="has-text-right">
                             Физических лиц: {{ users.length }}
@@ -100,6 +158,7 @@ import DefaultLayout from "../layouts/DefaultLayout";
 import datetimeMixin from "../../mixins/datetimeMixin";
 import individualsMixin from "../../mixins/individualsMixin";
 import individualService from "../../services/individual/individualService";
+import EventBus from "../../events/eventBus";
 
 export default {
     name: "PhysicalList",
@@ -109,16 +168,87 @@ export default {
     },
     data: () => ({
        users: [],
-        isLoading: true
+        isLoading: true,
+        showDetailIcon: true,
+        searchValue: '',
+        searchObject: {},
+        search: {
+            textString: '',
+            object: {},
+            snilsNumber: '',
+            passportNumber: '',
+            innNumber: ''
+        },
+        searchLoading: false,
+        searchResult: {},
+        searchClear: true
     }),
     async mounted() {
-        this.users = await individualService.getIndividualUsers();
-        this.isLoading = false;
+        if (!this.isWorker) {
+            await this.loadIndividuals();
+        }
+    },
+    watch: {
+        search: {
+            handler() {
+                this.searchResult = {
+                    name: this.search.object?.data?.name?.toLowerCase(),
+                    surname: this.search.object?.data?.surname?.toLowerCase(),
+                    patronymic: this.search.object?.data?.patronymic?.toLowerCase(),
+                    snils: this.search.snilsNumber,
+                    inn: this.search.innNumber,
+                    passport: this.search.passportNumber
+                };
+                this.searchClear = !Object.values(this.searchResult).filter(item => item).length;
+            },
+            deep: true
+        }
+    },
+    methods: {
+        async loadIndividuals() {
+            try {
+                this.isLoading = true;
+                this.users = await individualService.getIndividualUsers();
+                this.isLoading = false;
+                setTimeout(() => {
+                    document.getElementById('dadata-input').placeholder = 'ФИО';
+                    document.querySelector('div.suggestions-suggestions').style.position = 'fixed';
+                    console.log(document.querySelector('#passport-label > label'));
+                    document.querySelector('#passport-label label').innerHTML = '<label class="label">Паспорт РФ / Серия Номер</label>';
+                }, 1);
+            } catch (error) {
+                EventBus.$emit('error', error.message);
+            }
+        },
+        async clearSearch() {
+            Object.keys(this.search).map(key => {
+                this.search[key] = '';
+            });
+            if (!this.isWorker) {
+                await this.loadIndividuals();
+            }
+        },
+        async onSearch() {
+            if (!this.searchClear) {
+                try {
+                    this.searchLoading = true;
+                    this.users = await individualService.search(this.searchResult);
+                    this.searchLoading = false;
+                } catch (error) {
+                    this.searchLoading = false;
+                    EventBus.$emit('error', error.message);
+                }
+            }
+        }
     }
 }
 </script>
 
-
 <style scoped>
-
+ul {
+    list-style: disc;
+}
+.dadata-input {
+    padding: 7px 15px;
+}
 </style>

@@ -42,7 +42,7 @@
                                     class="confidence-badge"
                                     :class="'confidence-' + getLevelOfConfidence(field.confidence)"
                                 >
-                                    {{ field.confidence }}
+                                    {{ field.confidence.toFixed(2) }}
                                 </span>
                             </div>
                         </div>
@@ -141,15 +141,22 @@
                                 Заменить на новый!
                             </b-button>
                         </div>
-                        <div v-if="cannotBeRecognized(task.document_type)">
+                        <div v-else-if="cannotBeRecognized(task.document_type)">
                             <p class="text-danger">
                                 <b>Документ не может быть распознан!</b>
                             </p>
                         </div>
-                        <div v-if="canBeRecognized(task.document_type)">
-                            <p class="text-success">
+                        <div v-else-if="canBeRecognized(task.document_type)">
+                            <p class="text-success mb-3">
                                 <b>Физическое лицо не имеет документа такого типа, добавить?</b>
                             </p>
+                            <b-button
+                                type="is-danger"
+                                @click="dontChange(task.id)"
+                                :disabled="tasksLoading[task.id].loading"
+                            >
+                                Отмена
+                            </b-button>
                             <b-button
                                 type="is-success"
                                 @click="addDocument(task.id)"
@@ -160,12 +167,18 @@
                         </div>
                     </div>
                 </div>
-                <b-button
-                    type="is-success"
-                    @click="endUploadingDocuments"
-                >
-                    Готово!
-                </b-button>
+                <div class="d-flex justify-content-center">
+                    <div class="col-md-3">
+                        <b-button
+                            type="is-success"
+                            @click="endUploadingDocuments"
+                            expanded
+                        >
+                            Готово!
+                        </b-button>
+                    </div>
+                </div>
+
             </div>
         </template>
     </DefaultLayout>
@@ -249,7 +262,7 @@ export default {
             window.scrollTo(0,document.body.scrollHeight);
         },
         dontChange(taskId) {
-            const index = this.details.findIndex(item => item.id = taskId);
+            const index = this.details.findIndex(item => item.id === taskId);
             this.details = [
                 ...this.details.slice(0, index),
                 ...this.details.slice(index + 1)

@@ -18,6 +18,8 @@
 </head>
 <body>
     <div id="app">
+
+
         <modal></modal>
         <toast-notifications></toast-notifications>
         <?php
@@ -29,6 +31,7 @@
         <main class="py-4">
             @yield('content')
         </main>
+
     </div>
     <script>
         window.csrfToken = <?php echo json_encode(csrf_token()); ?>

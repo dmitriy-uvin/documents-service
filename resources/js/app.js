@@ -5,7 +5,12 @@ import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 import store from './store';
 import Vuelidate from 'vuelidate';
+import DadataSuggestions from 'vue-dadata-suggestions'
 
+Vue.use(DadataSuggestions,{
+    token: '378e4547c4b237b1cab568fb5c78be39590eb1cd',
+    type: 'NAME'
+});
 
 Vue.use(Buefy, {
     defaultIconPack: 'fa'

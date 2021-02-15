@@ -57,8 +57,8 @@ Route::group([
         ->name('individuals.id.view');
     Route::get('/individuals/get/{id}', [\App\Http\Controllers\IndividualsController::class, 'getIndividualById'])
         ->name('individuals.id');
-    Route::post('/individuals/documents', [\App\Http\Controllers\IndividualsController::class, 'uploadDocuments'])
-        ->name('individuals.documents');
+    Route::post('/individuals/search', [\App\Http\Controllers\IndividualsController::class, 'search'])
+        ->name('individuals.search');
 
     Route::group([
         'middleware' => 'admin.or.developer'

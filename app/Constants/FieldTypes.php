@@ -332,4 +332,58 @@ class FieldTypes
             "temporary_registration_term" => "Срок временной регистрации",
         ];
     }
+
+    public static function getNameTypes(): array
+    {
+        return [
+            'name_ukr',
+            'b_veh_driver_name',
+            'b_vehicle_owner_name',
+            'a_veh_driver_name',
+            'a_vehicle_owner_name',
+            'name_eng',
+            'name_rus',
+            'first_name',
+            'name'
+        ];
+    }
+
+    public static function getSurnameTypes(): array
+    {
+        return [
+            'surname',
+            'surname_rus',
+            'surname_eng',
+            'surname_ukr',
+            'a_vehicle_owner_surname',
+            'a_veh_driver_surname',
+            'b_vehicle_owner_surname',
+            'b_veh_driver_surname',
+        ];
+    }
+
+    public static function getPatronymicTypes(): array
+    {
+        return [
+            'third_name',
+            'patronymic',
+            'patron',
+            'other_name',
+            'other_names',
+            'patter',
+            'a_vehicle_owner_patronym',
+            'a_veh_driver_patronym',
+            'b_vehicle_owner_patronym',
+            'b_veh_driver_patronym',
+            'third',
+        ];
+    }
+
+    public static function getFioTypes(): array
+    {
+        return [
+            'born_full_name',
+            'full_name'
+        ];
+    }
 }

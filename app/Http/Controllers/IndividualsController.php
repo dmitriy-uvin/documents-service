@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\FieldTypes;
 use App\Exceptions\Individual\IndividualNotFoundException;
 use App\Models\Document;
 use App\Models\DocumentImage;
@@ -9,6 +10,7 @@ use App\Models\Field;
 use App\Models\Individual;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class IndividualsController extends Controller
 {
@@ -73,19 +75,70 @@ class IndividualsController extends Controller
         }
     }
 
-    public function uploadDocuments(Request $request)
+    public function search(Request $request)
     {
-        $individual = Individual::find($request->individual_id);
-        if (!$individual) {
-            throw new IndividualNotFoundException();
+        $snilsNumber = $request->snils;
+        $innNumber = $request->inn;
+        $passportNumber = $request->passport;
+
+        $name = $request->name;
+        $surname = $request->surname;
+        $patronymic = $request->patronymic;
+
+        $documentQuery = Document::query();
+
+        if ($snilsNumber) {
+            $documentQuery->where('type', '=', 'snils_front')
+                ->whereHas('fields', function ($query) use ($snilsNumber){
+                    return $query
+                        ->where('type', '=', 'number')
+                        ->where('value', 'like', '%' . $snilsNumber . '%');
+                });
         }
 
-        /*
-         * 1. Загружаем документы
-         * 2. Отправляем на классификацию
-         * 3. Отдаем классифицированные документы
-         * 4. Если документы уже существует у юзера, то либо оставляем старую, либо меняем старую на новую
-         * 5. Отправляем результат на распознавание и сохранаяем документ
-         */
+        if ($innNumber) {
+            $documentQuery->where('type', '=', 'inn_person')
+                ->whereHas('fields', function ($query) use ($innNumber){
+                    return $query
+                        ->where('type', '=', 'number')
+                        ->where('value', 'like', '%' . $innNumber . '%');
+                });
+        }
+
+        $fieldQuery = Field::query();
+
+        if ($name && $surname && $patronymic) {
+            $fio = $surname . ' ' . $name . ' ' . $patronymic;
+            $fieldQuery
+                ->whereIn('type', FieldTypes::getFioTypes())
+                ->where(DB::raw('LOWER(value)'), 'like', '%' . $fio . '%');
+        } else {
+            if ($name) {
+                $documentQuery->whereHas('fields', function ($query) use ($name) {
+                    return $query->whereIn('type', FieldTypes::getNameTypes())
+                        ->where(DB::raw('LOWER(value)'), 'like', '%' . $name . '%');
+                });
+            }
+
+            if ($surname) {
+                $documentQuery->whereHas('fields', function ($query) use ($name) {
+                    return $query->whereIn('type', FieldTypes::getSurnameTypes())
+                        ->where(DB::raw('LOWER(value)'), 'like', '%' . $name . '%');
+                });
+            }
+
+            if ($patronymic) {
+                $documentQuery->whereHas('fields', function ($query) use ($name) {
+                    return $query->whereIn('type', FieldTypes::getPatronymicTypes())
+                        ->where(DB::raw('LOWER(value)'), 'like', '%' . $name . '%');
+                });
+            }
+        }
+
+        $individualsByDocuments = $documentQuery->get()->map(fn($document) => $document->individual)->all();
+
+        $individuals = $individualsByDocuments;
+
+        return response()->json($individuals);
     }
 }

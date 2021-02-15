@@ -8,5 +8,9 @@ export default {
     async getIndividualUserById(id) {
         const response = await axiosService.get('/individuals/get/' + id);
         return response?.data;
+    },
+    async search(payload) {
+        const response = await axiosService.post('/individuals/search', payload);
+        return response?.data;
     }
 }
