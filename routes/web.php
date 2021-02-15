@@ -32,8 +32,7 @@ Route::group([
         ->name('home');
     Route::get('/users', [\App\Http\Controllers\UsersController::class, 'usersList'])->name('users.view');
     Route::get('/users/all', [\App\Http\Controllers\UsersController::class, 'getAllUsers'])->name('users.all');
-    Route::get('/users/{id}', [\App\Http\Controllers\UsersController::class, 'getUserById'])
-        ->name('users.id');
+
 
     Route::get('/documents', [\App\Http\Controllers\DocumentsController::class, 'index'])
         ->name('documents');
@@ -60,12 +59,10 @@ Route::group([
     Route::post('/individuals/search', [\App\Http\Controllers\IndividualsController::class, 'search'])
         ->name('individuals.search');
 
-    Route::group([
-        'middleware' => 'admin.or.developer'
-    ], function () {
+    Route::middleware(['not.worker'])
+        ->group(function () {
         Route::get('editor', [\App\Http\Controllers\EditorController::class, 'index'])
             ->name('editor');
-
         Route::post('/users', [\App\Http\Controllers\UsersController::class, 'createUser'])
             ->name('users.add');
         Route::delete('/users/{id}', [\App\Http\Controllers\UsersController::class, 'deleteUser'])
@@ -73,6 +70,9 @@ Route::group([
         Route::put('/users/block/{id}', [\App\Http\Controllers\UsersController::class, 'changeUserBlockStatus'])
             ->name('users.block');
     });
+
+    Route::get('/users/{id}', [\App\Http\Controllers\UsersController::class, 'getUserById'])
+        ->name('users.id');
 });
 
 

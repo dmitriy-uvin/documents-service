@@ -27,7 +27,7 @@
                         </b-field>
                     </div>
                     <div class="col-md-3">
-                        <b-field id="passport-label" label="123">
+                        <b-field id="passport-label" label="Паспорт РФ / Серия Номер">
                             <b-input
                                 placeholder="8914 935349"
                                 v-model="search.passportNumber"
@@ -71,7 +71,7 @@
                 </div>
 
                 <b-table
-                    v-if="users.length && !isWorker"
+                    v-if="users.length"
                     :data="users"
                     :bordered="false"
                     :hoverable="true"
@@ -139,7 +139,7 @@
                         </div>
                     </template>
                 </b-table>
-                <b-message type="is-danger" v-if="isWorker">
+                <b-message type="is-danger" v-if="isWorker && !users.length">
                     Вы не можете просмотреть список существующих физических лиц.
                     Вы можете использовать поиск, чтобы найти нужное Вам лицо!
                 </b-message>
@@ -187,6 +187,11 @@ export default {
         if (!this.isWorker) {
             await this.loadIndividuals();
         }
+        setTimeout(() => {
+            document.getElementById('dadata-input').placeholder = 'ФИО';
+            document.querySelector('div.suggestions-suggestions').style.position = 'fixed';
+        }, 1);
+        this.isLoading = false;
     },
     watch: {
         search: {
@@ -213,12 +218,14 @@ export default {
                 setTimeout(() => {
                     document.getElementById('dadata-input').placeholder = 'ФИО';
                     document.querySelector('div.suggestions-suggestions').style.position = 'fixed';
-                    console.log(document.querySelector('#passport-label > label'));
-                    document.querySelector('#passport-label label').innerHTML = '<label class="label">Паспорт РФ / Серия Номер</label>';
                 }, 1);
             } catch (error) {
                 EventBus.$emit('error', error.message);
             }
+            setTimeout(() => {
+                document.getElementById('dadata-input').placeholder = 'ФИО';
+                document.querySelector('div.suggestions-suggestions').style.position = 'fixed';
+            }, 1);
         },
         async clearSearch() {
             Object.keys(this.search).map(key => {
@@ -226,14 +233,22 @@ export default {
             });
             if (!this.isWorker) {
                 await this.loadIndividuals();
+            } else {
+                this.users = [];
             }
+            setTimeout(() => {
+                document.getElementById('dadata-input').placeholder = 'ФИО';
+                document.querySelector('div.suggestions-suggestions').style.position = 'fixed';
+            }, 1);
         },
         async onSearch() {
             if (!this.searchClear) {
                 try {
+                    this.isLoading = true;
                     this.searchLoading = true;
                     this.users = await individualService.search(this.searchResult);
                     this.searchLoading = false;
+                    this.isLoading = false;
                 } catch (error) {
                     this.searchLoading = false;
                     EventBus.$emit('error', error.message);

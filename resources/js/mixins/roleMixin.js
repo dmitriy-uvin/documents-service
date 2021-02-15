@@ -2,6 +2,14 @@ import * as getterTypes from '../store/modules/auth/types/getters';
 import { mapGetters } from 'vuex';
 
 export default {
+    data: () => ({
+       roleValues: {
+           worker: 1,
+           manager: 2,
+           administrator: 3,
+           developer: 4
+       }
+    }),
     computed: {
         ...mapGetters('auth', {
             authUser: getterTypes.GET_USER_DATA
@@ -17,6 +25,11 @@ export default {
         },
         isWorker() {
             return this.authUser.role[0].alias === 'worker';
+        }
+    },
+    methods: {
+        canDeleteUser(userRole) {
+            return this.roleValues[this.authUser.role[0].alias] > this.roleValues[userRole];
         }
     }
 }

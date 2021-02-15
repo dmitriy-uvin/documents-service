@@ -70,6 +70,7 @@
                                     expanded
                                     v-model="newUser.role"
                                 >
+                                    <option value="worker">Сотрудник</option>
                                     <option value="manager">Руководитель</option>
                                     <option value="administrator">Администратор</option>
                                     <option value="developer" v-if="isDeveloper">Разработчик</option>
@@ -86,11 +87,11 @@
                     </div>
                 </b-tab-item>
 
-                <b-tab-item label="Типы документов">
-                    <b-message type="is-warning">
-                        В разработке!
-                    </b-message>
-                </b-tab-item>
+<!--                <b-tab-item label="Типы документов">-->
+<!--                    <b-message type="is-warning">-->
+<!--                        В разработке!-->
+<!--                    </b-message>-->
+<!--                </b-tab-item>-->
             </b-tabs>
         </template>
     </DefaultLayout>
@@ -146,14 +147,23 @@ export default {
                     this.newUser.loading = true;
                     await userService.addUser(this.newUser);
                     this.newUser.loading = false;
-                    this.clearNewUser();
                     this.$v.$reset();
-                    EventBus.$emit('manager-added');
+                    EventBus.$emit('success', this.getRoleNameByKey(this.newUser.role) + ' был успешно создан!');
+                    this.clearNewUser();
                 } catch (error) {
                     this.newUser.loading = false;
                     EventBus.$emit('error', error.message);
                 }
             }
+        },
+        getRoleNameByKey(key) {
+            const roles = {
+                worker: 'Сотрудник',
+                manager: 'Руководитель',
+                administrator: 'Администратор',
+                developer: 'Разработчик'
+            };
+            return roles[key];
         },
         clearNewUser() {
             this.newUser = {

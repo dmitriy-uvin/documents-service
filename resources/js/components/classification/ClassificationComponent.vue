@@ -60,6 +60,7 @@
             </div>
             <b-button
                 type="is-success"
+                class="mb-4 mt-2"
                 @click="saveIndividual(taskKey)"
                 :loading="recognizedData[taskKey].loading"
             >
@@ -116,15 +117,19 @@ export default {
                                     id: this.recognizedData[mainKey][task].id,
                                     fields: this.recognizedData[mainKey][task].items[0].fields,
                                     document_type: this.recognizedData[mainKey][task].items[0].doc_type
-                                }
+                                };
                             }
                         }
                     });
                 });
+                this.changeLoadingForTaskKey(taskKey, true);
                 await documentService.saveIndividual({
                     payloadData: payloadRecognizedData
                 });
+                this.changeLoadingForTaskKey(taskKey, false);
+                EventBus.$emit('success', 'Физическое лицо было добавлено!');
             } catch(error) {
+                this.changeLoadingForTaskKey(taskKey, false);
                 EventBus.$emit('error', error.message);
             }
         },
@@ -139,7 +144,6 @@ export default {
                     return this.recognizedData[taskKey][taskId].items.length;
                 }
             }
-
             return false;
         },
         changeRecognizeLoadingState(taskKey, taskId, value) {
@@ -154,10 +158,22 @@ export default {
                 }
             };
         },
+        changeLoadingForTaskKey(taskKey, value) {
+            this.recognizedData = {
+                ...this.recognizedData,
+                [taskKey]: {
+                    ...this.recognizedData[taskKey],
+                    loading: value
+                }
+            };
+        },
         async onRecognize(taskId, taskKey) {
             try {
                 this.changeRecognizeLoadingState(taskKey, taskId, true);
+                this.changeLoadingForTaskKey(taskKey, true);
                 const response = await documentService.recognizeTask(taskId);
+                this.changeLoadingForTaskKey(taskKey, false);
+                this.changeRecognizeLoadingState(taskKey, taskId, false);
                 const result = {
                     ...this.recognizedData,
                     [taskKey]: {
@@ -172,6 +188,8 @@ export default {
                 console.log('recognize');
                 console.log(this.recognizedData);
             } catch (error) {
+                this.changeLoadingForTaskKey(taskKey, false);
+                this.changeRecognizeLoadingState(taskKey, taskId, false);
                 EventBus.$emit('error', error.message);
             }
         }

@@ -16,6 +16,14 @@ class Document extends Model
         'type'
     ];
 
+    protected static function booted()
+    {
+        static::created(function ($user) {
+            $user->updated_at = null;
+            $user->save();
+        });
+    }
+
     protected $with = [
         'fields',
         'documentImage'

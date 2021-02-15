@@ -96,6 +96,15 @@ class IndividualsController extends Controller
                 });
         }
 
+        if ($passportNumber) {
+            $documentQuery->whereIn('type', ['passport_main', 'passport_main_handwritten'])
+                ->whereHas('fields', function ($query) use ($passportNumber){
+                    return $query
+                        ->where('type', '=', 'series_and_number')
+                        ->where('value', 'like', '%' . $passportNumber . '%');
+                });
+        }
+
         if ($innNumber) {
             $documentQuery->where('type', '=', 'inn_person')
                 ->whereHas('fields', function ($query) use ($innNumber){

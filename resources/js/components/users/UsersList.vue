@@ -84,25 +84,31 @@
                     </span>
                 </b-table-column>
 
-                <b-table-column v-slot="props" label="Действия">
+                <b-table-column v-slot="props" label="Действия" v-if="!isWorker">
                     <b-button
+                        v-if="canDeleteUser(props.row.role[0].alias)"
                         type="is-warning"
                         size="is-small"
                         icon-right="lock"
                         @click="changeUserBlockStatus(props.row.id, props.row.is_blocked)"
                     />
+                    <b-button
+                        type="is-danger"
+                        size="is-small"
+                        icon-right="trash"
+                        v-if="canDeleteUser(props.row.role[0].alias)"
+                        @click="onDeleteUser(props.row.id)"
+                    />
 
-                    <b-button type="is-danger" size="is-small"
-                              icon-right="trash" @click="onDeleteUser(props.row.id)"/>
+<!--                    <b-tooltip label="Просмотреть пользователя"-->
+<!--                               type="is-dark"-->
+<!--                               position="is-top">-->
 
-                    <b-tooltip label="Просмотреть пользователя"
-                               type="is-dark"
-                               position="is-top">
-
-                        <b-button type="is-info" size="is-small"
-                                  icon-right="eye" @click="goToUser(props.row.id)"
-                        />
-                    </b-tooltip>
+<!--                        <b-button type="is-info" size="is-small"-->
+<!--                                  :disable="true"-->
+<!--                                  icon-right="eye" @click="goToUser(props.row.id)"-->
+<!--                        />-->
+<!--                    </b-tooltip>-->
                 </b-table-column>
 
                 <b-table-column
@@ -140,12 +146,14 @@ import DefaultLayout from "../layouts/DefaultLayout";
 import DeleteUserModalConfirmation from "../modal/DeleteUserModalConfirmation";
 import EventBus from "../../events/eventBus";
 import userService from "../../services/user/userService";
+import roleMixin from "../../mixins/roleMixin";
 export default {
     name: "UsersList",
     components: {
         DeleteUserModalConfirmation,
         DefaultLayout
     },
+    mixins: [roleMixin],
     data:() => ({
         modalVisible: false,
         userId: '',

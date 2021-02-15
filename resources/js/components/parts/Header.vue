@@ -17,10 +17,10 @@
                 <b-icon icon="tasks" class="mr-1"></b-icon>
                 Задания
             </b-navbar-item>
-            <b-navbar-item href="/history" has-link :active="isActiveItem('/history')">
-                <b-icon icon="history" class="mr-1"></b-icon>
-                История
-            </b-navbar-item>
+<!--            <b-navbar-item href="/history" has-link :active="isActiveItem('/history')">-->
+<!--                <b-icon icon="history" class="mr-1"></b-icon>-->
+<!--                История-->
+<!--            </b-navbar-item>-->
             <b-navbar-item
                 href="/editor"
                 v-if="developerOrAdministrator"

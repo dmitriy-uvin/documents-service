@@ -2168,6 +2168,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 
 
@@ -2234,26 +2235,35 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                     }
                   });
                 });
-                _context.next = 5;
+
+                _this2.changeLoadingForTaskKey(taskKey, true);
+
+                _context.next = 6;
                 return _services_document_documentService__WEBPACK_IMPORTED_MODULE_1__.default.saveIndividual({
                   payloadData: payloadRecognizedData
                 });
 
-              case 5:
-                _context.next = 10;
+              case 6:
+                _this2.changeLoadingForTaskKey(taskKey, false);
+
+                _events_eventBus__WEBPACK_IMPORTED_MODULE_2__.default.$emit('success', 'Физическое лицо было добавлено!');
+                _context.next = 14;
                 break;
 
-              case 7:
-                _context.prev = 7;
+              case 10:
+                _context.prev = 10;
                 _context.t0 = _context["catch"](0);
+
+                _this2.changeLoadingForTaskKey(taskKey, false);
+
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_2__.default.$emit('error', _context.t0.message);
 
-              case 10:
+              case 14:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 7]]);
+        }, _callee, null, [[0, 10]]);
       }))();
     },
     getLevelOfConfidence: function getLevelOfConfidence(confidence) {
@@ -2275,6 +2285,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         loading: value
       })))));
     },
+    changeLoadingForTaskKey: function changeLoadingForTaskKey(taskKey, value) {
+      this.recognizedData = _objectSpread(_objectSpread({}, this.recognizedData), {}, _defineProperty({}, taskKey, _objectSpread(_objectSpread({}, this.recognizedData[taskKey]), {}, {
+        loading: value
+      })));
+    },
     onRecognize: function onRecognize(taskId, taskKey) {
       var _this3 = this;
 
@@ -2288,29 +2303,41 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this3.changeRecognizeLoadingState(taskKey, taskId, true);
 
-                _context2.next = 4;
+                _this3.changeLoadingForTaskKey(taskKey, true);
+
+                _context2.next = 5;
                 return _services_document_documentService__WEBPACK_IMPORTED_MODULE_1__.default.recognizeTask(taskId);
 
-              case 4:
+              case 5:
                 response = _context2.sent;
+
+                _this3.changeLoadingForTaskKey(taskKey, false);
+
+                _this3.changeRecognizeLoadingState(taskKey, taskId, false);
+
                 result = _objectSpread(_objectSpread({}, _this3.recognizedData), {}, _defineProperty({}, taskKey, _objectSpread(_objectSpread({}, _this3.recognizedData[taskKey]), {}, _defineProperty({}, taskId, _objectSpread(_objectSpread({}, _this3.recognizedData[taskKey][taskId]), response)))));
                 _this3.recognizedData = result;
                 console.log('recognize');
                 console.log(_this3.recognizedData);
-                _context2.next = 14;
+                _context2.next = 19;
                 break;
 
-              case 11:
-                _context2.prev = 11;
+              case 14:
+                _context2.prev = 14;
                 _context2.t0 = _context2["catch"](0);
+
+                _this3.changeLoadingForTaskKey(taskKey, false);
+
+                _this3.changeRecognizeLoadingState(taskKey, taskId, false);
+
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_2__.default.$emit('error', _context2.t0.message);
 
-              case 14:
+              case 19:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 11]]);
+        }, _callee2, null, [[0, 14]]);
       }))();
     }
   }
@@ -2834,6 +2861,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 
 
@@ -2917,11 +2945,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 6:
                 _this.newUser.loading = false;
 
-                _this.clearNewUser();
-
                 _this.$v.$reset();
 
-                _events_eventBus__WEBPACK_IMPORTED_MODULE_1__.default.$emit('manager-added');
+                _events_eventBus__WEBPACK_IMPORTED_MODULE_1__.default.$emit('success', _this.getRoleNameByKey(_this.newUser.role) + ' был успешно создан!');
+
+                _this.clearNewUser();
+
                 _context.next = 16;
                 break;
 
@@ -2938,6 +2967,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee, null, [[2, 12]]);
       }))();
+    },
+    getRoleNameByKey: function getRoleNameByKey(key) {
+      var roles = {
+        worker: 'Сотрудник',
+        manager: 'Руководитель',
+        administrator: 'Администратор',
+        developer: 'Разработчик'
+      };
+      return roles[key];
     },
     clearNewUser: function clearNewUser() {
       this.newUser = {
@@ -3333,6 +3371,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               return _this.loadIndividuals();
 
             case 3:
+              setTimeout(function () {
+                document.getElementById('dadata-input').placeholder = 'ФИО';
+                document.querySelector('div.suggestions-suggestions').style.position = 'fixed';
+              }, 1);
+              _this.isLoading = false;
+
+            case 5:
             case "end":
               return _context.stop();
           }
@@ -3380,8 +3425,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 setTimeout(function () {
                   document.getElementById('dadata-input').placeholder = 'ФИО';
                   document.querySelector('div.suggestions-suggestions').style.position = 'fixed';
-                  console.log(document.querySelector('#passport-label > label'));
-                  document.querySelector('#passport-label label').innerHTML = '<label class="label">Паспорт РФ / Серия Номер</label>';
                 }, 1);
                 _context2.next = 12;
                 break;
@@ -3392,6 +3435,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_6__.default.$emit('error', _context2.t0.message);
 
               case 12:
+                setTimeout(function () {
+                  document.getElementById('dadata-input').placeholder = 'ФИО';
+                  document.querySelector('div.suggestions-suggestions').style.position = 'fixed';
+                }, 1);
+
+              case 13:
               case "end":
                 return _context2.stop();
             }
@@ -3412,7 +3461,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 });
 
                 if (_this3.isWorker) {
-                  _context3.next = 4;
+                  _context3.next = 6;
                   break;
                 }
 
@@ -3420,6 +3469,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _this3.loadIndividuals();
 
               case 4:
+                _context3.next = 7;
+                break;
+
+              case 6:
+                _this3.users = [];
+
+              case 7:
+                setTimeout(function () {
+                  document.getElementById('dadata-input').placeholder = 'ФИО';
+                  document.querySelector('div.suggestions-suggestions').style.position = 'fixed';
+                }, 1);
+
+              case 8:
               case "end":
                 return _context3.stop();
             }
@@ -3436,33 +3498,35 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context4.prev = _context4.next) {
               case 0:
                 if (_this4.searchClear) {
-                  _context4.next = 13;
+                  _context4.next = 15;
                   break;
                 }
 
                 _context4.prev = 1;
+                _this4.isLoading = true;
                 _this4.searchLoading = true;
-                _context4.next = 5;
+                _context4.next = 6;
                 return _services_individual_individualService__WEBPACK_IMPORTED_MODULE_5__.default.search(_this4.searchResult);
 
-              case 5:
+              case 6:
                 _this4.users = _context4.sent;
                 _this4.searchLoading = false;
-                _context4.next = 13;
+                _this4.isLoading = false;
+                _context4.next = 15;
                 break;
 
-              case 9:
-                _context4.prev = 9;
+              case 11:
+                _context4.prev = 11;
                 _context4.t0 = _context4["catch"](1);
                 _this4.searchLoading = false;
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_6__.default.$emit('error', _context4.t0.message);
 
-              case 13:
+              case 15:
               case "end":
                 return _context4.stop();
             }
           }
-        }, _callee4, null, [[1, 9]]);
+        }, _callee4, null, [[1, 11]]);
       }))();
     }
   }
@@ -4458,6 +4522,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modal_DeleteUserModalConfirmation__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../modal/DeleteUserModalConfirmation */ "./resources/js/components/modal/DeleteUserModalConfirmation.vue");
 /* harmony import */ var _events_eventBus__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../events/eventBus */ "./resources/js/events/eventBus.js");
 /* harmony import */ var _services_user_userService__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../services/user/userService */ "./resources/js/services/user/userService.js");
+/* harmony import */ var _mixins_roleMixin__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../mixins/roleMixin */ "./resources/js/mixins/roleMixin.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -4601,6 +4666,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -4611,6 +4683,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     DeleteUserModalConfirmation: _modal_DeleteUserModalConfirmation__WEBPACK_IMPORTED_MODULE_2__.default,
     DefaultLayout: _layouts_DefaultLayout__WEBPACK_IMPORTED_MODULE_1__.default
   },
+  mixins: [_mixins_roleMixin__WEBPACK_IMPORTED_MODULE_5__.default],
   data: function data() {
     return {
       modalVisible: false,
@@ -5546,6 +5619,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      roleValues: {
+        worker: 1,
+        manager: 2,
+        administrator: 3,
+        developer: 4
+      }
+    };
+  },
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapGetters)('auth', {
     authUser: _store_modules_auth_types_getters__WEBPACK_IMPORTED_MODULE_0__.GET_USER_DATA
   })), {}, {
@@ -5561,7 +5644,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     isWorker: function isWorker() {
       return this.authUser.role[0].alias === 'worker';
     }
-  })
+  }),
+  methods: {
+    canDeleteUser: function canDeleteUser(userRole) {
+      return this.roleValues[this.authUser.role[0].alias] > this.roleValues[userRole];
+    }
+  }
 });
 
 /***/ }),
@@ -83891,6 +83979,7 @@ var render = function() {
               _c(
                 "b-button",
                 {
+                  staticClass: "mb-4 mt-2",
                   attrs: {
                     type: "is-success",
                     loading: _vm.recognizedData[taskKey].loading
@@ -84292,7 +84381,7 @@ var render = function() {
       {
         key: "title",
         fn: function() {
-          return [_vm._v("\n        Редактор\n    ")]
+          return [_vm._v("\n            Редактор\n        ")]
         },
         proxy: true
       },
@@ -84555,6 +84644,10 @@ var render = function() {
                                 }
                               },
                               [
+                                _c("option", { attrs: { value: "worker" } }, [
+                                  _vm._v("Сотрудник")
+                                ]),
+                                _vm._v(" "),
                                 _c("option", { attrs: { value: "manager" } }, [
                                   _vm._v("Руководитель")
                                 ]),
@@ -84600,20 +84693,7 @@ var render = function() {
                     ],
                     1
                   )
-                ]),
-                _vm._v(" "),
-                _c(
-                  "b-tab-item",
-                  { attrs: { label: "Типы документов" } },
-                  [
-                    _c("b-message", { attrs: { type: "is-warning" } }, [
-                      _vm._v(
-                        "\n                    В разработке!\n                "
-                      )
-                    ])
-                  ],
-                  1
-                )
+                ])
               ],
               1
             )
@@ -84824,7 +84904,12 @@ var render = function() {
                         [
                           _c(
                             "b-field",
-                            { attrs: { id: "passport-label", label: "123" } },
+                            {
+                              attrs: {
+                                id: "passport-label",
+                                label: "Паспорт РФ / Серия Номер"
+                              }
+                            },
                             [
                               _c("b-input", {
                                 attrs: { placeholder: "8914 935349" },
@@ -84928,7 +85013,7 @@ var render = function() {
                       ]
                     ),
                     _vm._v(" "),
-                    _vm.users.length && !_vm.isWorker
+                    _vm.users.length
                       ? _c(
                           "b-table",
                           {
@@ -85132,7 +85217,7 @@ var render = function() {
                         )
                       : _vm._e(),
                     _vm._v(" "),
-                    _vm.isWorker
+                    _vm.isWorker && !_vm.users.length
                       ? _c("b-message", { attrs: { type: "is-danger" } }, [
                           _vm._v(
                             "\n                Вы не можете просмотреть список существующих физических лиц.\n                Вы можете использовать поиск, чтобы найти нужное Вам лицо!\n            "
@@ -85924,7 +86009,9 @@ var render = function() {
                         staticClass: "mr-1",
                         attrs: { icon: "file" }
                       }),
-                      _vm._v("\n            Загрузка документов\n        ")
+                      _vm._v(
+                        "\n                Загрузка документов\n            "
+                      )
                     ],
                     1
                   ),
@@ -85943,7 +86030,7 @@ var render = function() {
                         staticClass: "mr-1",
                         attrs: { icon: "users" }
                       }),
-                      _vm._v("\n            Пользователи\n        ")
+                      _vm._v("\n                Пользователи\n            ")
                     ],
                     1
                   ),
@@ -85962,7 +86049,7 @@ var render = function() {
                         staticClass: "mr-1",
                         attrs: { icon: "gavel" }
                       }),
-                      _vm._v("\n            Физические лица\n        ")
+                      _vm._v("\n                Физические лица\n            ")
                     ],
                     1
                   ),
@@ -85981,26 +86068,7 @@ var render = function() {
                         staticClass: "mr-1",
                         attrs: { icon: "tasks" }
                       }),
-                      _vm._v("\n            Задания\n        ")
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "b-navbar-item",
-                    {
-                      attrs: {
-                        href: "/history",
-                        "has-link": "",
-                        active: _vm.isActiveItem("/history")
-                      }
-                    },
-                    [
-                      _c("b-icon", {
-                        staticClass: "mr-1",
-                        attrs: { icon: "history" }
-                      }),
-                      _vm._v("\n            История\n        ")
+                      _vm._v("\n                Задания\n            ")
                     ],
                     1
                   ),
@@ -86019,7 +86087,7 @@ var render = function() {
                             staticClass: "mr-1",
                             attrs: { icon: "wrench" }
                           }),
-                          _vm._v("\n            Редактор\n        ")
+                          _vm._v("\n                Редактор\n            ")
                         ],
                         1
                       )
@@ -86082,7 +86150,7 @@ var render = function() {
                           [
                             _c("b-icon", { attrs: { icon: "user" } }),
                             _vm._v(
-                              "\n                    Профиль\n                "
+                              "\n                        Профиль\n                    "
                             )
                           ],
                           1
@@ -86094,7 +86162,9 @@ var render = function() {
                         { on: { click: _vm.logout } },
                         [
                           _c("b-icon", { attrs: { icon: "times" } }),
-                          _vm._v("\n                Выйти\n            ")
+                          _vm._v(
+                            "\n                    Выйти\n                "
+                          )
                         ],
                         1
                       )
@@ -86108,7 +86178,7 @@ var render = function() {
           ],
           null,
           false,
-          3036160574
+          728416806
         )
       })
     : _vm._e()
@@ -86265,7 +86335,7 @@ var render = function() {
       {
         key: "title",
         fn: function() {
-          return [_vm._v("\n        Пользователи\n    ")]
+          return [_vm._v("\n            Пользователи\n        ")]
         },
         proxy: true
       },
@@ -86293,9 +86363,9 @@ var render = function() {
                             return [
                               _c("div", { staticClass: "has-text-right" }, [
                                 _vm._v(
-                                  "\n                    Пользователей: " +
+                                  "\n                        Пользователей: " +
                                     _vm._s(_vm.users.length) +
-                                    "\n                "
+                                    "\n                    "
                                 )
                               ])
                             ]
@@ -86305,7 +86375,7 @@ var render = function() {
                       ],
                       null,
                       false,
-                      2339272463
+                      2824324879
                     )
                   },
                   [
@@ -86324,9 +86394,9 @@ var render = function() {
                             fn: function(props) {
                               return [
                                 _vm._v(
-                                  "\n                " +
+                                  "\n                    " +
                                     _vm._s(props.row.id) +
-                                    "\n            "
+                                    "\n                "
                                 )
                               ]
                             }
@@ -86334,7 +86404,7 @@ var render = function() {
                         ],
                         null,
                         false,
-                        127434000
+                        2901850384
                       )
                     }),
                     _vm._v(" "),
@@ -86354,9 +86424,9 @@ var render = function() {
                                   },
                                   [
                                     _vm._v(
-                                      "\n                    " +
+                                      "\n                        " +
                                         _vm._s(props.row.role[0].name) +
-                                        "\n                "
+                                        "\n                    "
                                     )
                                   ]
                                 )
@@ -86366,7 +86436,7 @@ var render = function() {
                         ],
                         null,
                         false,
-                        3935936405
+                        2086301333
                       )
                     }),
                     _vm._v(" "),
@@ -86383,9 +86453,9 @@ var render = function() {
                             fn: function(props) {
                               return [
                                 _vm._v(
-                                  "\n                " +
+                                  "\n                    " +
                                     _vm._s(props.row.first_name) +
-                                    "\n            "
+                                    "\n                "
                                 )
                               ]
                             }
@@ -86393,7 +86463,7 @@ var render = function() {
                         ],
                         null,
                         false,
-                        1472150527
+                        2675757823
                       )
                     }),
                     _vm._v(" "),
@@ -86410,9 +86480,9 @@ var render = function() {
                             fn: function(props) {
                               return [
                                 _vm._v(
-                                  "\n                " +
+                                  "\n                    " +
                                     _vm._s(props.row.second_name) +
-                                    "\n            "
+                                    "\n                "
                                 )
                               ]
                             }
@@ -86420,7 +86490,7 @@ var render = function() {
                         ],
                         null,
                         false,
-                        3828614901
+                        1570220277
                       )
                     }),
                     _vm._v(" "),
@@ -86437,9 +86507,9 @@ var render = function() {
                             fn: function(props) {
                               return [
                                 _vm._v(
-                                  "\n                " +
+                                  "\n                    " +
                                     _vm._s(props.row.patronymic) +
-                                    "\n            "
+                                    "\n                "
                                 )
                               ]
                             }
@@ -86447,7 +86517,7 @@ var render = function() {
                         ],
                         null,
                         false,
-                        53299541
+                        1237994325
                       )
                     }),
                     _vm._v(" "),
@@ -86466,13 +86536,13 @@ var render = function() {
                               return [
                                 _c("span", { staticClass: "tag is-info" }, [
                                   _vm._v(
-                                    "\n                    " +
+                                    "\n                        " +
                                       _vm._s(
                                         new Date(
                                           props.row.created_at
                                         ).toLocaleDateString()
                                       ) +
-                                      "\n                "
+                                      "\n                    "
                                   )
                                 ])
                               ]
@@ -86481,7 +86551,7 @@ var render = function() {
                         ],
                         null,
                         false,
-                        871554549
+                        2483473141
                       )
                     }),
                     _vm._v(" "),
@@ -86499,9 +86569,9 @@ var render = function() {
                               return [
                                 _c("span", [
                                   _vm._v(
-                                    "\n                    " +
+                                    "\n                        " +
                                       _vm._s(props.row.department) +
-                                      "\n                "
+                                      "\n                    "
                                   )
                                 ])
                               ]
@@ -86510,81 +86580,63 @@ var render = function() {
                         ],
                         null,
                         false,
-                        1437015426
+                        2470569346
                       )
                     }),
                     _vm._v(" "),
-                    _c("b-table-column", {
-                      attrs: { label: "Действия" },
-                      scopedSlots: _vm._u(
-                        [
-                          {
-                            key: "default",
-                            fn: function(props) {
-                              return [
-                                _c("b-button", {
-                                  attrs: {
-                                    type: "is-warning",
-                                    size: "is-small",
-                                    "icon-right": "lock"
-                                  },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.changeUserBlockStatus(
-                                        props.row.id,
-                                        props.row.is_blocked
-                                      )
-                                    }
-                                  }
-                                }),
-                                _vm._v(" "),
-                                _c("b-button", {
-                                  attrs: {
-                                    type: "is-danger",
-                                    size: "is-small",
-                                    "icon-right": "trash"
-                                  },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.onDeleteUser(props.row.id)
-                                    }
-                                  }
-                                }),
-                                _vm._v(" "),
-                                _c(
-                                  "b-tooltip",
-                                  {
-                                    attrs: {
-                                      label: "Просмотреть пользователя",
-                                      type: "is-dark",
-                                      position: "is-top"
-                                    }
-                                  },
-                                  [
-                                    _c("b-button", {
-                                      attrs: {
-                                        type: "is-info",
-                                        size: "is-small",
-                                        "icon-right": "eye"
-                                      },
-                                      on: {
-                                        click: function($event) {
-                                          return _vm.goToUser(props.row.id)
-                                        }
-                                      }
-                                    })
-                                  ],
-                                  1
-                                )
-                              ]
-                            }
-                          }
-                        ],
-                        null,
-                        false,
-                        3730622982
-                      )
-                    }),
+                    !_vm.isWorker
+                      ? _c("b-table-column", {
+                          attrs: { label: "Действия" },
+                          scopedSlots: _vm._u(
+                            [
+                              {
+                                key: "default",
+                                fn: function(props) {
+                                  return [
+                                    _vm.canDeleteUser(props.row.role[0].alias)
+                                      ? _c("b-button", {
+                                          attrs: {
+                                            type: "is-warning",
+                                            size: "is-small",
+                                            "icon-right": "lock"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.changeUserBlockStatus(
+                                                props.row.id,
+                                                props.row.is_blocked
+                                              )
+                                            }
+                                          }
+                                        })
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    _vm.canDeleteUser(props.row.role[0].alias)
+                                      ? _c("b-button", {
+                                          attrs: {
+                                            type: "is-danger",
+                                            size: "is-small",
+                                            "icon-right": "trash"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              return _vm.onDeleteUser(
+                                                props.row.id
+                                              )
+                                            }
+                                          }
+                                        })
+                                      : _vm._e()
+                                  ]
+                                }
+                              }
+                            ],
+                            null,
+                            false,
+                            2501165012
+                          )
+                        })
+                      : _vm._e(),
                     _vm._v(" "),
                     _c("b-table-column", {
                       attrs: {
@@ -86610,7 +86662,7 @@ var render = function() {
                                           staticClass: "mr-1",
                                           attrs: { icon: "times-circle" }
                                         }),
-                                        _vm._v("Blocked\n                ")
+                                        _vm._v("Blocked\n                    ")
                                       ],
                                       1
                                     )
@@ -86625,7 +86677,7 @@ var render = function() {
                                           staticClass: "mr-1",
                                           attrs: { icon: "check-circle" }
                                         }),
-                                        _vm._v("Active\n                ")
+                                        _vm._v("Active\n                    ")
                                       ],
                                       1
                                     )
@@ -86635,7 +86687,7 @@ var render = function() {
                         ],
                         null,
                         false,
-                        3103066317
+                        218027981
                       )
                     })
                   ],

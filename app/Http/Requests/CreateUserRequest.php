@@ -20,7 +20,10 @@ class CreateUserRequest extends FormRequest
             'role' => [
                 'required', 'string',
                 Rule::in([
-                    Roles::ADMINISTRATOR_ALIAS, Roles::MANAGER_ALIAS, Roles::DEVELOPER_ALIAS
+                    Roles::ADMINISTRATOR_ALIAS,
+                    Roles::MANAGER_ALIAS,
+                    Roles::DEVELOPER_ALIAS,
+                    Roles::WORKER_ALIAS
                 ])
             ]
         ];
