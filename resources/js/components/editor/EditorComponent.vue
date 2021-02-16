@@ -71,8 +71,8 @@
                                     v-model="newUser.role"
                                 >
                                     <option value="worker">Сотрудник</option>
-                                    <option value="manager">Руководитель</option>
-                                    <option value="administrator">Администратор</option>
+                                    <option value="manager" v-if="adminOrMore">Руководитель</option>
+                                    <option value="administrator" v-if="adminOrMore">Администратор</option>
                                     <option value="developer" v-if="isDeveloper">Разработчик</option>
                                 </b-select>
                             </b-field>
@@ -86,12 +86,6 @@
                         >Создать</b-button>
                     </div>
                 </b-tab-item>
-
-<!--                <b-tab-item label="Типы документов">-->
-<!--                    <b-message type="is-warning">-->
-<!--                        В разработке!-->
-<!--                    </b-message>-->
-<!--                </b-tab-item>-->
             </b-tabs>
         </template>
     </DefaultLayout>

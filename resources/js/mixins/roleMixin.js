@@ -25,6 +25,9 @@ export default {
         },
         isWorker() {
             return this.authUser.role[0].alias === 'worker';
+        },
+        adminOrMore() {
+            return this.roleValues[this.authUser.role[0].alias] >= this.roleValues.administrator;
         }
     },
     methods: {

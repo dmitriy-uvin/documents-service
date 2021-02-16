@@ -2856,12 +2856,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
 
 
 
@@ -5764,6 +5758,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     isWorker: function isWorker() {
       return this.authUser.role[0].alias === 'worker';
+    },
+    adminOrMore: function adminOrMore() {
+      return this.roleValues[this.authUser.role[0].alias] >= this.roleValues.administrator;
     }
   }),
   methods: {
@@ -84345,7 +84342,7 @@ var render = function() {
       {
         key: "title",
         fn: function() {
-          return [_vm._v("\n            Редактор\n        ")]
+          return [_vm._v("\n        Редактор\n    ")]
         },
         proxy: true
       },
@@ -84612,15 +84609,21 @@ var render = function() {
                                   _vm._v("Сотрудник")
                                 ]),
                                 _vm._v(" "),
-                                _c("option", { attrs: { value: "manager" } }, [
-                                  _vm._v("Руководитель")
-                                ]),
+                                _vm.adminOrMore
+                                  ? _c(
+                                      "option",
+                                      { attrs: { value: "manager" } },
+                                      [_vm._v("Руководитель")]
+                                    )
+                                  : _vm._e(),
                                 _vm._v(" "),
-                                _c(
-                                  "option",
-                                  { attrs: { value: "administrator" } },
-                                  [_vm._v("Администратор")]
-                                ),
+                                _vm.adminOrMore
+                                  ? _c(
+                                      "option",
+                                      { attrs: { value: "administrator" } },
+                                      [_vm._v("Администратор")]
+                                    )
+                                  : _vm._e(),
                                 _vm._v(" "),
                                 _vm.isDeveloper
                                   ? _c(
@@ -86236,7 +86239,7 @@ var render = function() {
                     1
                   ),
                   _vm._v(" "),
-                  _vm.developerOrAdministrator
+                  !_vm.isWorker
                     ? _c(
                         "b-navbar-item",
                         {
@@ -86339,7 +86342,7 @@ var render = function() {
           ],
           null,
           false,
-          3074139430
+          1529110011
         )
       })
     : _vm._e()

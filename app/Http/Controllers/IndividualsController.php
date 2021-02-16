@@ -22,8 +22,9 @@ class IndividualsController extends Controller
 
     public function getIndividuals()
     {
+        $individuals = Individual::orderBy('created_at', 'desc')->get()->all();
         return response()->json(
-            Individual::all()
+            $individuals
         );
     }
 
@@ -38,12 +39,10 @@ class IndividualsController extends Controller
     {
         $individual = Individual::find($id);
 
-
         if (!$individual) {
             throw new IndividualNotFoundException();
         }
 
-//        $history = FieldHistory::where('individual_id', '=', $individual->id)->get()->all();
         return response()->json($individual);
     }
 

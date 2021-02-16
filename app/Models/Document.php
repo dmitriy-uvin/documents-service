@@ -16,14 +16,6 @@ class Document extends Model
         'type'
     ];
 
-    protected static function booted()
-    {
-        static::created(function ($user) {
-            $user->updated_at = null;
-            $user->save();
-        });
-    }
-
     protected $with = [
         'fields',
         'documentImage'
@@ -41,8 +33,6 @@ class Document extends Model
 
     public function documentImage()
     {
-        return $this->hasMany(
-            DocumentImage::class
-        );
+        return $this->hasMany(DocumentImage::class);
     }
 }

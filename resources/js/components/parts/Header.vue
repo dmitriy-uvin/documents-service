@@ -19,7 +19,7 @@
             </b-navbar-item>
             <b-navbar-item
                 href="/editor"
-                v-if="developerOrAdministrator"
+                v-if="!isWorker"
                 :active="isActiveItem('/editor')"
             >
                 <b-icon icon="wrench" class="mr-1"></b-icon>
