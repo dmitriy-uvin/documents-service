@@ -224,7 +224,7 @@
                 </b-tab-item>
 
                 <b-tab-item label="История">
-                    <div class="history" v-if="historyData.leth">
+                    <div class="history" v-if="historyData.length">
                         <div
                             class="mb-3"
                             v-for="history in historyData"
@@ -232,9 +232,9 @@
                         >
                             <b-message type="is-info">
                                 {{ history.author.first_name + ' ' + history.author.second_name + ' ' + history.author.patronymic }}
-                                ({{ history.author.role[0].name}}) отредактировал поле.
-                                Было: <span class="text-success">{{ JSON.parse(history.before).value }}</span>,
-                                Стало: <span class="text-danger">{{ history.after }}</span><br>
+                                ({{ history.author.role[0].name}}) отредактировал поле - <b>{{ getFieldNameByKey(history.field.type) }}</b>.
+                                До: <span class="text-success">{{ JSON.parse(history.before).value }}</span>,
+                                После: <span class="text-danger">{{ JSON.parse(history.after).value }}</span><br>
                                 <small>
                                     <b class="text-black-50">{{ createdAt(history.created_at) }}</b>
                                 </small>
@@ -258,27 +258,17 @@ import individualsMixin from "../../mixins/individualsMixin";
 import documentService from "../../services/document/documentService";
 import EventBus from "../../events/eventBus";
 import datetimeMixin from "../../mixins/datetimeMixin";
-import historyService from "../../services/history/historyService";
+import uploadDocumentsMixin from "../../mixins/uploadDocumentsMixin";
+
 export default {
     name: "IndividualPage",
     components: {
         DefaultLayout
     },
-    mixins: [individualsMixin, datetimeMixin],
+    mixins: [individualsMixin, datetimeMixin, uploadDocumentsMixin],
     props: ['id'],
     data: () => ({
         individual: [],
-        availableTypes: [
-            'image/jpeg',
-            'image/jpg',
-            'image/png',
-            'application/pdf',
-            'image/bmp',
-            'image/tiff',
-            'image/gif',
-            'image/vnd.djvu',
-            'image/djvu'
-        ],
         documentFiles: [],
         fileNames: [],
         filesPreviews: [],
@@ -294,12 +284,7 @@ export default {
         historyData: []
     }),
     async mounted() {
-        try {
-            this.individual = await individualService.getIndividualUserById(this.id);
-            // this.historyData = this.individual.history;
-        } catch (error) {
-            console.log(error);
-        }
+        await this.loadIndividual();
     },
     watch: {
         details() {
@@ -312,17 +297,14 @@ export default {
         }
     },
     methods: {
-        async getHistoryForIndividual() {
+        async loadIndividual() {
             try {
-                this.historyData = await historyService.getHistoryForIndividual(this.id);
+                const response = await individualService.getIndividualUserById(this.id);
+                this.individual = response;
+                this.historyData = response.history;
             } catch (error) {
                 EventBus.$emit('error', error.message);
             }
-        },
-        getLevelOfConfidence(confidence) {
-            if (confidence >= 0 && confidence < 0.49) return 'low';
-            if (confidence >= 0.49 && confidence < 0.7) return 'middle';
-            if (confidence > 0.7) return 'high';
         },
         onDrop(event) {
             this.addFiles(event.dataTransfer.files);
@@ -341,7 +323,6 @@ export default {
         },
         onChange(event) {
             this.addFiles(event.target.files);
-            window.scrollTo(0,document.body.scrollHeight);
         },
         dontChange(taskId) {
             const index = this.details.findIndex(item => item.id === taskId);
@@ -416,7 +397,7 @@ export default {
                 EventBus.$emit('success', 'Документ был успешно заменен!');
                 this.makeTaskLoading(taskId, false);
                 this.dontChange(taskId);
-                this.individual = await individualService.getIndividualUserById(this.id);
+                await this.loadIndividual();
             } catch (error) {
                 this.makeTaskLoading(taskId, false);
                 EventBus.$emit('error', error.message);
@@ -430,7 +411,7 @@ export default {
                     individual_id: this.individual.id
                 });
                 this.makeTaskLoading(taskId, false);
-                this.individual = await individualService.getIndividualUserById(this.id);
+                await this.loadIndividual();
                 this.dontChange(taskId);
                 EventBus.$emit('success', 'Документ был успешно добавлен!');
             } catch (error) {
@@ -457,7 +438,7 @@ export default {
                         this.editLoading = false;
                         this.editing = false;
                         this.editableId = '';
-                        this.individual = await individualService.getIndividualUserById(this.id);
+                        await this.loadIndividual();
                         EventBus.$emit('success', 'Поле успешно обновлено!');
                     } catch (error) {
                         this.editLoading = false;
@@ -473,9 +454,6 @@ export default {
         }
     },
     computed: {
-        maxFileSize() {
-            return 10000000; // 10 MB
-        },
         individualDocumentTypes() {
             return this.individual.documents.map(document => document.type);
         }
@@ -484,10 +462,4 @@ export default {
 </script>
 
 <style scoped>
-.file-preview {
-    background: lightblue;
-    border: 1px solid blue;
-    padding: 10px;
-    border-radius: 40px;
-}
 </style>

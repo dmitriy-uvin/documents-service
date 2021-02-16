@@ -21,8 +21,7 @@ class FieldHistory extends Model
 
     protected $with = [
         'author',
-        'field',
-        'individual',
+        'field'
     ];
 
     public function author()

@@ -7,6 +7,7 @@ use App\Exceptions\Individual\IndividualNotFoundException;
 use App\Models\Document;
 use App\Models\DocumentImage;
 use App\Models\Field;
+use App\Models\FieldHistory;
 use App\Models\Individual;
 use App\Models\Task;
 use Illuminate\Http\Request;
@@ -37,10 +38,12 @@ class IndividualsController extends Controller
     {
         $individual = Individual::find($id);
 
+
         if (!$individual) {
             throw new IndividualNotFoundException();
         }
 
+//        $history = FieldHistory::where('individual_id', '=', $individual->id)->get()->all();
         return response()->json($individual);
     }
 

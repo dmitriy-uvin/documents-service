@@ -22,11 +22,6 @@ Auth::routes();
 Route::group([
     'middleware' => 'auth'
 ], function () {
-    Route::get('/history', [\App\Http\Controllers\HistoryController::class, 'index'])
-        ->name('history');
-    Route::get('/history/all', [\App\Http\Controllers\HistoryController::class, 'getAllHistory'])
-        ->name('history.all');
-
     Route::get('/tasks', [\App\Http\Controllers\TasksController::class, 'index'])
         ->name('tasks');
     Route::get('/tasks/all', [\App\Http\Controllers\TasksController::class, 'getAllTasks'])

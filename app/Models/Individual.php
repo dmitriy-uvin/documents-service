@@ -17,7 +17,8 @@ class Individual extends Model
     ];
 
     protected $with = [
-        'documents'
+        'documents',
+        'history'
     ];
 
     public function documents()
@@ -27,6 +28,6 @@ class Individual extends Model
 
     public function history()
     {
-        return $this->hasMany(FieldHistory::class);
+        return $this->hasMany(FieldHistory::class)->orderBy('created_at', 'desc');
     }
 }

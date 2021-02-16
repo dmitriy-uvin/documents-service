@@ -46,7 +46,6 @@ Vue.component('toast-notifications', require('./components/events/Toast.vue').de
 Vue.component('modal', require('./components/modal/Modal.vue').default);
 
 //
-Vue.component('history', require('./components/history/HistoryComponent.vue').default);
 Vue.component('tasks', require('./components/tasks/TasksComponent.vue').default);
 
 const app = new Vue({
