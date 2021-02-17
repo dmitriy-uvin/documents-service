@@ -65,7 +65,7 @@ class IndividualsController extends Controller
         $response = [];
         foreach ($payloadData as $dbrainTaskKey => $value) {
             $this->checkIfIndividualExists($payloadData[$dbrainTaskKey]);
-            throw new \Exception();
+
             $individual = new Individual();
             $individual->save();
 
