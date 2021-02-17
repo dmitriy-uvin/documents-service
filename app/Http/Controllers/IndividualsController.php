@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Constants\FieldTypes;
 use App\Exceptions\Individual\IndividualNotFoundException;
+use App\Exceptions\Individual\SuchIndividualAlreadyExistsException;
 use App\Exceptions\SomethingWentWrongException;
 use App\Models\Document;
 use App\Models\DocumentImage;
@@ -63,6 +64,8 @@ class IndividualsController extends Controller
         $payloadData = $request->payloadData;
         $response = [];
         foreach ($payloadData as $dbrainTaskKey => $value) {
+            $this->checkIfIndividualExists($payloadData[$dbrainTaskKey]);
+            throw new \Exception();
             $individual = new Individual();
             $individual->save();
 
@@ -99,6 +102,30 @@ class IndividualsController extends Controller
         }
 
         return response()->json($response);
+    }
+
+    private function checkIfIndividualExists(array $documentsPayload)
+    {
+        foreach ($documentsPayload as $taskId => $document) {
+            $findDocs = Document::where('type', '=', $document['document_type'])->get()->all();
+            foreach ($findDocs as $findDoc) {
+                $findFields = $findDoc->fields
+                    ->flatMap(fn($field) => [$field->type => $field->value]);
+
+                $fields = [];
+                foreach ($document['fields'] as $fieldType => $field) {
+                    $fields[$fieldType] = $field['text'] ?: '';
+                }
+                $fields = collect($fields);
+
+                $fieldsCount = $findFields->count();
+                $diff = $findFields->diffAssoc($fields);
+
+                if (count($diff) < $fieldsCount / 4) {
+                    throw new SuchIndividualAlreadyExistsException();
+                }
+            }
+        }
     }
 
     public function search(Request $request)
