@@ -44,6 +44,9 @@ Route::group([
     Route::post('/documents/individuals/add', [\App\Http\Controllers\DocumentsController::class, 'addDocumentForIndividual'])
         ->name('documents.individuals.add');
 
+    Route::post('/documents/recognize/taskkey', [\App\Http\Controllers\DocumentsController::class, 'getRecognizedDataByTaskKey'])
+        ->name('documents.recognize.taskkey');
+
     Route::get('/individuals', [\App\Http\Controllers\IndividualsController::class, 'individualsView'])
         ->name('individuals.view');
     Route::get('/individuals/all', [\App\Http\Controllers\IndividualsController::class, 'getIndividuals']);

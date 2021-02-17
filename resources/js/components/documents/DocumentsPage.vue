@@ -65,6 +65,8 @@ export default {
                 });
                 const response = await documentService.classifyDocuments(formData);
                 this.classifiedDetails = _.groupBy(response, 'task_id');
+                console.log('classifiedDetails');
+                console.log(this.classifiedDetails);
                 this.uploadLoading = false;
                 this.activeStep = 1;
             } catch (error) {
@@ -74,7 +76,6 @@ export default {
         },
         async onRecognize(taskId) {
             try {
-                console.log(taskId);
                 await documentService.recognizeTask(taskId);
             } catch (error) {
                 EventBus.$emit('error', error.message);

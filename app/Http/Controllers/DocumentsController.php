@@ -84,12 +84,6 @@ class DocumentsController extends Controller
         fclose($document);
         $response = $this->apiService->getRecognizeResponse($recognizeTaskId);
 
-        $docType = $response['items'][0]['doc_type'];
-        $responseFields = collect($response['items'][0]['fields'])
-            ->map(function ($field) {
-
-            });
-
 
         return response()->json($response);
     }
@@ -219,6 +213,29 @@ class DocumentsController extends Controller
         return response()->json([
             "success" => true
         ]);
+    }
+
+    public function getRecognizedDataByTaskKey(Request $request)
+    {
+        $tasks = Task::where('task_id', '=', $request->task_key)->get()->all();
+
+        $allResponses = [];
+        foreach ($tasks as $task) {
+            if ($task->document_type !== 'not_document') {
+                $document = fopen(storage_path('app/public/' . $task->document_path), 'r');
+                $recognizeTaskId = $this->apiService->getRecognizeTaskId($document);
+                fclose($document);
+                $response = $this->apiService->getRecognizeResponse($recognizeTaskId);
+                $allResponses[] = [
+                    'id' => $task->id,
+                    'task_id' => $task->task_id,
+                    'doc_type' => $response['items'][0]['doc_type'],
+                    'fields' => $response['items'][0]['fields'],
+                ];
+            }
+        }
+
+        return response()->json($allResponses);
     }
 
     private function saveDocument($document, $name)

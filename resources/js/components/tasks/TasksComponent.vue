@@ -40,7 +40,6 @@ export default {
         this.isLoading = true;
         this.tasks = await taskService.fetchTasks();
         this.isLoading = false;
-        console.log(this.tasks);
     },
     methods: {
         taskName(task) {

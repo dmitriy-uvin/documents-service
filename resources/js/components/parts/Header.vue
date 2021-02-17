@@ -73,10 +73,9 @@ import { mapGetters, mapActions } from 'vuex';
 import * as authMutations from '../../store/modules/auth/types/mutations';
 import * as actionTypes from '../../store/modules/auth/types/actions';
 import roleMixin from "../../mixins/roleMixin";
+import EventBus from '../../events/eventBus';
 export default {
     name: "Header",
-    data: () => ({
-    }),
     mixins: [roleMixin],
     props: ['authData'],
     beforeMount() {
@@ -95,7 +94,7 @@ export default {
                 await this.logoutAction();
                 window.location.href = '';
             } catch (error) {
-                console.log(error);
+                EventBust.$emit('error', error.message);
             }
         },
         isActiveItem(pathName) {

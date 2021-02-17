@@ -2189,6 +2189,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2218,65 +2226,49 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         });
 
         _this.recognizedData[key].loading = false;
+        _this.recognizedData[key].recognized = false;
+        _this.recognizedData[key].saved = false;
       });
-      console.log(this.details);
-      console.log(this.recognizedData);
     }
   },
   methods: {
-    goToIndividual: function goToIndividual(taskKey) {
-      window.location.href = '/individuals/' + this.goTo[taskKey];
-    },
-    saveIndividual: function saveIndividual(taskKey) {
+    onRecognizeByTaskKey: function onRecognizeByTaskKey(taskKey) {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var payloadRecognizedData, response;
+        var response, groupedResult, result;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.prev = 0;
-                payloadRecognizedData = {};
-                Object.keys(_this2.recognizedData).map(function (mainKey) {
-                  Object.keys(_this2.recognizedData[mainKey]).map(function (task) {
-                    if (!payloadRecognizedData[mainKey]) {
-                      payloadRecognizedData[mainKey] = {};
-                    }
 
-                    if (_this2.recognizedData[mainKey][task].items) {
-                      if (_this2.recognizedData[mainKey][task].items.length) {
-                        if (!payloadRecognizedData[mainKey][task]) {
-                          payloadRecognizedData[mainKey][task] = {};
-                        }
+                _this2.changePropertyForTaskKey('loading', taskKey, true);
 
-                        payloadRecognizedData[mainKey][task] = {
-                          id: _this2.recognizedData[mainKey][task].id,
-                          fields: _this2.recognizedData[mainKey][task].items[0].fields,
-                          document_type: _this2.recognizedData[mainKey][task].items[0].doc_type
-                        };
-                      }
-                    }
+                _context.next = 4;
+                return _services_document_documentService__WEBPACK_IMPORTED_MODULE_1__.default.getRecognizeResponseByTaskKey({
+                  task_key: taskKey
+                });
+
+              case 4:
+                response = _context.sent;
+
+                _this2.changePropertyForTaskKey('loading', taskKey, false);
+
+                groupedResult = _.groupBy(response, 'task_id');
+                result = {};
+                Object.keys(groupedResult).map(function (taskKey) {
+                  if (!result[taskKey]) result[taskKey] = {};
+                  Object.keys(groupedResult[taskKey]).map(function (index) {
+                    var task = groupedResult[taskKey][index];
+                    if (!result[taskKey][task.id]) result[taskKey][task.id] = {};
+                    result[taskKey][task.id] = groupedResult[taskKey][index];
                   });
                 });
+                _this2.recognizedData = _objectSpread(_objectSpread({}, _this2.recognizedData), result);
 
-                _this2.changeLoadingForTaskKey(taskKey, true);
+                _this2.changePropertyForTaskKey('recognized', taskKey, true);
 
-                _context.next = 6;
-                return _services_document_documentService__WEBPACK_IMPORTED_MODULE_1__.default.saveIndividual({
-                  payloadData: payloadRecognizedData
-                });
-
-              case 6:
-                response = _context.sent;
-                console.log(response);
-                Object.keys(response).map(function (taskKey) {
-                  _this2.goTo = _objectSpread(_objectSpread({}, _this2.goTo), {}, _defineProperty({}, taskKey, response[taskKey]));
-                });
-
-                _this2.changeLoadingForTaskKey(taskKey, false);
-
-                _events_eventBus__WEBPACK_IMPORTED_MODULE_2__.default.$emit('success', 'Физическое лицо было добавлено!');
                 _context.next = 17;
                 break;
 
@@ -2284,7 +2276,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context.prev = 13;
                 _context.t0 = _context["catch"](0);
 
-                _this2.changeLoadingForTaskKey(taskKey, false);
+                _this2.changePropertyForTaskKey('loading', taskKey, false);
 
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_2__.default.$emit('error', _context.t0.message);
 
@@ -2296,67 +2288,59 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee, null, [[0, 13]]);
       }))();
     },
-    getLevelOfConfidence: function getLevelOfConfidence(confidence) {
-      if (confidence >= 0 && confidence < 0.49) return 'low';
-      if (confidence >= 0.49 && confidence < 0.7) return 'middle';
-      if (confidence > 0.7) return 'high';
+    goToIndividual: function goToIndividual(taskKey) {
+      window.location.href = '/individuals/' + this.goTo[taskKey];
     },
-    recognizedDataExists: function recognizedDataExists(taskKey, taskId) {
-      if (this.recognizedData[taskKey][taskId]) {
-        if (this.recognizedData[taskKey][taskId].items) {
-          return this.recognizedData[taskKey][taskId].items.length;
-        }
-      }
-
-      return false;
-    },
-    changeRecognizeLoadingState: function changeRecognizeLoadingState(taskKey, taskId, value) {
-      this.recognizedData = _objectSpread(_objectSpread({}, this.recognizedData), {}, _defineProperty({}, taskKey, _objectSpread(_objectSpread({}, this.recognizedData[taskKey]), {}, _defineProperty({}, taskId, _objectSpread(_objectSpread({}, this.recognizedData[taskKey][taskId]), {}, {
-        loading: value
-      })))));
-    },
-    changeLoadingForTaskKey: function changeLoadingForTaskKey(taskKey, value) {
-      this.recognizedData = _objectSpread(_objectSpread({}, this.recognizedData), {}, _defineProperty({}, taskKey, _objectSpread(_objectSpread({}, this.recognizedData[taskKey]), {}, {
-        loading: value
-      })));
-    },
-    onRecognize: function onRecognize(taskId, taskKey) {
+    saveIndividual: function saveIndividual(taskKey) {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        var response, result;
+        var payloadRecognizedData, response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.prev = 0;
+                payloadRecognizedData = {};
+                Object.keys(_this3.recognizedData).map(function (mainKey) {
+                  Object.keys(_this3.recognizedData[mainKey]).map(function (task) {
+                    if (!payloadRecognizedData[mainKey]) payloadRecognizedData[mainKey] = {};
 
-                _this3.changeRecognizeLoadingState(taskKey, taskId, true);
+                    if (Object.keys(_this3.recognizedData[mainKey][task]).length) {
+                      if (!payloadRecognizedData[mainKey][task]) payloadRecognizedData[mainKey][task] = {};
+                      payloadRecognizedData[mainKey][task] = {
+                        id: _this3.recognizedData[mainKey][task].id,
+                        fields: _this3.recognizedData[mainKey][task].fields,
+                        document_type: _this3.recognizedData[mainKey][task].doc_type
+                      };
+                    }
+                  });
+                });
 
-                _this3.changeLoadingForTaskKey(taskKey, true);
+                _this3.changePropertyForTaskKey('loading', taskKey, true);
 
-                _context2.next = 5;
-                return _services_document_documentService__WEBPACK_IMPORTED_MODULE_1__.default.recognizeTask(taskId);
+                _context2.next = 6;
+                return _services_document_documentService__WEBPACK_IMPORTED_MODULE_1__.default.saveIndividual({
+                  payloadData: payloadRecognizedData
+                });
 
-              case 5:
+              case 6:
                 response = _context2.sent;
+                _this3.goTo = _objectSpread(_objectSpread({}, _this3.goTo), {}, _defineProperty({}, taskKey, response[taskKey]));
 
-                _this3.changeLoadingForTaskKey(taskKey, false);
+                _this3.changePropertyForTaskKey('loading', taskKey, false);
 
-                _this3.changeRecognizeLoadingState(taskKey, taskId, false);
+                _this3.changePropertyForTaskKey('saved', taskKey, true);
 
-                result = _objectSpread(_objectSpread({}, _this3.recognizedData), {}, _defineProperty({}, taskKey, _objectSpread(_objectSpread({}, _this3.recognizedData[taskKey]), {}, _defineProperty({}, taskId, _objectSpread(_objectSpread({}, _this3.recognizedData[taskKey][taskId]), response)))));
-                _this3.recognizedData = result;
+                _events_eventBus__WEBPACK_IMPORTED_MODULE_2__.default.$emit('success', 'Физическое лицо было добавлено!');
                 _context2.next = 17;
                 break;
 
-              case 12:
-                _context2.prev = 12;
+              case 13:
+                _context2.prev = 13;
                 _context2.t0 = _context2["catch"](0);
 
-                _this3.changeLoadingForTaskKey(taskKey, false);
-
-                _this3.changeRecognizeLoadingState(taskKey, taskId, false);
+                _this3.changePropertyForTaskKey('loading', taskKey, false);
 
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_2__.default.$emit('error', _context2.t0.message);
 
@@ -2365,8 +2349,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 12]]);
+        }, _callee2, null, [[0, 13]]);
       }))();
+    },
+    getLevelOfConfidence: function getLevelOfConfidence(confidence) {
+      if (confidence >= 0 && confidence < 0.49) return 'low';
+      if (confidence >= 0.49 && confidence < 0.7) return 'middle';
+      if (confidence > 0.7) return 'high';
+    },
+    recognizedDataExists: function recognizedDataExists(taskKey, taskId) {
+      if (this.recognizedData[taskKey][taskId]) {
+        if (this.recognizedData[taskKey][taskId].fields) {
+          return Object.keys(this.recognizedData[taskKey][taskId].fields).length;
+        }
+      }
+
+      return false;
+    },
+    changePropertyForTaskKey: function changePropertyForTaskKey(property, taskKey, value) {
+      this.recognizedData = _objectSpread(_objectSpread({}, this.recognizedData), {}, _defineProperty({}, taskKey, _objectSpread(_objectSpread({}, this.recognizedData[taskKey]), {}, _defineProperty({}, property, value))));
     }
   }
 });
@@ -2533,23 +2534,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 6:
                 response = _context.sent;
                 _this.classifiedDetails = _.groupBy(response, 'task_id');
+                console.log('classifiedDetails');
+                console.log(_this.classifiedDetails);
                 _this.uploadLoading = false;
                 _this.activeStep = 1;
-                _context.next = 16;
+                _context.next = 18;
                 break;
 
-              case 12:
-                _context.prev = 12;
+              case 14:
+                _context.prev = 14;
                 _context.t0 = _context["catch"](0);
                 _this.uploadLoading = false;
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_3__.default.$emit('error', _context.t0.message);
 
-              case 16:
+              case 18:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 12]]);
+        }, _callee, null, [[0, 14]]);
       }))();
     },
     onRecognize: function onRecognize(taskId) {
@@ -2559,25 +2562,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.prev = 0;
-                console.log(taskId);
-                _context2.next = 4;
+                _context2.next = 3;
                 return _services_document_documentService__WEBPACK_IMPORTED_MODULE_2__.default.recognizeTask(taskId);
 
-              case 4:
-                _context2.next = 9;
+              case 3:
+                _context2.next = 8;
                 break;
 
-              case 6:
-                _context2.prev = 6;
+              case 5:
+                _context2.prev = 5;
                 _context2.t0 = _context2["catch"](0);
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_3__.default.$emit('error', _context2.t0.message);
 
-              case 9:
+              case 8:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 6]]);
+        }, _callee2, null, [[0, 5]]);
       }))();
     }
   }
@@ -4453,10 +4455,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _store_modules_auth_types_getters__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../store/modules/auth/types/getters */ "./resources/js/store/modules/auth/types/getters.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _store_modules_auth_types_mutations__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../store/modules/auth/types/mutations */ "./resources/js/store/modules/auth/types/mutations.js");
 /* harmony import */ var _store_modules_auth_types_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../store/modules/auth/types/actions */ "./resources/js/store/modules/auth/types/actions.js");
 /* harmony import */ var _mixins_roleMixin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../mixins/roleMixin */ "./resources/js/mixins/roleMixin.js");
+/* harmony import */ var _events_eventBus__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../events/eventBus */ "./resources/js/events/eventBus.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -4543,11 +4546,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Header",
-  data: function data() {
-    return {};
-  },
   mixins: [_mixins_roleMixin__WEBPACK_IMPORTED_MODULE_4__.default],
   props: ['authData'],
   beforeMount: function beforeMount() {
@@ -4558,7 +4559,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.$store.commit('auth/' + _store_modules_auth_types_mutations__WEBPACK_IMPORTED_MODULE_2__.SET_USER_DATA, this.authData);
       this.$store.commit('auth/' + _store_modules_auth_types_mutations__WEBPACK_IMPORTED_MODULE_2__.LOG_IN);
     }
-  }, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('auth', {
+  }, (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapActions)('auth', {
     logoutAction: _store_modules_auth_types_actions__WEBPACK_IMPORTED_MODULE_3__.LOGOUT
   })), {}, {
     logout: function logout() {
@@ -4581,7 +4582,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               case 6:
                 _context.prev = 6;
                 _context.t0 = _context["catch"](0);
-                console.log(_context.t0);
+                EventBust.$emit('error', _context.t0.message);
 
               case 9:
               case "end":
@@ -4595,7 +4596,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return pathName === window.location.pathname;
     }
   }),
-  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('auth', {
+  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapGetters)('auth', {
     isLoggedIn: _store_modules_auth_types_getters__WEBPACK_IMPORTED_MODULE_1__.IS_LOGGED_IN
   }))
 });
@@ -4678,9 +4679,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 3:
               _this.tasks = _context.sent;
               _this.isLoading = false;
-              console.log(_this.tasks);
 
-            case 6:
+            case 5:
             case "end":
               return _context.stop();
           }
@@ -6045,10 +6045,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
             case 2:
               response = _context.sent;
-              console.log(response);
               return _context.abrupt("return", response === null || response === void 0 ? void 0 : response.data);
 
-            case 5:
+            case 4:
             case "end":
               return _context.stop();
           }
@@ -6068,11 +6067,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
             case 2:
               response = _context2.sent;
-              console.log('recognize');
-              console.log(response);
               return _context2.abrupt("return", response === null || response === void 0 ? void 0 : response.data);
 
-            case 6:
+            case 4:
             case "end":
               return _context2.stop();
           }
@@ -6080,7 +6077,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee2);
     }))();
   },
-  saveIndividual: function saveIndividual(payload) {
+  getRecognizeResponseByTaskKey: function getRecognizeResponseByTaskKey(payload) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
       var response;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
@@ -6088,7 +6085,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           switch (_context3.prev = _context3.next) {
             case 0:
               _context3.next = 2;
-              return _axiosService__WEBPACK_IMPORTED_MODULE_1__.default.post('/individuals/create', payload);
+              return _axiosService__WEBPACK_IMPORTED_MODULE_1__.default.post('/documents/recognize/taskkey', payload);
 
             case 2:
               response = _context3.sent;
@@ -6102,19 +6099,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee3);
     }))();
   },
-  replaceDocument: function replaceDocument(payload) {
+  saveIndividual: function saveIndividual(payload) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+      var response;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
               _context4.next = 2;
-              return _axiosService__WEBPACK_IMPORTED_MODULE_1__.default.post('/documents/replace', payload);
+              return _axiosService__WEBPACK_IMPORTED_MODULE_1__.default.post('/individuals/create', payload);
 
             case 2:
-              return _context4.abrupt("return", _context4.sent);
+              response = _context4.sent;
+              return _context4.abrupt("return", response === null || response === void 0 ? void 0 : response.data);
 
-            case 3:
+            case 4:
             case "end":
               return _context4.stop();
           }
@@ -6122,14 +6121,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee4);
     }))();
   },
-  saveDocumentForIndividual: function saveDocumentForIndividual(payload) {
+  replaceDocument: function replaceDocument(payload) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
               _context5.next = 2;
-              return _axiosService__WEBPACK_IMPORTED_MODULE_1__.default.post('/documents/individuals/add', payload);
+              return _axiosService__WEBPACK_IMPORTED_MODULE_1__.default.post('/documents/replace', payload);
 
             case 2:
               return _context5.abrupt("return", _context5.sent);
@@ -6142,14 +6141,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee5);
     }))();
   },
-  updateField: function updateField(payload) {
+  saveDocumentForIndividual: function saveDocumentForIndividual(payload) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
         while (1) {
           switch (_context6.prev = _context6.next) {
             case 0:
               _context6.next = 2;
-              return _axiosService__WEBPACK_IMPORTED_MODULE_1__.default.put('/fields/update', payload);
+              return _axiosService__WEBPACK_IMPORTED_MODULE_1__.default.post('/documents/individuals/add', payload);
 
             case 2:
               return _context6.abrupt("return", _context6.sent);
@@ -6160,6 +6159,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }
       }, _callee6);
+    }))();
+  },
+  updateField: function updateField(payload) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee7() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee7$(_context7) {
+        while (1) {
+          switch (_context7.prev = _context7.next) {
+            case 0:
+              _context7.next = 2;
+              return _axiosService__WEBPACK_IMPORTED_MODULE_1__.default.put('/fields/update', payload);
+
+            case 2:
+              return _context7.abrupt("return", _context7.sent);
+
+            case 3:
+            case "end":
+              return _context7.stop();
+          }
+        }
+      }, _callee7);
     }))();
   }
 });
@@ -83908,6 +83927,7 @@ var render = function() {
         ? _c(
             "div",
             [
+              _vm._v("\n        " + _vm._s(taskKey) + "\n        "),
               _vm._l(tasks, function(task) {
                 return _c("div", { staticClass: "row mb-3" }, [
                   _c("div", { staticClass: "col-md-6" }, [
@@ -83919,122 +83939,91 @@ var render = function() {
                     })
                   ]),
                   _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "col-md-6" },
-                    [
-                      _c("h2", { staticClass: "subtitle" }, [
-                        _vm._v("\n                    Document Type: "),
-                        _c("b", [_vm._v(_vm._s(task.document_type))])
-                      ]),
-                      _vm._v(" "),
-                      _vm.recognizedDataExists(taskKey, task.id)
-                        ? _c(
-                            "div",
-                            { staticClass: "fields-data" },
-                            [
-                              _vm._m(0, true),
-                              _vm._v(" "),
-                              _vm._l(
-                                _vm.recognizedData[taskKey][task.id].items[0]
-                                  .fields,
-                                function(field, field_name) {
-                                  return _c(
+                  _c("div", { staticClass: "col-md-6" }, [
+                    _c("h2", { staticClass: "subtitle" }, [
+                      _vm._v("\n                    Document Type: "),
+                      _c("b", [_vm._v(_vm._s(task.document_type))])
+                    ]),
+                    _vm._v(" "),
+                    _vm.recognizedDataExists(taskKey, task.id)
+                      ? _c(
+                          "div",
+                          { staticClass: "fields-data" },
+                          [
+                            _vm._m(0, true),
+                            _vm._v(" "),
+                            _vm._l(
+                              _vm.recognizedData[taskKey][task.id].fields,
+                              function(field, field_name) {
+                                return _c("div", { staticClass: "row mb-2" }, [
+                                  _c(
                                     "div",
-                                    { staticClass: "row mb-2" },
+                                    { staticClass: "col-md-4 text-left" },
+                                    [
+                                      _vm._v(
+                                        "\n                            " +
+                                          _vm._s(field_name) +
+                                          "\n                        "
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    { staticClass: "col-md-5 text-right" },
+                                    [
+                                      _vm._v(
+                                        "\n                            " +
+                                          _vm._s(field.text) +
+                                          "\n                        "
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    { staticClass: "col-md-3 text-right" },
                                     [
                                       _c(
-                                        "div",
-                                        { staticClass: "col-md-4 text-left" },
+                                        "span",
+                                        {
+                                          staticClass: "confidence-badge",
+                                          class:
+                                            "confidence-" +
+                                            _vm.getLevelOfConfidence(
+                                              field.confidence
+                                            )
+                                        },
                                         [
                                           _vm._v(
-                                            "\n                            " +
-                                              _vm._s(field_name) +
-                                              "\n                        "
-                                          )
-                                        ]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "div",
-                                        { staticClass: "col-md-5 text-right" },
-                                        [
-                                          _vm._v(
-                                            "\n                            " +
-                                              _vm._s(field.text) +
-                                              "\n                        "
-                                          )
-                                        ]
-                                      ),
-                                      _vm._v(" "),
-                                      _c(
-                                        "div",
-                                        { staticClass: "col-md-3 text-right" },
-                                        [
-                                          _c(
-                                            "span",
-                                            {
-                                              staticClass: "confidence-badge",
-                                              class:
-                                                "confidence-" +
-                                                _vm.getLevelOfConfidence(
-                                                  field.confidence
-                                                )
-                                            },
-                                            [
-                                              _vm._v(
-                                                "\n                                " +
-                                                  _vm._s(
-                                                    field.confidence.toFixed(2)
-                                                  ) +
-                                                  "\n                            "
-                                              )
-                                            ]
+                                            "\n                                " +
+                                              _vm._s(
+                                                field.confidence.toFixed(2)
+                                              ) +
+                                              "\n                            "
                                           )
                                         ]
                                       )
                                     ]
                                   )
-                                }
-                              )
-                            ],
-                            2
-                          )
-                        : task.document_type !== "not_document"
-                        ? _c(
-                            "b-button",
-                            {
-                              attrs: {
-                                type: "is-info",
-                                loading:
-                                  _vm.recognizedData[taskKey][task.id].loading
-                              },
-                              on: {
-                                click: function($event) {
-                                  return _vm.onRecognize(task.id, taskKey)
-                                }
+                                ])
                               }
-                            },
-                            [
-                              _vm._v(
-                                "\n                    Распознать\n                "
-                              )
-                            ]
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      !Object.keys(_vm.recognizableDocTypes).includes(
-                        task.document_type
-                      )
-                        ? _c("div", { staticClass: "text-danger" }, [
-                            _vm._v(
-                              "\n                    Документ не может быть распознан!\n                "
                             )
-                          ])
-                        : _vm._e()
-                    ],
-                    1
-                  )
+                          ],
+                          2
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    !Object.keys(_vm.recognizableDocTypes).includes(
+                      task.document_type
+                    )
+                      ? _c("div", { staticClass: "text-danger" }, [
+                          _vm._v(
+                            "\n                    Документ не может быть распознан!\n                "
+                          )
+                        ])
+                      : _vm._e()
+                  ])
                 ])
               }),
               _vm._v(" "),
@@ -84043,45 +84032,84 @@ var render = function() {
                 { staticClass: "buttons d-flex justify-content-center" },
                 [
                   _c("div", { staticClass: "col-md-4 row" }, [
-                    _c(
-                      "div",
-                      { class: _vm.goTo[taskKey] ? "col-md-6" : "col-md-12" },
-                      [
-                        _c(
-                          "b-button",
-                          {
-                            staticClass: "mb-4 mt-2",
-                            attrs: {
-                              type: "is-success",
-                              expanded: "",
-                              loading: _vm.recognizedData[taskKey].loading
-                            },
-                            on: {
-                              click: function($event) {
-                                return _vm.saveIndividual(taskKey)
-                              }
-                            }
-                          },
-                          [
-                            _vm._v(
-                              "\n                        Сохранить\n                    "
-                            )
-                          ]
-                        )
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _vm.goTo[taskKey]
+                    _vm.recognizedData[taskKey].recognized &&
+                    !_vm.recognizedData[taskKey].saved
                       ? _c(
                           "div",
-                          { staticClass: "col-md-6" },
+                          {
+                            class: _vm.recognizedData[taskKey].recognized
+                              ? "col-md-12"
+                              : "col-md-6"
+                          },
                           [
                             _c(
                               "b-button",
                               {
-                                staticClass: "mb-4 mt-2",
-                                attrs: { type: "is-info", expanded: "" },
+                                attrs: {
+                                  type: "is-success",
+                                  expanded: "",
+                                  loading: _vm.recognizedData[taskKey].loading
+                                },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.saveIndividual(taskKey)
+                                  }
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                        Сохранить\n                    "
+                                )
+                              ]
+                            )
+                          ],
+                          1
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    !_vm.recognizedData[taskKey].recognized
+                      ? _c(
+                          "div",
+                          {
+                            class: !_vm.recognizedData[taskKey].recognized
+                              ? "col-md-12"
+                              : "col-md-6"
+                          },
+                          [
+                            _c(
+                              "b-button",
+                              {
+                                attrs: {
+                                  type: "is-info",
+                                  expanded: "",
+                                  loading: _vm.recognizedData[taskKey].loading
+                                },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.onRecognizeByTaskKey(taskKey)
+                                  }
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                        Распознать\n                    "
+                                )
+                              ]
+                            )
+                          ],
+                          1
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.recognizedData[taskKey].saved
+                      ? _c(
+                          "div",
+                          { staticClass: "col-md-12" },
+                          [
+                            _c(
+                              "b-button",
+                              {
+                                attrs: { type: "is-primary", expanded: "" },
                                 on: {
                                   click: function($event) {
                                     return _vm.goToIndividual(taskKey)

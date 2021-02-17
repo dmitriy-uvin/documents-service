@@ -1,6 +1,7 @@
 <template>
     <div class="classification">
         <div v-for="(tasks, taskKey) in details" v-if="Object.keys(details).length">
+            {{ taskKey }}
             <div
                 class="row mb-3"
                 v-for="task in tasks"
@@ -26,7 +27,8 @@
                         </div>
                         <div
                             class="row mb-2"
-                            v-for="(field, field_name) in recognizedData[taskKey][task.id].items[0].fields">
+                            v-for="(field, field_name) in recognizedData[taskKey][task.id].fields"
+                        >
                             <div class="col-md-4 text-left">
                                 {{ field_name }}
                             </div>
@@ -43,14 +45,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <b-button type="is-info"
-                              @click="onRecognize(task.id, taskKey)"
-                              :loading="recognizedData[taskKey][task.id].loading"
-                              v-else-if="task.document_type !== 'not_document'"
-                    >
-                        Распознать
-                    </b-button>
                     <div class="text-danger"
                          v-if="!Object.keys(recognizableDocTypes).includes(task.document_type)"
                     >
@@ -61,11 +55,11 @@
             <div class="buttons d-flex justify-content-center">
                 <div class="col-md-4 row">
                     <div
-                        :class="goTo[taskKey] ? 'col-md-6' : 'col-md-12'"
+                        :class="recognizedData[taskKey].recognized ? 'col-md-12' : 'col-md-6'"
+                        v-if="recognizedData[taskKey].recognized && !recognizedData[taskKey].saved"
                     >
                         <b-button
                             type="is-success"
-                            class="mb-4 mt-2"
                             expanded
                             @click="saveIndividual(taskKey)"
                             :loading="recognizedData[taskKey].loading"
@@ -73,13 +67,27 @@
                             Сохранить
                         </b-button>
                     </div>
-                    <div class="col-md-6" v-if="goTo[taskKey]">
+                    <div
+                        :class="!recognizedData[taskKey].recognized ? 'col-md-12' : 'col-md-6'"
+                        v-if="!recognizedData[taskKey].recognized"
+                    >
                         <b-button
                             type="is-info"
-                            class="mb-4 mt-2"
+                            expanded
+                            @click="onRecognizeByTaskKey(taskKey)"
+                            :loading="recognizedData[taskKey].loading"
+                        >
+                            Распознать
+                        </b-button>
+                    </div>
+                    <div
+                        class="col-md-12"
+                        v-if="recognizedData[taskKey].saved"
+                    >
+                        <b-button
+                            type="is-primary"
                             expanded
                             @click="goToIndividual(taskKey)"
-
                         >
                             Перейти
                         </b-button>
@@ -100,7 +108,9 @@ export default {
     data: () => ({
         recognizedData: {},
         recognizableDocTypes: documentTypes.recognizable,
-        goTo: {}
+        goTo: {
+
+        }
     }),
     watch: {
         details() {
@@ -114,12 +124,40 @@ export default {
                     this.recognizedData[key][task.id].id = task.id;
                 });
                 this.recognizedData[key].loading = false;
+                this.recognizedData[key].recognized = false;
+                this.recognizedData[key].saved = false;
             });
-            console.log(this.details);
-            console.log(this.recognizedData);
         }
     },
     methods: {
+        async onRecognizeByTaskKey(taskKey) {
+            try {
+                this.changePropertyForTaskKey('loading', taskKey, true);
+                const response = await documentService.getRecognizeResponseByTaskKey({
+                    task_key: taskKey
+                });
+                this.changePropertyForTaskKey('loading', taskKey, false);
+
+                const groupedResult = _.groupBy(response, 'task_id');
+                const result = {};
+                Object.keys(groupedResult).map(taskKey => {
+                    if (!result[taskKey]) result[taskKey] = {};
+                    Object.keys(groupedResult[taskKey]).map(index => {
+                        const task = groupedResult[taskKey][index];
+                        if (!result[taskKey][task.id]) result[taskKey][task.id] = {};
+                        result[taskKey][task.id] = groupedResult[taskKey][index];
+                    });
+                });
+                this.recognizedData = {
+                    ...this.recognizedData,
+                    ...result
+                };
+                this.changePropertyForTaskKey('recognized', taskKey, true);
+            } catch (error) {
+                this.changePropertyForTaskKey('loading', taskKey, false);
+                EventBus.$emit('error', error.message);
+            }
+        },
         goToIndividual(taskKey) {
             window.location.href = '/individuals/' + this.goTo[taskKey];
         },
@@ -128,38 +166,34 @@ export default {
                 const payloadRecognizedData = {};
                 Object.keys(this.recognizedData).map(mainKey => {
                     Object.keys(this.recognizedData[mainKey]).map(task => {
-                        if (!payloadRecognizedData[mainKey]) {
+                        if (!payloadRecognizedData[mainKey])
                             payloadRecognizedData[mainKey] = {};
-                        }
-                        if (this.recognizedData[mainKey][task].items) {
-                            if (this.recognizedData[mainKey][task].items.length) {
-                                if (!payloadRecognizedData[mainKey][task]) {
-                                    payloadRecognizedData[mainKey][task] = {};
-                                }
-                                payloadRecognizedData[mainKey][task] = {
-                                    id: this.recognizedData[mainKey][task].id,
-                                    fields: this.recognizedData[mainKey][task].items[0].fields,
-                                    document_type: this.recognizedData[mainKey][task].items[0].doc_type
-                                };
-                            }
+
+                        if (Object.keys(this.recognizedData[mainKey][task]).length) {
+                            if (!payloadRecognizedData[mainKey][task])
+                                payloadRecognizedData[mainKey][task] = {};
+
+                            payloadRecognizedData[mainKey][task] = {
+                                id: this.recognizedData[mainKey][task].id,
+                                fields: this.recognizedData[mainKey][task].fields,
+                                document_type: this.recognizedData[mainKey][task].doc_type
+                            };
                         }
                     });
                 });
-                this.changeLoadingForTaskKey(taskKey, true);
+                this.changePropertyForTaskKey('loading', taskKey, true);
                 const response = await documentService.saveIndividual({
                     payloadData: payloadRecognizedData
                 });
-                console.log(response);
-                Object.keys(response).map(taskKey => {
-                    this.goTo = {
-                        ...this.goTo,
-                        [taskKey]: response[taskKey]
-                    }
-                });
-                this.changeLoadingForTaskKey(taskKey, false);
+                this.goTo = {
+                    ...this.goTo,
+                    [taskKey]: response[taskKey]
+                };
+                this.changePropertyForTaskKey('loading', taskKey, false);
+                this.changePropertyForTaskKey('saved', taskKey, true);
                 EventBus.$emit('success', 'Физическое лицо было добавлено!');
             } catch(error) {
-                this.changeLoadingForTaskKey(taskKey, false);
+                this.changePropertyForTaskKey('loading', taskKey, false);
                 EventBus.$emit('error', error.message);
             }
         },
@@ -170,61 +204,24 @@ export default {
         },
         recognizedDataExists(taskKey, taskId) {
             if (this.recognizedData[taskKey][taskId]) {
-                if (this.recognizedData[taskKey][taskId].items) {
-                    return this.recognizedData[taskKey][taskId].items.length;
+                if (this.recognizedData[taskKey][taskId].fields) {
+                    return Object.keys(this.recognizedData[taskKey][taskId].fields).length;
                 }
             }
             return false;
         },
-        changeRecognizeLoadingState(taskKey, taskId, value) {
+        changePropertyForTaskKey(property, taskKey, value) {
             this.recognizedData = {
                 ...this.recognizedData,
                 [taskKey]: {
                     ...this.recognizedData[taskKey],
-                    [taskId]: {
-                        ...this.recognizedData[taskKey][taskId],
-                        loading: value
-                    }
+                    [property]: value
                 }
             };
-        },
-        changeLoadingForTaskKey(taskKey, value) {
-            this.recognizedData = {
-                ...this.recognizedData,
-                [taskKey]: {
-                    ...this.recognizedData[taskKey],
-                    loading: value
-                }
-            };
-        },
-        async onRecognize(taskId, taskKey) {
-            try {
-                this.changeRecognizeLoadingState(taskKey, taskId, true);
-                this.changeLoadingForTaskKey(taskKey, true);
-                const response = await documentService.recognizeTask(taskId);
-                this.changeLoadingForTaskKey(taskKey, false);
-                this.changeRecognizeLoadingState(taskKey, taskId, false);
-                const result = {
-                    ...this.recognizedData,
-                    [taskKey]: {
-                        ...this.recognizedData[taskKey],
-                        [taskId]: {
-                            ...this.recognizedData[taskKey][taskId],
-                            ...response
-                        }
-                    }
-                }
-                this.recognizedData = result;
-            } catch (error) {
-                this.changeLoadingForTaskKey(taskKey, false);
-                this.changeRecognizeLoadingState(taskKey, taskId, false);
-                EventBus.$emit('error', error.message);
-            }
         }
     }
 }
 </script>
 
-<style scoped lang="scss">
-
+<style scoped>
 </style>
