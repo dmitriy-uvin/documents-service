@@ -29,10 +29,6 @@ Route::group([
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])
         ->name('home');
-    Route::get('/users', [\App\Http\Controllers\UsersController::class, 'usersList'])
-        ->name('users.view');
-    Route::get('/users/all', [\App\Http\Controllers\UsersController::class, 'getAllUsers'])
-        ->name('users.all');
 
 
     Route::get('/documents', [\App\Http\Controllers\DocumentsController::class, 'index'])
@@ -65,6 +61,10 @@ Route::group([
 
     Route::middleware(['not.worker'])
         ->group(function () {
+        Route::get('/users', [\App\Http\Controllers\UsersController::class, 'usersList'])
+            ->name('users.view');
+        Route::get('/users/all', [\App\Http\Controllers\UsersController::class, 'getAllUsers'])
+            ->name('users.all');
         Route::get('editor', [\App\Http\Controllers\EditorController::class, 'index'])
             ->name('editor');
         Route::post('/users', [\App\Http\Controllers\UsersController::class, 'createUser'])

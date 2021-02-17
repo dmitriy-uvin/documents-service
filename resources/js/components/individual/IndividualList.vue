@@ -64,6 +64,7 @@
                             @click="onSearch"
                             :loading="searchLoading"
                             :disabled="searchClear"
+                            id="searchBtn"
                         >
                             Найти
                         </b-button>
@@ -151,7 +152,6 @@
                 </b-message>
             </section>
         </template>
-
     </DefaultLayout>
 </template>
 
@@ -187,6 +187,8 @@ export default {
         searchClear: true
     }),
     async mounted() {
+
+        console.log(this.$refs.searchBtn)
         if (!this.isWorker) {
             await this.loadIndividuals();
         }
@@ -194,6 +196,13 @@ export default {
             document.getElementById('dadata-input').placeholder = 'ФИО';
             document.querySelector('div.suggestions-suggestions').style.position = 'fixed';
         }, 1);
+        const self = this;
+        document.addEventListener('keypress', function (event) {
+            if (event.key === 'Enter') {
+                self.onSearch();
+            }
+        });
+
         this.isLoading = false;
     },
     watch: {

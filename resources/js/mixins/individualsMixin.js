@@ -28,7 +28,7 @@ export default {
                 if (!name && !surname && !patronymic) {
                     fullName = "Неизвестно"
                 } else {
-                    fullName = name + " " + surname + " " + patronymic;
+                    fullName = surname + " " + name + " " + patronymic;
                 }
             }
 

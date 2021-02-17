@@ -13,7 +13,8 @@ export default {
         return response?.data;
     },
     async saveIndividual(payload) {
-        return await axiosService.post('/individuals/create', payload);
+        const response = await axiosService.post('/individuals/create', payload);
+        return response?.data;
     },
     async replaceDocument(payload) {
         return await axiosService.post('/documents/replace', payload);

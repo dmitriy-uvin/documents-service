@@ -2169,6 +2169,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2178,7 +2198,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       recognizedData: {},
-      recognizableDocTypes: _constants_documentTypes__WEBPACK_IMPORTED_MODULE_3__.default.recognizable
+      recognizableDocTypes: _constants_documentTypes__WEBPACK_IMPORTED_MODULE_3__.default.recognizable,
+      goTo: {}
     };
   },
   watch: {
@@ -2203,11 +2224,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   methods: {
+    goToIndividual: function goToIndividual(taskKey) {
+      window.location.href = '/individuals/' + this.goTo[taskKey];
+    },
     saveIndividual: function saveIndividual(taskKey) {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var payloadRecognizedData;
+        var payloadRecognizedData, response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -2244,26 +2268,32 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 });
 
               case 6:
+                response = _context.sent;
+                console.log(response);
+                Object.keys(response).map(function (taskKey) {
+                  _this2.goTo = _objectSpread(_objectSpread({}, _this2.goTo), {}, _defineProperty({}, taskKey, response[taskKey]));
+                });
+
                 _this2.changeLoadingForTaskKey(taskKey, false);
 
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_2__.default.$emit('success', 'Физическое лицо было добавлено!');
-                _context.next = 14;
+                _context.next = 17;
                 break;
 
-              case 10:
-                _context.prev = 10;
+              case 13:
+                _context.prev = 13;
                 _context.t0 = _context["catch"](0);
 
                 _this2.changeLoadingForTaskKey(taskKey, false);
 
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_2__.default.$emit('error', _context.t0.message);
 
-              case 14:
+              case 17:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 10]]);
+        }, _callee, null, [[0, 13]]);
       }))();
     },
     getLevelOfConfidence: function getLevelOfConfidence(confidence) {
@@ -2317,13 +2347,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 result = _objectSpread(_objectSpread({}, _this3.recognizedData), {}, _defineProperty({}, taskKey, _objectSpread(_objectSpread({}, _this3.recognizedData[taskKey]), {}, _defineProperty({}, taskId, _objectSpread(_objectSpread({}, _this3.recognizedData[taskKey][taskId]), response)))));
                 _this3.recognizedData = result;
-                console.log('recognize');
-                console.log(_this3.recognizedData);
-                _context2.next = 19;
+                _context2.next = 17;
                 break;
 
-              case 14:
-                _context2.prev = 14;
+              case 12:
+                _context2.prev = 12;
                 _context2.t0 = _context2["catch"](0);
 
                 _this3.changeLoadingForTaskKey(taskKey, false);
@@ -2332,12 +2360,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_2__.default.$emit('error', _context2.t0.message);
 
-              case 19:
+              case 17:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 14]]);
+        }, _callee2, null, [[0, 12]]);
       }))();
     }
   }
@@ -3321,26 +3349,35 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     var _this = this;
 
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      var self;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
+              console.log(_this.$refs.searchBtn);
+
               if (_this.isWorker) {
-                _context.next = 3;
+                _context.next = 4;
                 break;
               }
 
-              _context.next = 3;
+              _context.next = 4;
               return _this.loadIndividuals();
 
-            case 3:
+            case 4:
               setTimeout(function () {
                 document.getElementById('dadata-input').placeholder = 'ФИО';
                 document.querySelector('div.suggestions-suggestions').style.position = 'fixed';
               }, 1);
+              self = _this;
+              document.addEventListener('keypress', function (event) {
+                if (event.key === 'Enter') {
+                  self.onSearch();
+                }
+              });
               _this.isLoading = false;
 
-            case 5:
+            case 8:
             case "end":
               return _context.stop();
           }
@@ -3517,6 +3554,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _events_eventBus__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../events/eventBus */ "./resources/js/events/eventBus.js");
 /* harmony import */ var _mixins_datetimeMixin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../mixins/datetimeMixin */ "./resources/js/mixins/datetimeMixin.js");
 /* harmony import */ var _mixins_uploadDocumentsMixin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../mixins/uploadDocumentsMixin */ "./resources/js/mixins/uploadDocumentsMixin.js");
+/* harmony import */ var _constants_documentTypes__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../constants/documentTypes */ "./resources/js/constants/documentTypes.js");
 
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -3794,6 +3832,52 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -3810,6 +3894,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   props: ['id'],
   data: function data() {
     return {
+      recDocTypes: _constants_documentTypes__WEBPACK_IMPORTED_MODULE_8__.default.recognizable,
       individual: [],
       documentFiles: [],
       fileNames: [],
@@ -3856,6 +3941,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   methods: {
+    getDocumentImagePath: function getDocumentImagePath(documentType) {
+      var document = this.individual.documents.find(function (document) {
+        return document.type === documentType;
+      });
+      return document.document_image.path;
+    },
     loadIndividual: function loadIndividual() {
       var _this2 = this;
 
@@ -4378,6 +4469,16 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -5655,7 +5756,7 @@ __webpack_require__.r(__webpack_exports__);
         if (!name && !surname && !patronymic) {
           fullName = "Неизвестно";
         } else {
-          fullName = name + " " + surname + " " + patronymic;
+          fullName = surname + " " + name + " " + patronymic;
         }
       }
 
@@ -5981,6 +6082,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   saveIndividual: function saveIndividual(payload) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+      var response;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
@@ -5989,9 +6091,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               return _axiosService__WEBPACK_IMPORTED_MODULE_1__.default.post('/individuals/create', payload);
 
             case 2:
-              return _context3.abrupt("return", _context3.sent);
+              response = _context3.sent;
+              return _context3.abrupt("return", response === null || response === void 0 ? void 0 : response.data);
 
-            case 3:
+            case 4:
             case "end":
               return _context3.stop();
           }
@@ -83897,9 +84000,7 @@ var render = function() {
                             ],
                             2
                           )
-                        : Object.keys(_vm.recognizableDocTypes).includes(
-                            task.document_type
-                          )
+                        : task.document_type !== "not_document"
                         ? _c(
                             "b-button",
                             {
@@ -83938,20 +84039,67 @@ var render = function() {
               }),
               _vm._v(" "),
               _c(
-                "b-button",
-                {
-                  staticClass: "mb-4 mt-2",
-                  attrs: {
-                    type: "is-success",
-                    loading: _vm.recognizedData[taskKey].loading
-                  },
-                  on: {
-                    click: function($event) {
-                      return _vm.saveIndividual(taskKey)
-                    }
-                  }
-                },
-                [_vm._v("\n            Сохранить\n        ")]
+                "div",
+                { staticClass: "buttons d-flex justify-content-center" },
+                [
+                  _c("div", { staticClass: "col-md-4 row" }, [
+                    _c(
+                      "div",
+                      { class: _vm.goTo[taskKey] ? "col-md-6" : "col-md-12" },
+                      [
+                        _c(
+                          "b-button",
+                          {
+                            staticClass: "mb-4 mt-2",
+                            attrs: {
+                              type: "is-success",
+                              expanded: "",
+                              loading: _vm.recognizedData[taskKey].loading
+                            },
+                            on: {
+                              click: function($event) {
+                                return _vm.saveIndividual(taskKey)
+                              }
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n                        Сохранить\n                    "
+                            )
+                          ]
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _vm.goTo[taskKey]
+                      ? _c(
+                          "div",
+                          { staticClass: "col-md-6" },
+                          [
+                            _c(
+                              "b-button",
+                              {
+                                staticClass: "mb-4 mt-2",
+                                attrs: { type: "is-info", expanded: "" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.goToIndividual(taskKey)
+                                  }
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                        Перейти\n                    "
+                                )
+                              ]
+                            )
+                          ],
+                          1
+                        )
+                      : _vm._e()
+                  ])
+                ]
               )
             ],
             2
@@ -84012,9 +84160,9 @@ var render = function() {
             _vm._v(
               "\n        " +
                 _vm._s(
-                  _vm.user.first_name +
+                  _vm.user.second_name +
                     " " +
-                    _vm.user.second_name +
+                    _vm.user.first_name +
                     " " +
                     _vm.user.patronymic
                 ) +
@@ -84918,7 +85066,8 @@ var render = function() {
                                   type: "is-primary",
                                   "icon-left": "search",
                                   loading: _vm.searchLoading,
-                                  disabled: _vm.searchClear
+                                  disabled: _vm.searchClear,
+                                  id: "searchBtn"
                                 },
                                 on: { click: _vm.onSearch }
                               },
@@ -85218,222 +85367,278 @@ var render = function() {
                     "div",
                     { staticClass: "documents" },
                     _vm._l(_vm.individual.documents, function(document) {
-                      return _c(
-                        "div",
-                        {
-                          staticClass: "document row mb-4",
-                          on: { key: document.id }
-                        },
-                        [
-                          _c("div", { staticClass: "col-md-5" }, [
-                            _c("img", {
-                              attrs: {
-                                src:
-                                  "/storage/" + document.document_image[0].path
-                              }
-                            })
-                          ]),
-                          _vm._v(" "),
-                          _c(
+                      return document.type
+                        ? _c(
                             "div",
-                            { staticClass: "col-md-7" },
+                            {
+                              staticClass: "document row mb-4",
+                              on: { key: document.id }
+                            },
                             [
-                              _c("h2", { staticClass: "subtitle m-0" }, [
-                                _c("b", [
-                                  _vm._v(
-                                    _vm._s(
-                                      _vm.getDocumentNameByKey(document.type)
-                                    )
-                                  )
-                                ])
-                              ]),
-                              _vm._v(" "),
-                              _c(
-                                "p",
-                                {
-                                  staticClass:
-                                    "mb-2 text-black-50 font-weight-bold"
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                                Добавлено: " +
-                                      _vm._s(
-                                        _vm.createdAt(document.created_at)
-                                      ) +
-                                      "\n                            "
-                                  )
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "row mb-2" }, [
-                                _c(
-                                  "div",
-                                  { staticClass: "col-md-4 text-left" },
-                                  [_c("b", [_vm._v("Название поля")])]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "div",
-                                  { staticClass: "col-md-4 text-center" },
-                                  [_c("b", [_vm._v("Значение")])]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "div",
-                                  { staticClass: "col-md-3 text-right" },
-                                  [_c("b", [_vm._v("Уверенность")])]
-                                ),
-                                _vm._v(" "),
-                                _c("div", {
-                                  staticClass: "col-md-1 text-right"
+                              _c("div", { staticClass: "col-md-5" }, [
+                                _c("img", {
+                                  attrs: {
+                                    src:
+                                      "/storage/" + document.document_image.path
+                                  }
                                 })
                               ]),
                               _vm._v(" "),
-                              _vm._l(document.fields, function(field) {
-                                return _c("div", { staticClass: "row mb-2" }, [
-                                  _c(
-                                    "div",
-                                    {
-                                      staticClass:
-                                        "col-md-4 d-flex align-items-center"
-                                    },
-                                    [
-                                      _vm._v(
-                                        "\n                                    " +
-                                          _vm._s(
-                                            _vm.getFieldNameByKey(field.type)
-                                          ) +
-                                          "\n                                "
-                                      )
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "div",
-                                    {
-                                      staticClass:
-                                        "col-md-4 d-flex align-items-center justify-content-center"
-                                    },
-                                    [
-                                      _vm.editableId === field.id
-                                        ? _c(
-                                            "b-field",
-                                            [
-                                              _c("b-input", {
-                                                attrs: { value: field.value },
-                                                model: {
-                                                  value: _vm.editableValue,
-                                                  callback: function($$v) {
-                                                    _vm.editableValue = $$v
-                                                  },
-                                                  expression: "editableValue"
-                                                }
-                                              })
-                                            ],
-                                            1
+                              _c("div", { staticClass: "col-md-7" }, [
+                                _c("h2", { staticClass: "subtitle m-0" }, [
+                                  _c("b", [
+                                    _vm._v(
+                                      "#" +
+                                        _vm._s(document.id) +
+                                        " " +
+                                        _vm._s(
+                                          _vm.getDocumentNameByKey(
+                                            document.type
                                           )
-                                        : _c("span", [
-                                            _vm._v(_vm._s(field.value))
-                                          ])
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "div",
-                                    {
-                                      staticClass:
-                                        "col-md-3 text-right d-flex align-items-center is-justify-content-flex-end"
-                                    },
-                                    [
-                                      _c(
-                                        "span",
-                                        {
-                                          staticClass: "confidence-badge",
-                                          class:
-                                            "confidence-" +
-                                            _vm.getLevelOfConfidence(
-                                              field.confidence
-                                            )
-                                        },
-                                        [
-                                          _vm._v(
-                                            "\n                                        " +
-                                              _vm._s(
-                                                field.confidence.toFixed(2)
-                                              ) +
-                                              "\n                                    "
-                                          )
-                                        ]
-                                      )
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "div",
-                                    { staticClass: "col-md-1" },
-                                    [
-                                      _vm.editing && _vm.editableId === field.id
-                                        ? _c(
-                                            "b-tooltip",
+                                        )
+                                    )
+                                  ])
+                                ]),
+                                _vm._v(" "),
+                                _c(
+                                  "p",
+                                  {
+                                    staticClass:
+                                      "mb-2 text-black-50 font-weight-bold"
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                Добавлено: " +
+                                        _vm._s(
+                                          _vm.createdAt(document.created_at)
+                                        ) +
+                                        "\n                            "
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                Object.keys(_vm.recDocTypes).includes(
+                                  document.type
+                                )
+                                  ? _c(
+                                      "div",
+                                      [
+                                        _c("div", { staticClass: "row mb-2" }, [
+                                          _c(
+                                            "div",
                                             {
-                                              attrs: {
-                                                label: "Сохранить",
-                                                position: "is-left"
-                                              }
+                                              staticClass: "col-md-4 text-left"
                                             },
-                                            [
-                                              _c("b-button", {
-                                                attrs: {
-                                                  type: "is-success",
-                                                  "icon-left": "save",
-                                                  loading: _vm.editLoading
-                                                },
-                                                on: {
-                                                  click: function($event) {
-                                                    return _vm.onSave(field)
-                                                  }
-                                                }
-                                              })
-                                            ],
-                                            1
-                                          )
-                                        : _c(
-                                            "b-tooltip",
+                                            [_c("b", [_vm._v("Название поля")])]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "div",
                                             {
-                                              attrs: {
-                                                label: "Отредактировать",
-                                                position: "is-left"
-                                              }
+                                              staticClass:
+                                                "col-md-4 text-center"
                                             },
+                                            [_c("b", [_vm._v("Значение")])]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "div",
+                                            {
+                                              staticClass: "col-md-3 text-right"
+                                            },
+                                            [_c("b", [_vm._v("Уверенность")])]
+                                          ),
+                                          _vm._v(" "),
+                                          _c("div", {
+                                            staticClass: "col-md-1 text-right"
+                                          })
+                                        ]),
+                                        _vm._v(" "),
+                                        _vm._l(document.fields, function(
+                                          field
+                                        ) {
+                                          return _c(
+                                            "div",
+                                            { staticClass: "row mb-2" },
                                             [
-                                              _c("b-button", {
-                                                attrs: {
-                                                  type: "is-info",
-                                                  "icon-left": "pencil-alt"
+                                              _c(
+                                                "div",
+                                                {
+                                                  staticClass:
+                                                    "col-md-4 d-flex align-items-center"
                                                 },
-                                                on: {
-                                                  click: function($event) {
-                                                    return _vm.onEdit(
-                                                      field.id,
-                                                      field.value
-                                                    )
-                                                  }
-                                                }
-                                              })
-                                            ],
-                                            1
+                                                [
+                                                  _vm._v(
+                                                    "\n                                        " +
+                                                      _vm._s(
+                                                        _vm.getFieldNameByKey(
+                                                          field.type
+                                                        )
+                                                      ) +
+                                                      "\n                                    "
+                                                  )
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "div",
+                                                {
+                                                  staticClass:
+                                                    "col-md-4 d-flex align-items-center justify-content-center"
+                                                },
+                                                [
+                                                  _vm.editableId === field.id
+                                                    ? _c(
+                                                        "b-field",
+                                                        [
+                                                          _c("b-input", {
+                                                            attrs: {
+                                                              value:
+                                                                field.value,
+                                                              type:
+                                                                field.value
+                                                                  .length > 15
+                                                                  ? "textarea"
+                                                                  : ""
+                                                            },
+                                                            model: {
+                                                              value:
+                                                                _vm.editableValue,
+                                                              callback: function(
+                                                                $$v
+                                                              ) {
+                                                                _vm.editableValue = $$v
+                                                              },
+                                                              expression:
+                                                                "editableValue"
+                                                            }
+                                                          })
+                                                        ],
+                                                        1
+                                                      )
+                                                    : _c("span", [
+                                                        _vm._v(
+                                                          _vm._s(field.value)
+                                                        )
+                                                      ])
+                                                ],
+                                                1
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "div",
+                                                {
+                                                  staticClass:
+                                                    "col-md-3 text-right d-flex align-items-center is-justify-content-flex-end"
+                                                },
+                                                [
+                                                  _c(
+                                                    "span",
+                                                    {
+                                                      staticClass:
+                                                        "confidence-badge",
+                                                      class:
+                                                        "confidence-" +
+                                                        _vm.getLevelOfConfidence(
+                                                          field.confidence
+                                                        )
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                                        " +
+                                                          _vm._s(
+                                                            field.confidence.toFixed(
+                                                              2
+                                                            )
+                                                          ) +
+                                                          "\n                                    "
+                                                      )
+                                                    ]
+                                                  )
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "div",
+                                                { staticClass: "col-md-1" },
+                                                [
+                                                  _vm.editing &&
+                                                  _vm.editableId === field.id
+                                                    ? _c(
+                                                        "b-tooltip",
+                                                        {
+                                                          attrs: {
+                                                            label: "Сохранить",
+                                                            position: "is-left"
+                                                          }
+                                                        },
+                                                        [
+                                                          _c("b-button", {
+                                                            attrs: {
+                                                              type:
+                                                                "is-success",
+                                                              "icon-left":
+                                                                "save",
+                                                              loading:
+                                                                _vm.editLoading
+                                                            },
+                                                            on: {
+                                                              click: function(
+                                                                $event
+                                                              ) {
+                                                                return _vm.onSave(
+                                                                  field
+                                                                )
+                                                              }
+                                                            }
+                                                          })
+                                                        ],
+                                                        1
+                                                      )
+                                                    : _c(
+                                                        "b-tooltip",
+                                                        {
+                                                          attrs: {
+                                                            label:
+                                                              "Отредактировать",
+                                                            position: "is-left"
+                                                          }
+                                                        },
+                                                        [
+                                                          _c("b-button", {
+                                                            attrs: {
+                                                              type: "is-info",
+                                                              "icon-left":
+                                                                "pencil-alt"
+                                                            },
+                                                            on: {
+                                                              click: function(
+                                                                $event
+                                                              ) {
+                                                                return _vm.onEdit(
+                                                                  field.id,
+                                                                  field.value
+                                                                )
+                                                              }
+                                                            }
+                                                          })
+                                                        ],
+                                                        1
+                                                      )
+                                                ],
+                                                1
+                                              )
+                                            ]
                                           )
-                                    ],
-                                    1
-                                  )
-                                ])
-                              })
-                            ],
-                            2
+                                        })
+                                      ],
+                                      2
+                                    )
+                                  : _vm._e()
+                              ])
+                            ]
                           )
-                        ]
-                      )
+                        : _vm._e()
                     }),
                     0
                   ),
@@ -85605,175 +85810,271 @@ var render = function() {
                               "div",
                               { staticClass: "row mb-2", on: { key: task.id } },
                               [
-                                _c("div", { staticClass: "col-md-6" }, [
-                                  _c("img", {
-                                    attrs: {
-                                      src: "/storage/" + task.document_path,
-                                      alt: ""
-                                    }
-                                  })
-                                ]),
-                                _vm._v(" "),
-                                _c("div", { staticClass: "col-md-6" }, [
-                                  _c("h2", { staticClass: "subtitle" }, [
-                                    _vm._v(
-                                      _vm._s(
-                                        _vm.getDocumentNameByKey(
+                                _vm.individualDocumentTypes.includes(
+                                  task.document_type
+                                )
+                                  ? _c("div", [
+                                      _c("p", [
+                                        _c("b", [
+                                          _vm._v(
+                                            "У данного физического лица уже существует документ такого типа!"
+                                          ),
+                                          _c("br"),
+                                          _vm._v(
+                                            "\n                                    Заменить его на новый экземпляр?"
+                                          )
+                                        ])
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("div", { staticClass: "row" }, [
+                                        _c("div", { staticClass: "col-md-6" }, [
+                                          _c(
+                                            "h2",
+                                            {
+                                              staticClass:
+                                                "text-center subtitle"
+                                            },
+                                            [_vm._v("Текущий документ")]
+                                          ),
+                                          _vm._v(" "),
+                                          _c("img", {
+                                            attrs: {
+                                              src:
+                                                "/storage/" +
+                                                _vm.getDocumentImagePath(
+                                                  task.document_type
+                                                ),
+                                              alt: ""
+                                            }
+                                          })
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("div", { staticClass: "col-md-6" }, [
+                                          _c(
+                                            "h2",
+                                            {
+                                              staticClass:
+                                                "text-center subtitle"
+                                            },
+                                            [_vm._v("Новый документ")]
+                                          ),
+                                          _vm._v(" "),
+                                          _c("img", {
+                                            attrs: {
+                                              src:
+                                                "/storage/" +
+                                                task.document_path,
+                                              alt: ""
+                                            }
+                                          })
+                                        ])
+                                      ]),
+                                      _vm._v(" "),
+                                      _c(
+                                        "div",
+                                        {
+                                          staticClass:
+                                            "buttons d-flex is-justify-content-flex-end"
+                                        },
+                                        [
+                                          _c(
+                                            "div",
+                                            { staticClass: "col-md-5" },
+                                            [
+                                              _c(
+                                                "div",
+                                                { staticClass: "row" },
+                                                [
+                                                  _c(
+                                                    "div",
+                                                    { staticClass: "col-md-6" },
+                                                    [
+                                                      _c(
+                                                        "b-button",
+                                                        {
+                                                          attrs: {
+                                                            type: "is-warning",
+                                                            disabled:
+                                                              _vm.tasksLoading[
+                                                                task.id
+                                                              ].loading,
+                                                            expanded: ""
+                                                          },
+                                                          on: {
+                                                            click: function(
+                                                              $event
+                                                            ) {
+                                                              return _vm.dontChange(
+                                                                task.id
+                                                              )
+                                                            }
+                                                          }
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            "\n                                                Не заменять\n                                            "
+                                                          )
+                                                        ]
+                                                      )
+                                                    ],
+                                                    1
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "div",
+                                                    { staticClass: "col-md-6" },
+                                                    [
+                                                      _c(
+                                                        "b-button",
+                                                        {
+                                                          attrs: {
+                                                            type: "is-danger",
+                                                            loading:
+                                                              _vm.tasksLoading[
+                                                                task.id
+                                                              ].loading
+                                                          },
+                                                          on: {
+                                                            click: function(
+                                                              $event
+                                                            ) {
+                                                              return _vm.replaceDocument(
+                                                                task.id,
+                                                                task.document_type
+                                                              )
+                                                            }
+                                                          }
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            "\n                                                Заменить на новый!\n                                            "
+                                                          )
+                                                        ]
+                                                      )
+                                                    ],
+                                                    1
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          )
+                                        ]
+                                      )
+                                    ])
+                                  : _c("div", { staticClass: "row" }, [
+                                      _c("div", { staticClass: "col-md-6" }, [
+                                        _c("img", {
+                                          attrs: {
+                                            src:
+                                              "/storage/" + task.document_path,
+                                            alt: ""
+                                          }
+                                        })
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("div", { staticClass: "col-md-6" }, [
+                                        _c("h2", { staticClass: "subtitle" }, [
+                                          _vm._v(
+                                            _vm._s(
+                                              _vm.getDocumentNameByKey(
+                                                task.document_type
+                                              )
+                                            )
+                                          )
+                                        ]),
+                                        _vm._v(" "),
+                                        _vm.cannotBeRecognized(
                                           task.document_type
                                         )
-                                      )
-                                    )
-                                  ]),
-                                  _vm._v(" "),
-                                  _vm.individualDocumentTypes.includes(
-                                    task.document_type
-                                  )
-                                    ? _c(
-                                        "div",
-                                        [
-                                          _c("p", [
-                                            _c("b", [
-                                              _vm._v(
-                                                "У данного физического лица уже существует документ такого типа!"
-                                              ),
-                                              _c("br"),
-                                              _vm._v(
-                                                "\n                                        Заменить его на новый экземпляр?"
+                                          ? _c("div", [
+                                              _c(
+                                                "p",
+                                                { staticClass: "text-danger" },
+                                                [
+                                                  _c("b", [
+                                                    _vm._v(
+                                                      "Документ не может быть распознан!"
+                                                    )
+                                                  ])
+                                                ]
                                               )
                                             ])
-                                          ]),
-                                          _vm._v(" "),
-                                          _c(
-                                            "b-button",
-                                            {
-                                              attrs: {
-                                                type: "is-warning",
-                                                disabled:
-                                                  _vm.tasksLoading[task.id]
-                                                    .loading
-                                              },
-                                              on: {
-                                                click: function($event) {
-                                                  return _vm.dontChange(task.id)
-                                                }
-                                              }
-                                            },
-                                            [
-                                              _vm._v(
-                                                "\n                                    Не заменять\n                                "
-                                              )
-                                            ]
-                                          ),
-                                          _vm._v(" "),
-                                          _c(
-                                            "b-button",
-                                            {
-                                              attrs: {
-                                                type: "is-danger",
-                                                loading:
-                                                  _vm.tasksLoading[task.id]
-                                                    .loading
-                                              },
-                                              on: {
-                                                click: function($event) {
-                                                  return _vm.replaceDocument(
-                                                    task.id,
-                                                    task.document_type
-                                                  )
-                                                }
-                                              }
-                                            },
-                                            [
-                                              _vm._v(
-                                                "\n                                    Заменить на новый!\n                                "
-                                              )
-                                            ]
-                                          )
-                                        ],
-                                        1
-                                      )
-                                    : _vm.cannotBeRecognized(task.document_type)
-                                    ? _c("div", [
-                                        _c(
-                                          "p",
-                                          { staticClass: "text-danger" },
-                                          [
-                                            _c("b", [
-                                              _vm._v(
-                                                "Документ не может быть распознан!"
-                                              )
-                                            ])
-                                          ]
-                                        )
-                                      ])
-                                    : _vm.canBeRecognized(task.document_type)
-                                    ? _c(
-                                        "div",
-                                        [
-                                          _c(
-                                            "p",
-                                            {
-                                              staticClass: "text-success mb-3"
-                                            },
-                                            [
-                                              _c("b", [
-                                                _vm._v(
-                                                  "Физическое лицо не имеет документа такого типа, добавить?"
+                                          : _vm.canBeRecognized(
+                                              task.document_type
+                                            )
+                                          ? _c(
+                                              "div",
+                                              [
+                                                _c(
+                                                  "p",
+                                                  {
+                                                    staticClass:
+                                                      "text-success mb-3"
+                                                  },
+                                                  [
+                                                    _c("b", [
+                                                      _vm._v(
+                                                        "Физическое лицо не имеет документа такого типа, добавить?"
+                                                      )
+                                                    ])
+                                                  ]
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "b-button",
+                                                  {
+                                                    attrs: {
+                                                      type: "is-danger",
+                                                      disabled:
+                                                        _vm.tasksLoading[
+                                                          task.id
+                                                        ].loading
+                                                    },
+                                                    on: {
+                                                      click: function($event) {
+                                                        return _vm.dontChange(
+                                                          task.id
+                                                        )
+                                                      }
+                                                    }
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "\n                                        Отмена\n                                    "
+                                                    )
+                                                  ]
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "b-button",
+                                                  {
+                                                    attrs: {
+                                                      type: "is-success",
+                                                      loading:
+                                                        _vm.tasksLoading[
+                                                          task.id
+                                                        ].loading
+                                                    },
+                                                    on: {
+                                                      click: function($event) {
+                                                        return _vm.addDocument(
+                                                          task.id
+                                                        )
+                                                      }
+                                                    }
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "\n                                        Добавить\n                                    "
+                                                    )
+                                                  ]
                                                 )
-                                              ])
-                                            ]
-                                          ),
-                                          _vm._v(" "),
-                                          _c(
-                                            "b-button",
-                                            {
-                                              attrs: {
-                                                type: "is-danger",
-                                                disabled:
-                                                  _vm.tasksLoading[task.id]
-                                                    .loading
-                                              },
-                                              on: {
-                                                click: function($event) {
-                                                  return _vm.dontChange(task.id)
-                                                }
-                                              }
-                                            },
-                                            [
-                                              _vm._v(
-                                                "\n                                    Отмена\n                                "
-                                              )
-                                            ]
-                                          ),
-                                          _vm._v(" "),
-                                          _c(
-                                            "b-button",
-                                            {
-                                              attrs: {
-                                                type: "is-success",
-                                                loading:
-                                                  _vm.tasksLoading[task.id]
-                                                    .loading
-                                              },
-                                              on: {
-                                                click: function($event) {
-                                                  return _vm.addDocument(
-                                                    task.id
-                                                  )
-                                                }
-                                              }
-                                            },
-                                            [
-                                              _vm._v(
-                                                "\n                                    Добавить\n                                "
-                                              )
-                                            ]
-                                          )
-                                        ],
-                                        1
-                                      )
-                                    : _vm._e()
-                                ])
+                                              ],
+                                              1
+                                            )
+                                          : _vm._e()
+                                      ])
+                                    ])
                               ]
                             )
                           }),
@@ -85822,40 +86123,108 @@ var render = function() {
                             { staticClass: "mb-3", on: { key: history.id } },
                             [
                               _c("b-message", { attrs: { type: "is-info" } }, [
-                                _vm._v(
-                                  "\n                            " +
-                                    _vm._s(
-                                      history.author.first_name +
-                                        " " +
-                                        history.author.second_name +
-                                        " " +
-                                        history.author.patronymic
-                                    ) +
-                                    "\n                            (" +
-                                    _vm._s(history.author.role[0].name) +
-                                    ") отредактировал поле - "
-                                ),
-                                _c("b", [
+                                _c("span", { staticClass: "author-name" }, [
                                   _vm._v(
-                                    _vm._s(
-                                      _vm.getFieldNameByKey(history.field.type)
-                                    )
+                                    "\n                                " +
+                                      _vm._s(
+                                        history.author.first_name +
+                                          " " +
+                                          history.author.second_name +
+                                          " " +
+                                          history.author.patronymic
+                                      ) +
+                                      "\n                            "
                                   )
                                 ]),
-                                _vm._v(".\n                            До: "),
-                                _c("span", { staticClass: "text-success" }, [
+                                _vm._v(" "),
+                                _c("span", { staticClass: "author-role" }, [
                                   _vm._v(
-                                    _vm._s(JSON.parse(history.before).value)
+                                    "\n                                (" +
+                                      _vm._s(history.author.role[0].name) +
+                                      ")\n                            "
                                   )
                                 ]),
-                                _vm._v(
-                                  ",\n                            После: "
-                                ),
-                                _c("span", { staticClass: "text-danger" }, [
-                                  _vm._v(
-                                    _vm._s(JSON.parse(history.after).value)
-                                  )
-                                ]),
+                                _vm._v(" "),
+                                history.type === "field"
+                                  ? _c("span", [
+                                      _vm._v(
+                                        "\n                                отредактировал поле - "
+                                      ),
+                                      _c("b", [
+                                        _vm._v(
+                                          _vm._s(
+                                            _vm.getFieldNameByKey(
+                                              history.field.type
+                                            )
+                                          )
+                                        )
+                                      ]),
+                                      _vm._v(
+                                        ",\n                                Документ "
+                                      ),
+                                      _c("b", [
+                                        _vm._v(
+                                          "#" +
+                                            _vm._s(history.field.document_id)
+                                        )
+                                      ]),
+                                      _vm._v(
+                                        "\n                                До: "
+                                      ),
+                                      _c(
+                                        "span",
+                                        { staticClass: "text-success" },
+                                        [
+                                          _vm._v(
+                                            _vm._s(
+                                              JSON.parse(history.before).value
+                                            )
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(
+                                        ",\n                                После: "
+                                      ),
+                                      _c(
+                                        "span",
+                                        { staticClass: "text-danger" },
+                                        [
+                                          _vm._v(
+                                            _vm._s(
+                                              JSON.parse(history.after).value
+                                            )
+                                          )
+                                        ]
+                                      )
+                                    ])
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                history.type === "document_add"
+                                  ? _c("span", {}, [
+                                      _vm._v(
+                                        "\n                                добавил документ "
+                                      ),
+                                      _c("b", [
+                                        _vm._v(
+                                          "#" + _vm._s(history.document_id)
+                                        )
+                                      ])
+                                    ])
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                history.type === "document_update"
+                                  ? _c("span", {}, [
+                                      _vm._v(
+                                        "\n                                обновил документ "
+                                      ),
+                                      _c("b", [
+                                        _vm._v(
+                                          "#" + _vm._s(history.document_id)
+                                        )
+                                      ])
+                                    ])
+                                  : _vm._e(),
+                                _vm._v(" "),
                                 _c("br"),
                                 _vm._v(" "),
                                 _c("small", [
@@ -86182,24 +86551,26 @@ var render = function() {
                     1
                   ),
                   _vm._v(" "),
-                  _c(
-                    "b-navbar-item",
-                    {
-                      attrs: {
-                        href: "/users",
-                        "has-link": "",
-                        active: _vm.isActiveItem("/users")
-                      }
-                    },
-                    [
-                      _c("b-icon", {
-                        staticClass: "mr-1",
-                        attrs: { icon: "users" }
-                      }),
-                      _vm._v("\n            Пользователи\n        ")
-                    ],
-                    1
-                  ),
+                  !_vm.isWorker
+                    ? _c(
+                        "b-navbar-item",
+                        {
+                          attrs: {
+                            href: "/users",
+                            "has-link": "",
+                            active: _vm.isActiveItem("/users")
+                          }
+                        },
+                        [
+                          _c("b-icon", {
+                            staticClass: "mr-1",
+                            attrs: { icon: "users" }
+                          }),
+                          _vm._v("\n            Пользователи\n        ")
+                        ],
+                        1
+                      )
+                    : _vm._e(),
                   _vm._v(" "),
                   _c(
                     "b-navbar-item",
@@ -86220,24 +86591,26 @@ var render = function() {
                     1
                   ),
                   _vm._v(" "),
-                  _c(
-                    "b-navbar-item",
-                    {
-                      attrs: {
-                        href: "/tasks",
-                        "has-link": "",
-                        active: _vm.isActiveItem("/tasks")
-                      }
-                    },
-                    [
-                      _c("b-icon", {
-                        staticClass: "mr-1",
-                        attrs: { icon: "tasks" }
-                      }),
-                      _vm._v("\n            Задания\n        ")
-                    ],
-                    1
-                  ),
+                  !_vm.isWorker
+                    ? _c(
+                        "b-navbar-item",
+                        {
+                          attrs: {
+                            href: "/tasks",
+                            "has-link": "",
+                            active: _vm.isActiveItem("/tasks")
+                          }
+                        },
+                        [
+                          _c("b-icon", {
+                            staticClass: "mr-1",
+                            attrs: { icon: "tasks" }
+                          }),
+                          _vm._v("\n            Задания\n        ")
+                        ],
+                        1
+                      )
+                    : _vm._e(),
                   _vm._v(" "),
                   !_vm.isWorker
                     ? _c(
@@ -86342,7 +86715,7 @@ var render = function() {
           ],
           null,
           false,
-          1529110011
+          2339771995
         )
       })
     : _vm._e()
@@ -86606,33 +86979,6 @@ var render = function() {
                     _vm._v(" "),
                     _c("b-table-column", {
                       attrs: {
-                        field: "first_name",
-                        label: "Имя",
-                        sortable: ""
-                      },
-                      scopedSlots: _vm._u(
-                        [
-                          {
-                            key: "default",
-                            fn: function(props) {
-                              return [
-                                _vm._v(
-                                  "\n                    " +
-                                    _vm._s(props.row.first_name) +
-                                    "\n                "
-                                )
-                              ]
-                            }
-                          }
-                        ],
-                        null,
-                        false,
-                        2675757823
-                      )
-                    }),
-                    _vm._v(" "),
-                    _c("b-table-column", {
-                      attrs: {
                         field: "second_name",
                         label: "Фамилия",
                         sortable: ""
@@ -86655,6 +87001,33 @@ var render = function() {
                         null,
                         false,
                         1570220277
+                      )
+                    }),
+                    _vm._v(" "),
+                    _c("b-table-column", {
+                      attrs: {
+                        field: "first_name",
+                        label: "Имя",
+                        sortable: ""
+                      },
+                      scopedSlots: _vm._u(
+                        [
+                          {
+                            key: "default",
+                            fn: function(props) {
+                              return [
+                                _vm._v(
+                                  "\n                    " +
+                                    _vm._s(props.row.first_name) +
+                                    "\n                "
+                                )
+                              ]
+                            }
+                          }
+                        ],
+                        null,
+                        false,
+                        2675757823
                       )
                     }),
                     _vm._v(" "),

@@ -4,17 +4,29 @@ namespace App\Http\Controllers;
 
 use App\Constants\FieldTypes;
 use App\Exceptions\Individual\IndividualNotFoundException;
+use App\Exceptions\SomethingWentWrongException;
 use App\Models\Document;
 use App\Models\DocumentImage;
 use App\Models\Field;
-use App\Models\FieldHistory;
+use App\Models\History;
 use App\Models\Individual;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class IndividualsController extends Controller
 {
+    private string $dbrainApiUrl;
+    private string $dbrainToken;
+
+    public function __construct()
+    {
+        $this->dbrainApiUrl = config('dbrain.api_url');
+        $this->dbrainToken = config('dbrain.token');
+    }
+
     public function individualsView()
     {
         return view('individuals');
@@ -49,9 +61,11 @@ class IndividualsController extends Controller
     public function save(Request $request)
     {
         $payloadData = $request->payloadData;
+        $response = [];
         foreach ($payloadData as $dbrainTaskKey => $value) {
             $individual = new Individual();
             $individual->save();
+
             foreach ($payloadData[$dbrainTaskKey] as $taskId => $item) {
                 $task = Task::find($taskId);
 
@@ -59,6 +73,13 @@ class IndividualsController extends Controller
                 $document->type = $item['document_type'];
                 $document->individual()->associate($individual);
                 $document->save();
+
+                History::create([
+                    'type' => 'document_add',
+                    'author_id' => Auth::id(),
+                    'document_id' => $document->id,
+                    'individual_id' => $individual->id,
+                ]);
 
                 $documentImage = new DocumentImage();
                 $documentImage->path = $task->document_path;
@@ -74,7 +95,10 @@ class IndividualsController extends Controller
                     $fieldObj->save();
                 }
             }
+            $response[$dbrainTaskKey] = $individual->id;
         }
+
+        return response()->json($response);
     }
 
     public function search(Request $request)
@@ -132,23 +156,21 @@ class IndividualsController extends Controller
             }
 
             if ($surname) {
-                $documentQuery->whereHas('fields', function ($query) use ($name) {
+                $documentQuery->whereHas('fields', function ($query) use ($surname) {
                     return $query->whereIn('type', FieldTypes::getSurnameTypes())
-                        ->where(DB::raw('LOWER(value)'), 'like', '%' . $name . '%');
+                        ->where(DB::raw('LOWER(value)'), 'like', '%' . $surname . '%');
                 });
             }
 
             if ($patronymic) {
-                $documentQuery->whereHas('fields', function ($query) use ($name) {
+                $documentQuery->whereHas('fields', function ($query) use ($patronymic) {
                     return $query->whereIn('type', FieldTypes::getPatronymicTypes())
-                        ->where(DB::raw('LOWER(value)'), 'like', '%' . $name . '%');
+                        ->where(DB::raw('LOWER(value)'), 'like', '%' . $patronymic . '%');
                 });
             }
         }
 
-        $individualsByDocuments = $documentQuery->get()->map(fn($document) => $document->individual)->all();
-
-        $individuals = $individualsByDocuments;
+        $individuals = $documentQuery->get()->map(fn($document) => $document->individual)->all();
 
         return response()->json($individuals);
     }

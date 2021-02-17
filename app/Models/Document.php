@@ -33,6 +33,6 @@ class Document extends Model
 
     public function documentImage()
     {
-        return $this->hasMany(DocumentImage::class);
+        return $this->hasOne(DocumentImage::class);
     }
 }

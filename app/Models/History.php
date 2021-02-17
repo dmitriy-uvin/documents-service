@@ -5,15 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class FieldHistory extends Model
+class History extends Model
 {
     use HasFactory;
 
-    protected $table = 'field_history';
+    protected $table = 'history';
 
     protected $fillable = [
+        'type',
         'author_id',
         'field_id',
+        'document_id',
         'individual_id',
         'before',
         'after'
@@ -37,5 +39,10 @@ class FieldHistory extends Model
     public function individual()
     {
         return $this->belongsTo(Individual::class, 'individual_id', 'id');
+    }
+
+    public function document()
+    {
+        return $this->belongsTo(Document::class, 'document_id', 'id');
     }
 }

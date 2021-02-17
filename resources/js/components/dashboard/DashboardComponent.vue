@@ -1,7 +1,7 @@
 <template>
     <DefaultLayout>
         <template v-slot:title>
-            {{ user.first_name + ' ' + user.second_name + ' ' + user.patronymic }}
+            {{ user.second_name + ' ' + user.first_name + ' ' + user.patronymic }}
         </template>
         <template v-slot:subtitle>
             {{ user.role[0].name }}

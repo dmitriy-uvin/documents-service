@@ -11,80 +11,84 @@
                             class="document row mb-4"
                             v-for="document in individual.documents"
                             @key="document.id"
+                            v-if="document.type"
                         >
                             <div class="col-md-5">
-                                <img :src="'/storage/' + document.document_image[0].path" />
+                                <img :src="'/storage/' + document.document_image.path" />
                             </div>
                             <div class="col-md-7">
                                 <h2 class="subtitle m-0">
-                                    <b>{{ getDocumentNameByKey(document.type) }}</b>
+                                    <b>#{{ document.id }} {{ getDocumentNameByKey(document.type) }}</b>
                                 </h2>
                                 <p class="mb-2 text-black-50 font-weight-bold">
                                     Добавлено: {{ createdAt(document.created_at) }}
                                 </p>
-                                <div class="row mb-2">
-                                    <div class="col-md-4 text-left">
-                                        <b>Название поля</b>
-                                    </div>
-                                    <div class="col-md-4 text-center">
-                                        <b>Значение</b>
-                                    </div>
-                                    <div class="col-md-3 text-right">
-                                        <b>Уверенность</b>
-                                    </div>
-                                    <div class="col-md-1 text-right">
+                                <div v-if="Object.keys(recDocTypes).includes(document.type)">
+                                    <div class="row mb-2">
+                                        <div class="col-md-4 text-left">
+                                            <b>Название поля</b>
+                                        </div>
+                                        <div class="col-md-4 text-center">
+                                            <b>Значение</b>
+                                        </div>
+                                        <div class="col-md-3 text-right">
+                                            <b>Уверенность</b>
+                                        </div>
+                                        <div class="col-md-1 text-right">
 
+                                        </div>
                                     </div>
-                                </div>
-                                <div
-                                    class="row mb-2"
-                                    v-for="field in document.fields">
-                                    <div class="col-md-4 d-flex align-items-center">
-                                        {{ getFieldNameByKey(field.type) }}
-                                    </div>
-                                    <div class="col-md-4 d-flex align-items-center justify-content-center">
-                                        <b-field v-if="editableId === field.id">
-                                            <b-input
-                                                :value="field.value"
-                                                v-model="editableValue"
-                                            />
-                                        </b-field>
-                                        <span v-else>{{ field.value }}</span>
-                                    </div>
-                                    <div class="col-md-3 text-right d-flex align-items-center is-justify-content-flex-end">
+                                    <div
+                                        class="row mb-2"
+                                        v-for="field in document.fields">
+                                        <div class="col-md-4 d-flex align-items-center">
+                                            {{ getFieldNameByKey(field.type) }}
+                                        </div>
+                                        <div class="col-md-4 d-flex align-items-center justify-content-center">
+                                            <b-field v-if="editableId === field.id">
+                                                <b-input
+                                                    :value="field.value"
+                                                    v-model="editableValue"
+                                                    :type="field.value.length > 15 ? 'textarea' : ''"
+                                                />
+                                            </b-field>
+                                            <span v-else>{{ field.value }}</span>
+                                        </div>
+                                        <div class="col-md-3 text-right d-flex align-items-center is-justify-content-flex-end">
                                         <span
                                             class="confidence-badge"
                                             :class="'confidence-' + getLevelOfConfidence(field.confidence)"
                                         >
                                             {{ field.confidence.toFixed(2) }}
                                         </span>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <b-tooltip
-                                            label="Сохранить"
-                                            position="is-left"
-                                            v-if="editing && editableId === field.id"
-                                        >
-                                            <b-button
-                                                type="is-success"
-                                                icon-left="save"
-                                                :loading="editLoading"
-                                                @click="onSave(field)"
+                                        </div>
+                                        <div class="col-md-1">
+                                            <b-tooltip
+                                                label="Сохранить"
+                                                position="is-left"
+                                                v-if="editing && editableId === field.id"
                                             >
-                                            </b-button>
-                                        </b-tooltip>
-                                        <b-tooltip
-                                            label="Отредактировать"
-                                            position="is-left"
-                                            v-else
-                                        >
-                                            <b-button
-                                                @click="onEdit(field.id, field.value)"
-                                                type="is-info"
-                                                icon-left="pencil-alt"
+                                                <b-button
+                                                    type="is-success"
+                                                    icon-left="save"
+                                                    :loading="editLoading"
+                                                    @click="onSave(field)"
+                                                >
+                                                </b-button>
+                                            </b-tooltip>
+                                            <b-tooltip
+                                                label="Отредактировать"
+                                                position="is-left"
+                                                v-else
                                             >
-                                            </b-button>
-                                        </b-tooltip>
+                                                <b-button
+                                                    @click="onEdit(field.id, field.value)"
+                                                    type="is-info"
+                                                    icon-left="pencil-alt"
+                                                >
+                                                </b-button>
+                                            </b-tooltip>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -156,55 +160,82 @@
                         </div>
                     </div>
                     <div class="" v-else>
-                        <div class="row mb-2" v-for="task in details" @key="task.id">
-                            <div class="col-md-6">
-                                <img :src="'/storage/' + task.document_path" alt="">
+                        <div
+                            class="row mb-2"
+                            v-for="task in details"
+                            @key="task.id"
+                        >
+                            <div v-if="individualDocumentTypes.includes(task.document_type)">
+                                <p>
+                                    <b>У данного физического лица уже существует документ такого типа!<br>
+                                        Заменить его на новый экземпляр?</b>
+                                </p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h2 class="text-center subtitle">Текущий документ</h2>
+                                        <img :src="'/storage/' + getDocumentImagePath(task.document_type)" alt="">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h2 class="text-center subtitle">Новый документ</h2>
+                                        <img :src="'/storage/' + task.document_path" alt="">
+                                    </div>
+                                </div>
+                                <div class="buttons d-flex is-justify-content-flex-end">
+                                    <div class="col-md-5">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <b-button
+                                                    type="is-warning"
+                                                    @click="dontChange(task.id)"
+                                                    :disabled="tasksLoading[task.id].loading"
+                                                    expanded
+                                                >
+                                                    Не заменять
+                                                </b-button>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <b-button
+                                                    type="is-danger"
+                                                    @click="replaceDocument(task.id, task.document_type)"
+                                                    :loading="tasksLoading[task.id].loading"
+                                                >
+                                                    Заменить на новый!
+                                                </b-button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <h2 class="subtitle">{{ getDocumentNameByKey(task.document_type) }}</h2>
-                                <div v-if="individualDocumentTypes.includes(task.document_type)">
-                                    <p>
-                                        <b>У данного физического лица уже существует документ такого типа!<br>
-                                            Заменить его на новый экземпляр?</b>
-                                    </p>
-                                    <b-button
-                                        type="is-warning"
-                                        @click="dontChange(task.id)"
-                                        :disabled="tasksLoading[task.id].loading"
-                                    >
-                                        Не заменять
-                                    </b-button>
-                                    <b-button
-                                        type="is-danger"
-                                        @click="replaceDocument(task.id, task.document_type)"
-                                        :loading="tasksLoading[task.id].loading"
-                                    >
-                                        Заменить на новый!
-                                    </b-button>
+                            <div class="row" v-else>
+                                <div class="col-md-6">
+                                    <img :src="'/storage/' + task.document_path" alt="">
                                 </div>
-                                <div v-else-if="cannotBeRecognized(task.document_type)">
-                                    <p class="text-danger">
-                                        <b>Документ не может быть распознан!</b>
-                                    </p>
-                                </div>
-                                <div v-else-if="canBeRecognized(task.document_type)">
-                                    <p class="text-success mb-3">
-                                        <b>Физическое лицо не имеет документа такого типа, добавить?</b>
-                                    </p>
-                                    <b-button
-                                        type="is-danger"
-                                        @click="dontChange(task.id)"
-                                        :disabled="tasksLoading[task.id].loading"
-                                    >
-                                        Отмена
-                                    </b-button>
-                                    <b-button
-                                        type="is-success"
-                                        @click="addDocument(task.id)"
-                                        :loading="tasksLoading[task.id].loading"
-                                    >
-                                        Добавить
-                                    </b-button>
+                                <div class="col-md-6">
+                                    <h2 class="subtitle">{{ getDocumentNameByKey(task.document_type) }}</h2>
+                                    <div v-if="cannotBeRecognized(task.document_type)">
+                                        <p class="text-danger">
+                                            <b>Документ не может быть распознан!</b>
+                                        </p>
+                                    </div>
+                                    <div v-else-if="canBeRecognized(task.document_type)">
+                                        <p class="text-success mb-3">
+                                            <b>Физическое лицо не имеет документа такого типа, добавить?</b>
+                                        </p>
+                                        <b-button
+                                            type="is-danger"
+                                            @click="dontChange(task.id)"
+                                            :disabled="tasksLoading[task.id].loading"
+                                        >
+                                            Отмена
+                                        </b-button>
+                                        <b-button
+                                            type="is-success"
+                                            @click="addDocument(task.id)"
+                                            :loading="tasksLoading[task.id].loading"
+                                        >
+                                            Добавить
+                                        </b-button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -231,10 +262,25 @@
                             @key="history.id"
                         >
                             <b-message type="is-info">
-                                {{ history.author.first_name + ' ' + history.author.second_name + ' ' + history.author.patronymic }}
-                                ({{ history.author.role[0].name}}) отредактировал поле - <b>{{ getFieldNameByKey(history.field.type) }}</b>.
-                                До: <span class="text-success">{{ JSON.parse(history.before).value }}</span>,
-                                После: <span class="text-danger">{{ JSON.parse(history.after).value }}</span><br>
+                                <span class="author-name">
+                                    {{ history.author.first_name + ' ' + history.author.second_name + ' ' + history.author.patronymic }}
+                                </span>
+                                <span class="author-role">
+                                    ({{ history.author.role[0].name}})
+                                </span>
+                                <span v-if="history.type === 'field'">
+                                    отредактировал поле - <b>{{ getFieldNameByKey(history.field.type) }}</b>,
+                                    Документ <b>#{{ history.field.document_id }}</b>
+                                    До: <span class="text-success">{{ JSON.parse(history.before).value }}</span>,
+                                    После: <span class="text-danger">{{ JSON.parse(history.after).value }}</span>
+                                </span>
+                                <span class="" v-if="history.type === 'document_add'">
+                                    добавил документ <b>#{{ history.document_id }}</b>
+                                </span>
+                                <span class="" v-if="history.type === 'document_update'">
+                                    обновил документ <b>#{{ history.document_id }}</b>
+                                </span>
+                                <br>
                                 <small>
                                     <b class="text-black-50">{{ createdAt(history.created_at) }}</b>
                                 </small>
@@ -246,7 +292,6 @@
                     </div>
                 </b-tab-item>
             </b-tabs>
-
         </template>
     </DefaultLayout>
 </template>
@@ -259,6 +304,7 @@ import documentService from "../../services/document/documentService";
 import EventBus from "../../events/eventBus";
 import datetimeMixin from "../../mixins/datetimeMixin";
 import uploadDocumentsMixin from "../../mixins/uploadDocumentsMixin";
+import documentTypes from "../../constants/documentTypes";
 
 export default {
     name: "IndividualPage",
@@ -268,6 +314,7 @@ export default {
     mixins: [individualsMixin, datetimeMixin, uploadDocumentsMixin],
     props: ['id'],
     data: () => ({
+        recDocTypes: documentTypes.recognizable,
         individual: [],
         documentFiles: [],
         fileNames: [],
@@ -297,6 +344,11 @@ export default {
         }
     },
     methods: {
+        getDocumentImagePath(documentType) {
+            const document = this.individual.documents.find(document => document.type === documentType);
+
+            return document.document_image.path;
+        },
         async loadIndividual() {
             try {
                 const response = await individualService.getIndividualUserById(this.id);

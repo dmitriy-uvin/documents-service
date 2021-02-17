@@ -47,7 +47,7 @@
                     <b-button type="is-info"
                               @click="onRecognize(task.id, taskKey)"
                               :loading="recognizedData[taskKey][task.id].loading"
-                              v-else-if="Object.keys(recognizableDocTypes).includes(task.document_type)"
+                              v-else-if="task.document_type !== 'not_document'"
                     >
                         Распознать
                     </b-button>
@@ -58,14 +58,34 @@
                     </div>
                 </div>
             </div>
-            <b-button
-                type="is-success"
-                class="mb-4 mt-2"
-                @click="saveIndividual(taskKey)"
-                :loading="recognizedData[taskKey].loading"
-            >
-                Сохранить
-            </b-button>
+            <div class="buttons d-flex justify-content-center">
+                <div class="col-md-4 row">
+                    <div
+                        :class="goTo[taskKey] ? 'col-md-6' : 'col-md-12'"
+                    >
+                        <b-button
+                            type="is-success"
+                            class="mb-4 mt-2"
+                            expanded
+                            @click="saveIndividual(taskKey)"
+                            :loading="recognizedData[taskKey].loading"
+                        >
+                            Сохранить
+                        </b-button>
+                    </div>
+                    <div class="col-md-6" v-if="goTo[taskKey]">
+                        <b-button
+                            type="is-info"
+                            class="mb-4 mt-2"
+                            expanded
+                            @click="goToIndividual(taskKey)"
+
+                        >
+                            Перейти
+                        </b-button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -79,7 +99,8 @@ export default {
     props: ['details'],
     data: () => ({
         recognizedData: {},
-        recognizableDocTypes: documentTypes.recognizable
+        recognizableDocTypes: documentTypes.recognizable,
+        goTo: {}
     }),
     watch: {
         details() {
@@ -94,12 +115,14 @@ export default {
                 });
                 this.recognizedData[key].loading = false;
             });
-
             console.log(this.details);
             console.log(this.recognizedData);
         }
     },
     methods: {
+        goToIndividual(taskKey) {
+            window.location.href = '/individuals/' + this.goTo[taskKey];
+        },
         async saveIndividual(taskKey) {
             try {
                 const payloadRecognizedData = {};
@@ -123,8 +146,15 @@ export default {
                     });
                 });
                 this.changeLoadingForTaskKey(taskKey, true);
-                await documentService.saveIndividual({
+                const response = await documentService.saveIndividual({
                     payloadData: payloadRecognizedData
+                });
+                console.log(response);
+                Object.keys(response).map(taskKey => {
+                    this.goTo = {
+                        ...this.goTo,
+                        [taskKey]: response[taskKey]
+                    }
                 });
                 this.changeLoadingForTaskKey(taskKey, false);
                 EventBus.$emit('success', 'Физическое лицо было добавлено!');
@@ -185,8 +215,6 @@ export default {
                     }
                 }
                 this.recognizedData = result;
-                console.log('recognize');
-                console.log(this.recognizedData);
             } catch (error) {
                 this.changeLoadingForTaskKey(taskKey, false);
                 this.changeRecognizeLoadingState(taskKey, taskId, false);

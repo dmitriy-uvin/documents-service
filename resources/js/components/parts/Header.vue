@@ -5,7 +5,12 @@
                 <b-icon icon="file" class="mr-1"></b-icon>
                 Загрузка документов
             </b-navbar-item>
-            <b-navbar-item href="/users" has-link :active="isActiveItem('/users')">
+            <b-navbar-item
+                href="/users"
+                has-link
+                :active="isActiveItem('/users')"
+                v-if="!isWorker"
+            >
                 <b-icon icon="users" class="mr-1"></b-icon>
                 Пользователи
             </b-navbar-item>
@@ -13,7 +18,12 @@
                 <b-icon icon="gavel" class="mr-1"></b-icon>
                 Физические лица
             </b-navbar-item>
-            <b-navbar-item href="/tasks" has-link :active="isActiveItem('/tasks')">
+            <b-navbar-item
+                href="/tasks"
+                has-link
+                :active="isActiveItem('/tasks')"
+                v-if="!isWorker"
+            >
                 <b-icon icon="tasks" class="mr-1"></b-icon>
                 Задания
             </b-navbar-item>

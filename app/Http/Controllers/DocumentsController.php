@@ -12,10 +12,10 @@ use App\Exceptions\Task\TaskNotFoundException;
 use App\Models\Document;
 use App\Models\DocumentImage;
 use App\Models\Field;
-use App\Models\FieldHistory;
 use App\Models\History;
 use App\Models\Individual;
 use App\Models\Task;
+use App\Services\DbrainApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -24,13 +24,11 @@ use Illuminate\Support\Str;
 
 class DocumentsController extends Controller
 {
-    private string $dbrainApiUrl;
-    private string $dbrainToken;
+    private DbrainApiService $apiService;
 
-    public function __construct()
+    public function __construct(DbrainApiService $service)
     {
-        $this->dbrainApiUrl = config('dbrain.api_url');
-        $this->dbrainToken = config('dbrain.token');
+        $this->apiService = $service;
     }
 
     public function index()
@@ -44,26 +42,12 @@ class DocumentsController extends Controller
 
         $tasks = [];
         foreach ($documents as $document) {
-            $response = Http::attach(
-                'image',
-                fopen($document, 'r'),
-                $document->getClientOriginalName()
-            )->post("{$this->dbrainApiUrl}/classify?token={$this->dbrainToken}&async=true");
-
-            $tasks[] = $response->json('task_id');
+            $tasks[] = $this->apiService->getClassifyTaskId($document);
         }
 
         $responses = [];
         foreach ($tasks as $taskId) {
-            $classifyResponse = Http::get(
-                "{$this->dbrainApiUrl}/result/{$taskId}?token={$this->dbrainToken}"
-            )->json();
-
-            while($classifyResponse['code'] == 202) {
-                $classifyResponse = Http::get(
-                    "{$this->dbrainApiUrl}/result/{$taskId}?token={$this->dbrainToken}"
-                )->json();
-            }
+            $classifyResponse = $this->apiService->getClassifyResponse($taskId);
 
             foreach ($classifyResponse['items'] as $item) {
                 $image_parts = explode(";base64,", $item['crop']);
@@ -73,14 +57,13 @@ class DocumentsController extends Controller
                 $name = time() . '_' . Str::random(10) . '.' . $image_type;
                 $this->saveDocument($image_base64, $name);
 
-                $task = new Task([
+                $task = Task::create([
                     'user_id' => Auth::id(),
                     'document_path' => 'documents/' . $name,
                     'task_id' => $taskId,
                     'type' => TaskConstants::CLASSIFY_TYPE,
                     'document_type' => $item['document']['type']
                 ]);
-                $task->save();
                 $responses[] = $task;
             }
         }
@@ -96,25 +79,17 @@ class DocumentsController extends Controller
             throw new TaskNotFoundException();
         }
 
-        if (!in_array($task->document_type, array_keys(DocumentTypes::recognizableDocumentTypes()))) {
-            throw new NotRecognizableDocumentTypeException();
-        }
-
         $document = fopen(storage_path('app/public/' . $task->document_path), 'r');
-        $recognizeResponse = Http::attach(
-            'image',
-            $document,
-            str_replace('documents/', '', $document)
-        )->post("{$this->dbrainApiUrl}/recognize?token={$this->dbrainToken}&async=true")->json();
+        $recognizeTaskId = $this->apiService->getRecognizeTaskId($document);
+        fclose($document);
+        $response = $this->apiService->getRecognizeResponse($recognizeTaskId);
 
-        $response = Http::get(
-            "{$this->dbrainApiUrl}/result/{$recognizeResponse['task_id']}?token={$this->dbrainToken}"
-        )->json();
-        while($response['code'] == 202) {
-            $response = Http::get(
-                "{$this->dbrainApiUrl}/result/{$recognizeResponse['task_id']}?token={$this->dbrainToken}"
-            )->json();
-        }
+        $docType = $response['items'][0]['doc_type'];
+        $responseFields = collect($response['items'][0]['fields'])
+            ->map(function ($field) {
+
+            });
+
 
         return response()->json($response);
     }
@@ -129,33 +104,22 @@ class DocumentsController extends Controller
 
         $documentObj = Document::find($request->document_id);
 
-        if (!$documentObj) {
-//            throw new DocumentNotFoundException();
-        }
-
-        if (!in_array($task->document_type, array_keys(DocumentTypes::recognizableDocumentTypes()))) {
-            throw new NotRecognizableDocumentTypeException();
-        }
-
         $document = fopen(storage_path('app/public/' . $task->document_path), 'r');
-        $recognizeResponse = Http::attach(
-            'image',
-            $document,
-            str_replace('documents/', '', $document)
-        )->post("{$this->dbrainApiUrl}/recognize?token={$this->dbrainToken}&async=true")->json();
+        $recognizeTaskId = $this->apiService->getRecognizeTaskId($document);
 
-        $response = Http::get(
-            "{$this->dbrainApiUrl}/result/{$recognizeResponse['task_id']}?token={$this->dbrainToken}"
-        )->json();
-        while($response['code'] == 202) {
-            $response = Http::get(
-                "{$this->dbrainApiUrl}/result/{$recognizeResponse['task_id']}?token={$this->dbrainToken}"
-            )->json();
-        }
+        $response = $this->apiService->getRecognizeResponse($recognizeTaskId);
 
         $documentObj->fields()->delete();
+        Storage::delete('public/' . $documentObj->documentImage->path);
         $documentObj->documentImage()->update(['path' => $task->document_path]);
         $documentObj->save();
+
+        History::create([
+            'type' => 'document_update',
+            'author_id' => Auth::id(),
+            'document_id' => $documentObj->id,
+            'individual_id' => $documentObj->individual->id
+        ]);
 
         foreach ($response['items'][0]['fields'] as $fieldType => $field) {
             $fieldObj = new Field();
@@ -179,9 +143,10 @@ class DocumentsController extends Controller
             throw new TaskNotFoundException();
         }
 
-        if (!in_array($task->document_type, array_keys(DocumentTypes::recognizableDocumentTypes()))) {
-            throw new NotRecognizableDocumentTypeException();
-        }
+//        if (!in_array($task->document_type, array_keys(DocumentTypes::recognizableDocumentTypes()))) {
+//            throw new NotRecognizableDocumentTypeException();
+//        }
+
 
         $individual = Individual::find($request->individual_id);
 
@@ -190,26 +155,23 @@ class DocumentsController extends Controller
         }
 
         $document = fopen(storage_path('app/public/' . $task->document_path), 'r');
-        $recognizeResponse = Http::attach(
-            'image',
-            $document,
-            str_replace('documents/', '', $document)
-        )->post("{$this->dbrainApiUrl}/recognize?token={$this->dbrainToken}&async=true")->json();
 
-        $response = Http::get(
-            "{$this->dbrainApiUrl}/result/{$recognizeResponse['task_id']}?token={$this->dbrainToken}"
-        )->json();
-        while($response['code'] == 202) {
-            $response = Http::get(
-                "{$this->dbrainApiUrl}/result/{$recognizeResponse['task_id']}?token={$this->dbrainToken}"
-            )->json();
-        }
+        $recognizeTaskId = $this->apiService->getRecognizeTaskId($document);
+
+        $response = $this->apiService->getRecognizeResponse($recognizeTaskId);
 
 
         $documentObj = new Document();
         $documentObj->type = $task->document_type;
         $documentObj->individual()->associate($individual);
         $documentObj->save();
+
+        History::create([
+            'type' => 'document_add',
+            'author_id' => Auth::id(),
+            'document_id' => $documentObj->id,
+            'individual_id' => $individual->id
+        ]);
 
         $documentImage = new DocumentImage();
         $documentImage->path = $task->document_path;
@@ -241,11 +203,13 @@ class DocumentsController extends Controller
         if ($field->value !== $request->new_value) {
             $field->value = $request->new_value;
 
-            $fHistory = new FieldHistory();
+            $fHistory = new History();
+            $fHistory->type = 'field';
             $fHistory->before = $field->getDifference()['before'];
             $fHistory->after = $field->getDifference()['after'];
             $fHistory->author()->associate(Auth::id());
             $fHistory->field()->associate($field);
+            $fHistory->document()->associate($field->document->id);
             $fHistory->individual()->associate($field->document->individual->id);
             $fHistory->save();
 

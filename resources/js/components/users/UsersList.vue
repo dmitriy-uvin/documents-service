@@ -35,21 +35,21 @@
                 </b-table-column>
 
                 <b-table-column
-                    field="first_name"
-                    label="Имя"
-                    v-slot="props"
-                    sortable
-                >
-                    {{ props.row.first_name }}
-                </b-table-column>
-
-                <b-table-column
                     field="second_name"
                     label="Фамилия"
                     v-slot="props"
                     sortable
                 >
                     {{ props.row.second_name }}
+                </b-table-column>
+
+                <b-table-column
+                    field="first_name"
+                    label="Имя"
+                    v-slot="props"
+                    sortable
+                >
+                    {{ props.row.first_name }}
                 </b-table-column>
 
                 <b-table-column
