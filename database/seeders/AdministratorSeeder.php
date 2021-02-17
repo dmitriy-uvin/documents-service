@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
-class DeveloperSeeder extends Seeder
+class AdministratorSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -18,15 +18,15 @@ class DeveloperSeeder extends Seeder
     public function run()
     {
         $user = User::create([
-            'first_name' => 'Dmitriy',
-            'second_name' => 'Uvin',
-            'patronymic' => 'Igorevich',
-            'email' => 'developer@developer.com',
+            'first_name' => 'Главный',
+            'second_name' => 'Администратор',
+            'patronymic' => '',
+            'email' => 'admin@gmail.com',
             'password' => Hash::make('password'),
-            'unhashed_password' => 'password',
-            'department' => 'dev'
+            'unhashed_password' => '123123123',
+            'department' => 'admins'
         ]);
-        $role = Role::where('alias', '=', Roles::DEVELOPER_ALIAS)->get()->first();
+        $role = Role::where('alias', '=', Roles::ADMINISTRATOR_ALIAS)->get()->first();
         $user->role()->attach($role);
     }
 }
