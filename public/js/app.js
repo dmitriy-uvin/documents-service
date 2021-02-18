@@ -2265,7 +2265,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                     result[taskKey][task.id] = groupedResult[taskKey][index];
                   });
                 });
-                _this2.recognizedData = _objectSpread(_objectSpread({}, _this2.recognizedData), result);
+                _this2.recognizedData = _objectSpread(_objectSpread({}, _this2.recognizedData), {}, _defineProperty({}, taskKey, _objectSpread(_objectSpread({}, _this2.recognizedData[taskKey]), result[taskKey])));
 
                 _this2.changePropertyForTaskKey('recognized', taskKey, true);
 
@@ -2302,20 +2302,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context2.prev = 0;
                 payloadRecognizedData = {};
-                Object.keys(_this3.recognizedData).map(function (mainKey) {
-                  Object.keys(_this3.recognizedData[mainKey]).map(function (task) {
-                    if (!payloadRecognizedData[mainKey]) payloadRecognizedData[mainKey] = {};
 
-                    if (Object.keys(_this3.recognizedData[mainKey][task]).length) {
-                      if (!payloadRecognizedData[mainKey][task]) payloadRecognizedData[mainKey][task] = {};
-                      payloadRecognizedData[mainKey][task] = {
-                        id: _this3.recognizedData[mainKey][task].id,
-                        fields: _this3.recognizedData[mainKey][task].fields,
-                        document_type: _this3.recognizedData[mainKey][task].doc_type
+                if (_this3.recognizedData[taskKey].recognized && !_this3.recognizedData[taskKey].saved) {
+                  Object.keys(_this3.recognizedData[taskKey]).map(function (task) {
+                    if (!payloadRecognizedData[taskKey]) payloadRecognizedData[taskKey] = {};
+
+                    if (Object.keys(_this3.recognizedData[taskKey][task]).length) {
+                      if (!payloadRecognizedData[taskKey][task]) payloadRecognizedData[taskKey][task] = {};
+                      payloadRecognizedData[taskKey][task] = {
+                        id: _this3.recognizedData[taskKey][task].id,
+                        fields: _this3.recognizedData[taskKey][task].fields,
+                        document_type: _this3.recognizedData[taskKey][task].doc_type
                       };
                     }
                   });
-                });
+                }
 
                 _this3.changePropertyForTaskKey('loading', taskKey, true);
 

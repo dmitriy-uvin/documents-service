@@ -108,9 +108,7 @@ export default {
     data: () => ({
         recognizedData: {},
         recognizableDocTypes: documentTypes.recognizable,
-        goTo: {
-
-        }
+        goTo: {}
     }),
     watch: {
         details() {
@@ -148,9 +146,13 @@ export default {
                         result[taskKey][task.id] = groupedResult[taskKey][index];
                     });
                 });
+
                 this.recognizedData = {
                     ...this.recognizedData,
-                    ...result
+                    [taskKey]: {
+                        ...this.recognizedData[taskKey],
+                        ...result[taskKey]
+                    }
                 };
                 this.changePropertyForTaskKey('recognized', taskKey, true);
             } catch (error) {
@@ -164,23 +166,23 @@ export default {
         async saveIndividual(taskKey) {
             try {
                 const payloadRecognizedData = {};
-                Object.keys(this.recognizedData).map(mainKey => {
-                    Object.keys(this.recognizedData[mainKey]).map(task => {
-                        if (!payloadRecognizedData[mainKey])
-                            payloadRecognizedData[mainKey] = {};
+                if (this.recognizedData[taskKey].recognized && !this.recognizedData[taskKey].saved) {
+                    Object.keys(this.recognizedData[taskKey]).map(task => {
+                        if (!payloadRecognizedData[taskKey])
+                            payloadRecognizedData[taskKey] = {};
 
-                        if (Object.keys(this.recognizedData[mainKey][task]).length) {
-                            if (!payloadRecognizedData[mainKey][task])
-                                payloadRecognizedData[mainKey][task] = {};
+                        if (Object.keys(this.recognizedData[taskKey][task]).length) {
+                            if (!payloadRecognizedData[taskKey][task])
+                                payloadRecognizedData[taskKey][task] = {};
 
-                            payloadRecognizedData[mainKey][task] = {
-                                id: this.recognizedData[mainKey][task].id,
-                                fields: this.recognizedData[mainKey][task].fields,
-                                document_type: this.recognizedData[mainKey][task].doc_type
+                            payloadRecognizedData[taskKey][task] = {
+                                id: this.recognizedData[taskKey][task].id,
+                                fields: this.recognizedData[taskKey][task].fields,
+                                document_type: this.recognizedData[taskKey][task].doc_type
                             };
                         }
                     });
-                });
+                }
                 this.changePropertyForTaskKey('loading', taskKey, true);
                 const response = await documentService.saveIndividual({
                     payloadData: payloadRecognizedData
