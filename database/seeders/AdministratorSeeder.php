@@ -17,15 +17,16 @@ class AdministratorSeeder extends Seeder
      */
     public function run()
     {
-        $user = User::create([
+        $user = new User([
             'first_name' => 'Главный',
             'second_name' => 'Администратор',
             'patronymic' => '',
             'email' => 'admin@gmail.com',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('123123123'),
             'unhashed_password' => '123123123',
             'department' => 'admins'
         ]);
+        $user->save();
         $role = Role::where('alias', '=', Roles::ADMINISTRATOR_ALIAS)->get()->first();
         $user->role()->attach($role);
     }

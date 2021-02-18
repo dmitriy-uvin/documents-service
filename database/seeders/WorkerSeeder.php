@@ -17,7 +17,7 @@ class WorkerSeeder extends Seeder
             'second_name' => 'Номер 1',
             'patronymic' => '',
             'email' => 'worker1@gmail.com',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('123123123'),
             'unhashed_password' => '123123123',
             'department' => 'workers'
         ]);

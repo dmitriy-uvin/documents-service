@@ -17,7 +17,7 @@ class ManagerSeeder extends Seeder
             'second_name' => 'Руководитель',
             'patronymic' => '',
             'email' => 'manager@gmail.com',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('123123123'),
             'unhashed_password' => '123123123',
             'department' => 'managers'
         ]);
