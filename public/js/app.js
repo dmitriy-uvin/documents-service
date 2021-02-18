@@ -2196,7 +2196,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
 
 
 
@@ -83928,7 +83927,6 @@ var render = function() {
         ? _c(
             "div",
             [
-              _vm._v("\n        " + _vm._s(taskKey) + "\n        "),
               _vm._l(tasks, function(task) {
                 return _c("div", { staticClass: "row mb-3" }, [
                   _c("div", { staticClass: "col-md-6" }, [

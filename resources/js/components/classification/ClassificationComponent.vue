@@ -1,7 +1,6 @@
 <template>
     <div class="classification">
         <div v-for="(tasks, taskKey) in details" v-if="Object.keys(details).length">
-            {{ taskKey }}
             <div
                 class="row mb-3"
                 v-for="task in tasks"
