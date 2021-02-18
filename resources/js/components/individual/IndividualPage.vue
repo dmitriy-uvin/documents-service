@@ -180,7 +180,7 @@
                                         <img :src="'/storage/' + task.document_path" alt="">
                                     </div>
                                 </div>
-                                <div class="buttons d-flex is-justify-content-flex-end">
+                                <div class="buttons d-flex justify-content-center my-4">
                                     <div class="col-md-5">
                                         <div class="row">
                                             <div class="col-md-6">

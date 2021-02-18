@@ -84028,7 +84028,7 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "div",
-                { staticClass: "buttons d-flex justify-content-center" },
+                { staticClass: "buttons d-flex justify-content-center mb-5" },
                 [
                   _c("div", { staticClass: "col-md-4 row" }, [
                     _vm.recognizedData[taskKey].recognized &&
@@ -85901,7 +85901,7 @@ var render = function() {
                                         "div",
                                         {
                                           staticClass:
-                                            "buttons d-flex is-justify-content-flex-end"
+                                            "buttons d-flex justify-content-center my-4"
                                         },
                                         [
                                           _c(

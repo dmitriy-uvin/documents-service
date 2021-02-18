@@ -51,7 +51,7 @@
                     </div>
                 </div>
             </div>
-            <div class="buttons d-flex justify-content-center">
+            <div class="buttons d-flex justify-content-center mb-5">
                 <div class="col-md-4 row">
                     <div
                         :class="recognizedData[taskKey].recognized ? 'col-md-12' : 'col-md-6'"
