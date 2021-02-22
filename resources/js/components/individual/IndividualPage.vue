@@ -87,8 +87,9 @@
                                                 <b-button
                                                     type="is-success"
                                                     icon-left="save"
-                                                    :loading="editLoading">
-<!--                                                    @click="onSave(field)"-->
+                                                    :loading="editLoading"
+                                                    @click="onSave(field)"
+                                                >
                                                 </b-button>
                                             </b-tooltip>
                                             <b-tooltip
@@ -325,7 +326,7 @@ export default {
                     });
                 }
             }
-        })
+        });
     },
     watch: {
         details() {

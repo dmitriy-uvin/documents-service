@@ -4001,6 +4001,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 
 
@@ -86078,9 +86079,7 @@ var render = function() {
         fn: function() {
           return [
             _vm._v(
-              "\n            " +
-                _vm._s(_vm.getFullName(_vm.individual)) +
-                "\n        "
+              "\n        " + _vm._s(_vm.getFullName(_vm.individual)) + "\n    "
             )
           ]
         },
@@ -86144,7 +86143,7 @@ var render = function() {
                                               },
                                               [
                                                 _vm._v(
-                                                  "\n                                            Удалить\n                                        "
+                                                  "\n                                        Удалить\n                                    "
                                                 )
                                               ]
                                             )
@@ -86180,11 +86179,11 @@ var render = function() {
                                   },
                                   [
                                     _vm._v(
-                                      "\n                                    Добавлено: " +
+                                      "\n                                Добавлено: " +
                                         _vm._s(
                                           _vm.createdAt(document.created_at)
                                         ) +
-                                        "\n                                "
+                                        "\n                            "
                                     )
                                   ]
                                 ),
@@ -86241,13 +86240,13 @@ var render = function() {
                                                 },
                                                 [
                                                   _vm._v(
-                                                    "\n                                            " +
+                                                    "\n                                        " +
                                                       _vm._s(
                                                         _vm.getFieldNameByKey(
                                                           field.type
                                                         )
                                                       ) +
-                                                      "\n                                        "
+                                                      "\n                                    "
                                                   )
                                                 ]
                                               ),
@@ -86317,13 +86316,13 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "\n                                            " +
+                                                        "\n                                        " +
                                                           _vm._s(
                                                             field.confidence.toFixed(
                                                               2
                                                             )
                                                           ) +
-                                                          "\n                                        "
+                                                          "\n                                    "
                                                       )
                                                     ]
                                                   )
@@ -86353,6 +86352,15 @@ var render = function() {
                                                                 "save",
                                                               loading:
                                                                 _vm.editLoading
+                                                            },
+                                                            on: {
+                                                              click: function(
+                                                                $event
+                                                              ) {
+                                                                return _vm.onSave(
+                                                                  field
+                                                                )
+                                                              }
                                                             }
                                                           })
                                                         ],
@@ -86435,7 +86443,7 @@ var render = function() {
                             [
                               _c("span", { staticClass: "dropzone-title" }, [
                                 _vm._v(
-                                  "\n                        Выберите файлы для распознавания\n                    "
+                                  "\n                    Выберите файлы для распознавания\n                "
                                 )
                               ]),
                               _vm._v(" "),
@@ -86450,11 +86458,11 @@ var render = function() {
                             { staticClass: "text-center user-select-none" },
                             [
                               _vm._v(
-                                "\n                                Форматы JPEG, PNG, BMP, TIFF, GIF, PDF, DJVU — весом до 10 МБ."
+                                "\n                            Форматы JPEG, PNG, BMP, TIFF, GIF, PDF, DJVU — весом до 10 МБ."
                               ),
                               _c("br"),
                               _vm._v(
-                                "\n                                Поддерживаются многостраничные файлы и распознавание нескольких документов в одном файле.\n                            "
+                                "\n                            Поддерживаются многостраничные файлы и распознавание нескольких документов в одном файле.\n                        "
                               )
                             ]
                           ),
@@ -86486,9 +86494,9 @@ var render = function() {
                                   { staticClass: "file-preview mr-2" },
                                   [
                                     _vm._v(
-                                      "\n                                " +
+                                      "\n                            " +
                                         _vm._s(filePreview) +
-                                        "\n                            "
+                                        "\n                        "
                                     )
                                   ]
                                 )
@@ -86526,7 +86534,7 @@ var render = function() {
                                           },
                                           [
                                             _vm._v(
-                                              "\n                                        Загрузить\n                                    "
+                                              "\n                                    Загрузить\n                                "
                                             )
                                           ]
                                         )
@@ -86551,7 +86559,7 @@ var render = function() {
                                           },
                                           [
                                             _vm._v(
-                                              "\n                                        Очистить\n                                    "
+                                              "\n                                    Очистить\n                                "
                                             )
                                           ]
                                         )
@@ -86584,7 +86592,7 @@ var render = function() {
                                           ),
                                           _c("br"),
                                           _vm._v(
-                                            "\n                                        Заменить его на новый экземпляр?"
+                                            "\n                                    Заменить его на новый экземпляр?"
                                           )
                                         ])
                                       ]),
@@ -86675,7 +86683,7 @@ var render = function() {
                                                         },
                                                         [
                                                           _vm._v(
-                                                            "\n                                                    Не заменять\n                                                "
+                                                            "\n                                                Не заменять\n                                            "
                                                           )
                                                         ]
                                                       )
@@ -86710,7 +86718,7 @@ var render = function() {
                                                         },
                                                         [
                                                           _vm._v(
-                                                            "\n                                                    Заменить на новый!\n                                                "
+                                                            "\n                                                Заменить на новый!\n                                            "
                                                           )
                                                         ]
                                                       )
@@ -86803,7 +86811,7 @@ var render = function() {
                                                   },
                                                   [
                                                     _vm._v(
-                                                      "\n                                            Отмена\n                                        "
+                                                      "\n                                        Отмена\n                                    "
                                                     )
                                                   ]
                                                 ),
@@ -86828,7 +86836,7 @@ var render = function() {
                                                   },
                                                   [
                                                     _vm._v(
-                                                      "\n                                            Добавить\n                                        "
+                                                      "\n                                        Добавить\n                                    "
                                                     )
                                                   ]
                                                 )
@@ -86861,7 +86869,7 @@ var render = function() {
                                     },
                                     [
                                       _vm._v(
-                                        "\n                                    Готово!\n                                "
+                                        "\n                                Готово!\n                            "
                                       )
                                     ]
                                   )
