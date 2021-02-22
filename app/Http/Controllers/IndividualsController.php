@@ -88,6 +88,7 @@ class IndividualsController extends Controller
                     'author_id' => Auth::id(),
                     'document_id' => $document->id,
                     'individual_id' => $individual->id,
+                    'before' => $task->document_path
                 ]);
 
                 $documentImage = new DocumentImage();

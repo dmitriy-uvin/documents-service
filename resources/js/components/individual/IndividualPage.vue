@@ -120,9 +120,9 @@
                                    @dragover.prevent="onDropzoneHover"
                                    @dragleave.prevent="onDropzoneLeave"
                             >
-                    <span class="dropzone-title">
-                        Выберите файлы для распознавания
-                    </span>
+                                <span class="dropzone-title">
+                                    Выберите файлы для распознавания
+                                </span>
                                 <span class="dropzone-subtitle">или просто перетащите их сюда</span>
                             </label>
                             <div class="text-center user-select-none">
@@ -181,8 +181,8 @@
                             v-for="task in details"
                             @key="task.id"
                         >
-                            <div v-if="individualDocumentTypes.includes(task.document_type)">
-                                <p>
+                            <div v-if="individualDocumentTypes.includes(task.document_type) && task.document_type !== 'other'">
+                                <p class="text-center">
                                     <b>У данного физического лица уже существует документ такого типа!<br>
                                         Заменить его на новый экземпляр?</b>
                                 </p>
@@ -228,13 +228,14 @@
                                 </div>
                                 <div class="col-md-6">
                                     <h2 class="subtitle">{{ getDocumentNameByKey(task.document_type) }}</h2>
-                                    <div v-if="cannotBeRecognized(task.document_type)">
-                                        <p class="text-danger">
-                                            <b>Документ не может быть распознан!</b>
-                                        </p>
-                                    </div>
-                                    <div v-else-if="canBeRecognized(task.document_type)">
-                                        <p class="text-success mb-3">
+<!--                                    <div v-if="cannotBeRecognized(task.document_type)">-->
+<!--                                        <p class="text-danger">-->
+<!--                                            <b>Документ не может быть распознан!</b>-->
+<!--                                        </p>-->
+<!--                                    </div>-->
+<!--                                    <div v-if="canBeRecognized(task.document_type)">-->
+                                    <div v-if="canBeUpload(task.document_type)">
+                                        <p class="text-success mb-3" v-if="!canBeDuplicated(task.document_type)">
                                             <b>Физическое лицо не имеет документа такого типа, добавить?</b>
                                         </p>
                                         <b-button
@@ -266,7 +267,6 @@
                                 </b-button>
                             </div>
                         </div>
-
                     </div>
                 </b-tab-item>
 

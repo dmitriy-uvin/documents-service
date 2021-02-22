@@ -3258,6 +3258,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -3267,7 +3281,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       beforeImageModal: false,
-      afterImageModal: false
+      afterImageModal: false,
+      imageModal: false
     };
   }
 });
@@ -6018,6 +6033,14 @@ __webpack_require__.r(__webpack_exports__);
     },
     canBeRecognized: function canBeRecognized(key) {
       return Object.keys(_constants_documentTypes__WEBPACK_IMPORTED_MODULE_0__.default.recognizable).includes(key);
+    },
+    canBeUpload: function canBeUpload(key) {
+      return key !== 'not_document';
+    },
+    canBeDuplicated: function canBeDuplicated(key) {
+      var types = Object.keys(_constants_documentTypes__WEBPACK_IMPORTED_MODULE_0__.default.notRecognizable);
+      types.push('passport_registration');
+      return types.includes(key);
     }
   }
 });
@@ -85440,11 +85463,53 @@ var render = function() {
                       ])
                     : _vm._e(),
                   _vm._v(" "),
+                  history.type === "document_add"
+                    ? _c("div", [
+                        _c(
+                          "div",
+                          {
+                            staticClass: "col-md-6 cursor-pointer",
+                            on: {
+                              click: function($event) {
+                                _vm.imageModal = true
+                              }
+                            }
+                          },
+                          [
+                            _c("b-image", {
+                              attrs: { src: "/storage/" + history.before }
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "b-modal",
+                              {
+                                model: {
+                                  value: _vm.imageModal,
+                                  callback: function($$v) {
+                                    _vm.imageModal = $$v
+                                  },
+                                  expression: "imageModal"
+                                }
+                              },
+                              [
+                                _c("p", { staticClass: "image is-4by3" }, [
+                                  _c("img", {
+                                    attrs: { src: "/storage/" + history.before }
+                                  })
+                                ])
+                              ]
+                            )
+                          ],
+                          1
+                        )
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
                   history.type === "document_update"
                     ? _c("span", [
-                        _vm._v("обновил документ "),
+                        _vm._v("\n                обновил документ "),
                         _c("b", [_vm._v("#" + _vm._s(history.document_id))]),
-                        _vm._v(".")
+                        _vm._v(".\n            ")
                       ])
                     : _vm._e(),
                   _vm._v(" "),
@@ -86079,7 +86144,9 @@ var render = function() {
         fn: function() {
           return [
             _vm._v(
-              "\n        " + _vm._s(_vm.getFullName(_vm.individual)) + "\n    "
+              "\n            " +
+                _vm._s(_vm.getFullName(_vm.individual)) +
+                "\n        "
             )
           ]
         },
@@ -86143,7 +86210,7 @@ var render = function() {
                                               },
                                               [
                                                 _vm._v(
-                                                  "\n                                        Удалить\n                                    "
+                                                  "\n                                            Удалить\n                                        "
                                                 )
                                               ]
                                             )
@@ -86179,11 +86246,11 @@ var render = function() {
                                   },
                                   [
                                     _vm._v(
-                                      "\n                                Добавлено: " +
+                                      "\n                                    Добавлено: " +
                                         _vm._s(
                                           _vm.createdAt(document.created_at)
                                         ) +
-                                        "\n                            "
+                                        "\n                                "
                                     )
                                   ]
                                 ),
@@ -86240,13 +86307,13 @@ var render = function() {
                                                 },
                                                 [
                                                   _vm._v(
-                                                    "\n                                        " +
+                                                    "\n                                            " +
                                                       _vm._s(
                                                         _vm.getFieldNameByKey(
                                                           field.type
                                                         )
                                                       ) +
-                                                      "\n                                    "
+                                                      "\n                                        "
                                                   )
                                                 ]
                                               ),
@@ -86316,13 +86383,13 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "\n                                        " +
+                                                        "\n                                            " +
                                                           _vm._s(
                                                             field.confidence.toFixed(
                                                               2
                                                             )
                                                           ) +
-                                                          "\n                                    "
+                                                          "\n                                        "
                                                       )
                                                     ]
                                                   )
@@ -86443,7 +86510,7 @@ var render = function() {
                             [
                               _c("span", { staticClass: "dropzone-title" }, [
                                 _vm._v(
-                                  "\n                    Выберите файлы для распознавания\n                "
+                                  "\n                                    Выберите файлы для распознавания\n                                "
                                 )
                               ]),
                               _vm._v(" "),
@@ -86458,11 +86525,11 @@ var render = function() {
                             { staticClass: "text-center user-select-none" },
                             [
                               _vm._v(
-                                "\n                            Форматы JPEG, PNG, BMP, TIFF, GIF, PDF, DJVU — весом до 10 МБ."
+                                "\n                                Форматы JPEG, PNG, BMP, TIFF, GIF, PDF, DJVU — весом до 10 МБ."
                               ),
                               _c("br"),
                               _vm._v(
-                                "\n                            Поддерживаются многостраничные файлы и распознавание нескольких документов в одном файле.\n                        "
+                                "\n                                Поддерживаются многостраничные файлы и распознавание нескольких документов в одном файле.\n                            "
                               )
                             ]
                           ),
@@ -86494,9 +86561,9 @@ var render = function() {
                                   { staticClass: "file-preview mr-2" },
                                   [
                                     _vm._v(
-                                      "\n                            " +
+                                      "\n                                " +
                                         _vm._s(filePreview) +
-                                        "\n                        "
+                                        "\n                            "
                                     )
                                   ]
                                 )
@@ -86534,7 +86601,7 @@ var render = function() {
                                           },
                                           [
                                             _vm._v(
-                                              "\n                                    Загрузить\n                                "
+                                              "\n                                        Загрузить\n                                    "
                                             )
                                           ]
                                         )
@@ -86559,7 +86626,7 @@ var render = function() {
                                           },
                                           [
                                             _vm._v(
-                                              "\n                                    Очистить\n                                "
+                                              "\n                                        Очистить\n                                    "
                                             )
                                           ]
                                         )
@@ -86583,16 +86650,16 @@ var render = function() {
                               [
                                 _vm.individualDocumentTypes.includes(
                                   task.document_type
-                                )
+                                ) && task.document_type !== "other"
                                   ? _c("div", [
-                                      _c("p", [
+                                      _c("p", { staticClass: "text-center" }, [
                                         _c("b", [
                                           _vm._v(
                                             "У данного физического лица уже существует документ такого типа!"
                                           ),
                                           _c("br"),
                                           _vm._v(
-                                            "\n                                    Заменить его на новый экземпляр?"
+                                            "\n                                        Заменить его на новый экземпляр?"
                                           )
                                         ])
                                       ]),
@@ -86683,7 +86750,7 @@ var render = function() {
                                                         },
                                                         [
                                                           _vm._v(
-                                                            "\n                                                Не заменять\n                                            "
+                                                            "\n                                                    Не заменять\n                                                "
                                                           )
                                                         ]
                                                       )
@@ -86718,7 +86785,7 @@ var render = function() {
                                                         },
                                                         [
                                                           _vm._v(
-                                                            "\n                                                Заменить на новый!\n                                            "
+                                                            "\n                                                    Заменить на новый!\n                                                "
                                                           )
                                                         ]
                                                       )
@@ -86754,42 +86821,28 @@ var render = function() {
                                           )
                                         ]),
                                         _vm._v(" "),
-                                        _vm.cannotBeRecognized(
-                                          task.document_type
-                                        )
-                                          ? _c("div", [
-                                              _c(
-                                                "p",
-                                                { staticClass: "text-danger" },
-                                                [
-                                                  _c("b", [
-                                                    _vm._v(
-                                                      "Документ не может быть распознан!"
-                                                    )
-                                                  ])
-                                                ]
-                                              )
-                                            ])
-                                          : _vm.canBeRecognized(
-                                              task.document_type
-                                            )
+                                        _vm.canBeUpload(task.document_type)
                                           ? _c(
                                               "div",
                                               [
-                                                _c(
-                                                  "p",
-                                                  {
-                                                    staticClass:
-                                                      "text-success mb-3"
-                                                  },
-                                                  [
-                                                    _c("b", [
-                                                      _vm._v(
-                                                        "Физическое лицо не имеет документа такого типа, добавить?"
-                                                      )
-                                                    ])
-                                                  ]
-                                                ),
+                                                !_vm.canBeDuplicated(
+                                                  task.document_type
+                                                )
+                                                  ? _c(
+                                                      "p",
+                                                      {
+                                                        staticClass:
+                                                          "text-success mb-3"
+                                                      },
+                                                      [
+                                                        _c("b", [
+                                                          _vm._v(
+                                                            "Физическое лицо не имеет документа такого типа, добавить?"
+                                                          )
+                                                        ])
+                                                      ]
+                                                    )
+                                                  : _vm._e(),
                                                 _vm._v(" "),
                                                 _c(
                                                   "b-button",
@@ -86811,7 +86864,7 @@ var render = function() {
                                                   },
                                                   [
                                                     _vm._v(
-                                                      "\n                                        Отмена\n                                    "
+                                                      "\n                                            Отмена\n                                        "
                                                     )
                                                   ]
                                                 ),
@@ -86836,7 +86889,7 @@ var render = function() {
                                                   },
                                                   [
                                                     _vm._v(
-                                                      "\n                                        Добавить\n                                    "
+                                                      "\n                                            Добавить\n                                        "
                                                     )
                                                   ]
                                                 )
@@ -86869,7 +86922,7 @@ var render = function() {
                                     },
                                     [
                                       _vm._v(
-                                        "\n                                Готово!\n                            "
+                                        "\n                                    Готово!\n                                "
                                       )
                                     ]
                                   )

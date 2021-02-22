@@ -22,7 +22,21 @@
                 <span v-if="history.type === 'document_add'">
                     добавил документ <b>#{{ history.document_id }}</b>
                 </span>
-                <span v-if="history.type === 'document_update'">обновил документ <b>#{{ history.document_id }}</b>.</span>
+                <div v-if="history.type === 'document_add'">
+                    <div class="col-md-6 cursor-pointer" @click="imageModal = true">
+                        <b-image
+                            :src="'/storage/' + history.before"
+                        ></b-image>
+                        <b-modal v-model="imageModal">
+                            <p class="image is-4by3">
+                                <img :src="'/storage/' + history.before">
+                            </p>
+                        </b-modal>
+                    </div>
+                </div>
+                <span v-if="history.type === 'document_update'">
+                    обновил документ <b>#{{ history.document_id }}</b>.
+                </span>
                 <div v-if="history.type === 'document_update'">
                     <div class="row col-md-6">
                         <div class="col-md-6 cursor-pointer" @click="beforeImageModal = true">
@@ -76,6 +90,7 @@ export default {
     data: () => ({
         beforeImageModal: false,
         afterImageModal: false,
+        imageModal: false
     })
 }
 </script>

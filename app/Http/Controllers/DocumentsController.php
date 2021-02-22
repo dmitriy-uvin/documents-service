@@ -167,7 +167,8 @@ class DocumentsController extends Controller
             'type' => 'document_add',
             'author_id' => Auth::id(),
             'document_id' => $documentObj->id,
-            'individual_id' => $individual->id
+            'individual_id' => $individual->id,
+            'before' => $task->document_path
         ]);
 
         $documentImage = new DocumentImage();

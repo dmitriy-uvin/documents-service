@@ -112,6 +112,14 @@ export default {
         },
         canBeRecognized(key) {
             return Object.keys(documentTypes.recognizable).includes(key);
+        },
+        canBeUpload(key) {
+            return key !== 'not_document';
+        },
+        canBeDuplicated(key) {
+            const types = Object.keys(documentTypes.notRecognizable);
+            types.push('passport_registration');
+            return types.includes(key);
         }
     }
 }
