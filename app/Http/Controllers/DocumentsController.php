@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Constants\TaskConstants;
+use App\Exceptions\Document\DocumentAlreadyRestoredException;
 use App\Exceptions\Document\DocumentNotFoundException;
 use App\Exceptions\Document\UnableToDeleteDocumentException;
 use App\Exceptions\Field\FieldNotFoundException;
@@ -262,6 +263,32 @@ class DocumentsController extends Controller
         ]);
 
         return response()->json(null, 204);
+    }
+
+    public function restoreDocument(Request $request)
+    {
+        $document = Document::withTrashed()->find((int)$request->id);
+
+        if (!$document) {
+            throw new DocumentNotFoundException();
+        }
+
+        if (!$document->deleted_at) {
+            throw new DocumentAlreadyRestoredException();
+        }
+
+        $document->restore();
+
+        History::create([
+            'type' => 'document_restore',
+            'author_id' => Auth::id(),
+            'individual_id' => $document->individual->id,
+            'document_id' => $document->id
+        ]);
+
+        return response()->json([
+            'success' => true
+        ]);
     }
 
     private function saveDocument($document, $name)

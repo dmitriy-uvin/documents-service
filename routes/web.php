@@ -62,6 +62,9 @@ Route::group([
     Route::put('/fields/update', [\App\Http\Controllers\DocumentsController::class, 'updateField'])
         ->name('fields.update');
 
+    Route::put('/documents/restore', [\App\Http\Controllers\DocumentsController::class, 'restoreDocument'])
+        ->name('documents.restore');
+
     Route::middleware(['not.worker'])
         ->group(function () {
         Route::get('/users', [\App\Http\Controllers\UsersController::class, 'usersList'])

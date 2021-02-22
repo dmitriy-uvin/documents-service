@@ -28,5 +28,8 @@ export default {
     },
     async deleteDocument(docId) {
         return await axiosService.delete('/documents/' + docId);
+    },
+    async restoreDocument(payload) {
+        return await axiosService.put('/documents/restore', payload);
     }
 }

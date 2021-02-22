@@ -3189,8 +3189,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _mixins_datetimeMixin__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../mixins/datetimeMixin */ "./resources/js/mixins/datetimeMixin.js");
-/* harmony import */ var _mixins_individualsMixin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../mixins/individualsMixin */ "./resources/js/mixins/individualsMixin.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _mixins_datetimeMixin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../mixins/datetimeMixin */ "./resources/js/mixins/datetimeMixin.js");
+/* harmony import */ var _mixins_individualsMixin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../mixins/individualsMixin */ "./resources/js/mixins/individualsMixin.js");
+/* harmony import */ var _services_document_documentService__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../services/document/documentService */ "./resources/js/services/document/documentService.js");
+/* harmony import */ var _events_eventBus__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../events/eventBus */ "./resources/js/events/eventBus.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 //
 //
 //
@@ -3272,11 +3282,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "History",
-  mixins: [_mixins_datetimeMixin__WEBPACK_IMPORTED_MODULE_0__.default, _mixins_individualsMixin__WEBPACK_IMPORTED_MODULE_1__.default],
+  mixins: [_mixins_datetimeMixin__WEBPACK_IMPORTED_MODULE_1__.default, _mixins_individualsMixin__WEBPACK_IMPORTED_MODULE_2__.default],
   props: ['historyData'],
   data: function data() {
     return {
@@ -3284,6 +3305,47 @@ __webpack_require__.r(__webpack_exports__);
       afterImageModal: false,
       imageModal: false
     };
+  },
+  methods: {
+    onRestoreDocument: function onRestoreDocument(docId) {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.prev = 0;
+                _context.next = 3;
+                return _services_document_documentService__WEBPACK_IMPORTED_MODULE_3__.default.restoreDocument({
+                  id: docId
+                });
+
+              case 3:
+                _this.$emit('doc-restored');
+
+                _events_eventBus__WEBPACK_IMPORTED_MODULE_4__.default.$emit('success', 'Документ успешно восстановлен!');
+                _context.next = 10;
+                break;
+
+              case 7:
+                _context.prev = 7;
+                _context.t0 = _context["catch"](0);
+                _events_eventBus__WEBPACK_IMPORTED_MODULE_4__.default.$emit('error', _context.t0.message);
+
+              case 10:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, null, [[0, 7]]);
+      }))();
+    },
+    getMessageType: function getMessageType(historyType) {
+      if (historyType.includes('delete')) return 'is-warning';
+      if (historyType.includes('restore')) return 'is-success';
+      return 'is-info';
+    }
   }
 });
 
@@ -4025,6 +4087,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 
 
 
@@ -4470,63 +4535,53 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context8.prev = _context8.next) {
               case 0:
-                if (_this9.editableValue) {
-                  _context8.next = 4;
-                  break;
-                }
-
-                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', 'Поле не может быть пустым!');
-                _context8.next = 27;
-                break;
-
-              case 4:
                 if (!(_this9.editableValue !== field.value)) {
-                  _context8.next = 25;
+                  _context8.next = 21;
                   break;
                 }
 
-                _context8.prev = 5;
+                _context8.prev = 1;
                 _this9.editLoading = true;
-                _context8.next = 9;
+                _context8.next = 5;
                 return _services_document_documentService__WEBPACK_IMPORTED_MODULE_4__.default.updateField({
                   field_id: field.id,
                   new_value: _this9.editableValue
                 });
 
-              case 9:
+              case 5:
                 _this9.editLoading = false;
                 _this9.editing = false;
                 _this9.editableId = '';
-                _context8.next = 14;
+                _context8.next = 10;
                 return _this9.loadIndividual();
 
-              case 14:
+              case 10:
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('success', 'Поле успешно обновлено!');
-                _context8.next = 23;
+                _context8.next = 19;
                 break;
 
-              case 17:
-                _context8.prev = 17;
-                _context8.t0 = _context8["catch"](5);
+              case 13:
+                _context8.prev = 13;
+                _context8.t0 = _context8["catch"](1);
                 _this9.editLoading = false;
                 _this9.editing = false;
                 _this9.editableId = '';
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context8.t0.message);
 
-              case 23:
-                _context8.next = 27;
+              case 19:
+                _context8.next = 23;
                 break;
 
-              case 25:
+              case 21:
                 _this9.editing = false;
                 _this9.editableId = '';
 
-              case 27:
+              case 23:
               case "end":
                 return _context8.stop();
             }
           }
-        }, _callee8, null, [[5, 17]]);
+        }, _callee8, null, [[1, 13]]);
       }))();
     }
   },
@@ -6505,6 +6560,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }
       }, _callee8);
+    }))();
+  },
+  restoreDocument: function restoreDocument(payload) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee9() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee9$(_context9) {
+        while (1) {
+          switch (_context9.prev = _context9.next) {
+            case 0:
+              _context9.next = 2;
+              return _axiosService__WEBPACK_IMPORTED_MODULE_1__.default.put('/documents/restore', payload);
+
+            case 2:
+              return _context9.abrupt("return", _context9.sent);
+
+            case 3:
+            case "end":
+              return _context9.stop();
+          }
+        }
+      }, _callee9);
     }))();
   }
 });
@@ -85475,13 +85550,7 @@ var render = function() {
             [
               _c(
                 "b-message",
-                {
-                  attrs: {
-                    type: history.type.includes("delete")
-                      ? "is-warning"
-                      : "is-info"
-                  }
-                },
+                { attrs: { type: _vm.getMessageType(history.type) } },
                 [
                   _c("span", { staticClass: "author-name" }, [
                     _vm._v(
@@ -85585,6 +85654,14 @@ var render = function() {
                       ])
                     : _vm._e(),
                   _vm._v(" "),
+                  history.type === "document_restore"
+                    ? _c("span", [
+                        _vm._v("\n                восстановил документ "),
+                        _c("b", [_vm._v("#" + _vm._s(history.document_id))]),
+                        _vm._v(".\n            ")
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
                   history.type === "document_update"
                     ? _c("div", [
                         _c("div", { staticClass: "row col-md-6" }, [
@@ -85682,7 +85759,26 @@ var render = function() {
                   history.type === "document_delete"
                     ? _c("span", [
                         _vm._v("\n                удалил документ "),
-                        _c("b", [_vm._v("#" + _vm._s(history.document_id))])
+                        _c("b", [_vm._v("#" + _vm._s(history.document_id))]),
+                        _vm._v(".\n                "),
+                        _c(
+                          "span",
+                          {
+                            staticClass: "text-info text-underline",
+                            on: {
+                              click: function($event) {
+                                return _vm.onRestoreDocument(
+                                  history.document_id
+                                )
+                              }
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n                    Восстановить?\n                "
+                            )
+                          ]
+                        )
                       ])
                     : _vm._e(),
                   _vm._v(" "),
@@ -87029,7 +87125,8 @@ var render = function() {
                   { attrs: { label: "История" } },
                   [
                     _c("History", {
-                      attrs: { "history-data": _vm.individual.history }
+                      attrs: { "history-data": _vm.individual.history },
+                      on: { "doc-restored": _vm.loadIndividual }
                     })
                   ],
                   1

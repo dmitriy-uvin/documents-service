@@ -279,7 +279,10 @@
                 </b-tab-item>
 
                 <b-tab-item label="История">
-                    <History :history-data="individual.history"/>
+                    <History
+                        :history-data="individual.history"
+                        @doc-restored="loadIndividual"
+                    />
                 </b-tab-item>
             </b-tabs>
         </template>
@@ -523,31 +526,27 @@ export default {
             this.editableValue = fieldValue;
         },
         async onSave(field) {
-            if (!this.editableValue) {
-                EventBus.$emit('error', 'Поле не может быть пустым!');
-            } else {
-                if (this.editableValue !== field.value) {
-                    try {
-                        this.editLoading = true;
-                        await documentService.updateField({
-                            field_id: field.id,
-                            new_value: this.editableValue
-                        });
-                        this.editLoading = false;
-                        this.editing = false;
-                        this.editableId = '';
-                        await this.loadIndividual();
-                        EventBus.$emit('success', 'Поле успешно обновлено!');
-                    } catch (error) {
-                        this.editLoading = false;
-                        this.editing = false;
-                        this.editableId = '';
-                        EventBus.$emit('error', error.message);
-                    }
-                } else {
+            if (this.editableValue !== field.value) {
+                try {
+                    this.editLoading = true;
+                    await documentService.updateField({
+                        field_id: field.id,
+                        new_value: this.editableValue
+                    });
+                    this.editLoading = false;
                     this.editing = false;
                     this.editableId = '';
+                    await this.loadIndividual();
+                    EventBus.$emit('success', 'Поле успешно обновлено!');
+                } catch (error) {
+                    this.editLoading = false;
+                    this.editing = false;
+                    this.editableId = '';
+                    EventBus.$emit('error', error.message);
                 }
+            } else {
+                this.editing = false;
+                this.editableId = '';
             }
         }
     },

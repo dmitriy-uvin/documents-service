@@ -6,7 +6,7 @@
             v-for="history in historyData"
             @key="history.id"
         >
-            <b-message :type="history.type.includes('delete') ? 'is-warning' : 'is-info'">
+            <b-message :type="getMessageType(history.type)">
                 <span class="author-name">
                     {{ history.author.first_name + ' ' + history.author.second_name + ' ' + history.author.patronymic }}
                 </span>
@@ -37,6 +37,9 @@
                 <span v-if="history.type === 'document_update'">
                     обновил документ <b>#{{ history.document_id }}</b>.
                 </span>
+                <span v-if="history.type === 'document_restore'">
+                    восстановил документ <b>#{{ history.document_id }}</b>.
+                </span>
                 <div v-if="history.type === 'document_update'">
                     <div class="row col-md-6">
                         <div class="col-md-6 cursor-pointer" @click="beforeImageModal = true">
@@ -64,7 +67,13 @@
                     </div>
                 </div>
                 <span v-if="history.type === 'document_delete'">
-                    удалил документ <b>#{{ history.document_id }}</b>
+                    удалил документ <b>#{{ history.document_id }}</b>.
+                    <span
+                        class="text-info text-underline"
+                        @click="onRestoreDocument(history.document_id)"
+                    >
+                        Восстановить?
+                    </span>
                 </span>
                 <br>
                 <small>
@@ -82,6 +91,8 @@
 <script>
 import datetimeMixin from "../../mixins/datetimeMixin";
 import individualsMixin from "../../mixins/individualsMixin";
+import documentService from "../../services/document/documentService";
+import EventBus from "../../events/eventBus";
 
 export default {
     name: "History",
@@ -91,7 +102,25 @@ export default {
         beforeImageModal: false,
         afterImageModal: false,
         imageModal: false
-    })
+    }),
+    methods: {
+        async onRestoreDocument(docId) {
+            try {
+                await documentService.restoreDocument({
+                    id: docId
+                });
+                this.$emit('doc-restored');
+                EventBus.$emit('success', 'Документ успешно восстановлен!');
+            } catch (error) {
+                EventBus.$emit('error', error.message);
+            }
+        },
+        getMessageType(historyType) {
+            if (historyType.includes('delete')) return 'is-warning';
+            if (historyType.includes('restore')) return 'is-success';
+            return 'is-info';
+        }
+    }
 }
 </script>
 
