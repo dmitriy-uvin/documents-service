@@ -4017,6 +4017,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -86398,73 +86402,86 @@ var render = function() {
                                               _vm._v(" "),
                                               _c(
                                                 "div",
-                                                { staticClass: "col-md-1" },
+                                                {
+                                                  staticClass:
+                                                    "col-md-1 d-flex align-items-center is-justify-content-flex-end"
+                                                },
                                                 [
-                                                  _vm.editing &&
-                                                  _vm.editableId === field.id
-                                                    ? _c(
-                                                        "b-tooltip",
-                                                        {
-                                                          attrs: {
-                                                            label: "Сохранить",
-                                                            position: "is-left"
-                                                          }
-                                                        },
-                                                        [
-                                                          _c("b-button", {
-                                                            attrs: {
-                                                              type:
-                                                                "is-success",
-                                                              "icon-left":
-                                                                "save",
-                                                              loading:
-                                                                _vm.editLoading
-                                                            },
-                                                            on: {
-                                                              click: function(
-                                                                $event
-                                                              ) {
-                                                                return _vm.onSave(
-                                                                  field
-                                                                )
+                                                  _c(
+                                                    "div",
+                                                    [
+                                                      _vm.editing &&
+                                                      _vm.editableId ===
+                                                        field.id
+                                                        ? _c(
+                                                            "b-tooltip",
+                                                            {
+                                                              attrs: {
+                                                                label:
+                                                                  "Сохранить",
+                                                                position:
+                                                                  "is-left"
                                                               }
-                                                            }
-                                                          })
-                                                        ],
-                                                        1
-                                                      )
-                                                    : _c(
-                                                        "b-tooltip",
-                                                        {
-                                                          attrs: {
-                                                            label:
-                                                              "Отредактировать",
-                                                            position: "is-left"
-                                                          }
-                                                        },
-                                                        [
-                                                          _c("b-button", {
-                                                            attrs: {
-                                                              type: "is-info",
-                                                              "icon-left":
-                                                                "pencil-alt"
                                                             },
-                                                            on: {
-                                                              click: function(
-                                                                $event
-                                                              ) {
-                                                                return _vm.onEdit(
-                                                                  field.id,
-                                                                  field.value
-                                                                )
+                                                            [
+                                                              _c("b-button", {
+                                                                attrs: {
+                                                                  type:
+                                                                    "is-success",
+                                                                  "icon-left":
+                                                                    "save",
+                                                                  loading:
+                                                                    _vm.editLoading
+                                                                },
+                                                                on: {
+                                                                  click: function(
+                                                                    $event
+                                                                  ) {
+                                                                    return _vm.onSave(
+                                                                      field
+                                                                    )
+                                                                  }
+                                                                }
+                                                              })
+                                                            ],
+                                                            1
+                                                          )
+                                                        : _c(
+                                                            "b-tooltip",
+                                                            {
+                                                              attrs: {
+                                                                label:
+                                                                  "Отредактировать",
+                                                                position:
+                                                                  "is-left"
                                                               }
-                                                            }
-                                                          })
-                                                        ],
-                                                        1
-                                                      )
-                                                ],
-                                                1
+                                                            },
+                                                            [
+                                                              _c("b-button", {
+                                                                attrs: {
+                                                                  type:
+                                                                    "is-info",
+                                                                  "icon-left":
+                                                                    "pencil-alt"
+                                                                },
+                                                                on: {
+                                                                  click: function(
+                                                                    $event
+                                                                  ) {
+                                                                    return _vm.onEdit(
+                                                                      field.id,
+                                                                      field.value
+                                                                    )
+                                                                  }
+                                                                }
+                                                              })
+                                                            ],
+                                                            1
+                                                          )
+                                                    ],
+                                                    1
+                                                  )
+                                                ]
                                               )
                                             ]
                                           )

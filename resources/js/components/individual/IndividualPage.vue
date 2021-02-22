@@ -70,7 +70,8 @@
                                             </b-field>
                                             <span v-else>{{ field.value }}</span>
                                         </div>
-                                        <div class="col-md-3 text-right d-flex align-items-center is-justify-content-flex-end">
+                                        <div
+                                            class="col-md-3 text-right d-flex align-items-center is-justify-content-flex-end">
                                         <span
                                             class="confidence-badge"
                                             :class="'confidence-' + getLevelOfConfidence(field.confidence)"
@@ -78,32 +79,35 @@
                                             {{ field.confidence.toFixed(2) }}
                                         </span>
                                         </div>
-                                        <div class="col-md-1">
-                                            <b-tooltip
-                                                label="Сохранить"
-                                                position="is-left"
-                                                v-if="editing && editableId === field.id"
-                                            >
-                                                <b-button
-                                                    type="is-success"
-                                                    icon-left="save"
-                                                    :loading="editLoading"
-                                                    @click="onSave(field)"
+                                        <div class="col-md-1 d-flex align-items-center is-justify-content-flex-end">
+                                            <div>
+                                                <b-tooltip
+                                                    label="Сохранить"
+                                                    position="is-left"
+                                                    v-if="editing && editableId === field.id"
                                                 >
-                                                </b-button>
-                                            </b-tooltip>
-                                            <b-tooltip
-                                                label="Отредактировать"
-                                                position="is-left"
-                                                v-else
-                                            >
-                                                <b-button
-                                                    @click="onEdit(field.id, field.value)"
-                                                    type="is-info"
-                                                    icon-left="pencil-alt"
+                                                    <b-button
+                                                        type="is-success"
+                                                        icon-left="save"
+                                                        :loading="editLoading"
+                                                        @click="onSave(field)"
+                                                    >
+                                                    </b-button>
+                                                </b-tooltip>
+                                                <b-tooltip
+                                                    label="Отредактировать"
+                                                    position="is-left"
+                                                    v-else
                                                 >
-                                                </b-button>
-                                            </b-tooltip>
+                                                    <b-button
+                                                        @click="onEdit(field.id, field.value)"
+                                                        type="is-info"
+                                                        icon-left="pencil-alt"
+                                                    >
+                                                    </b-button>
+                                                </b-tooltip>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>

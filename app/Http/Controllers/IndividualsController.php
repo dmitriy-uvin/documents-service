@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Constants\FieldTypes;
+use App\Actions\Individual\SearchIndividualsAction;
+use App\Actions\Individual\SearchIndividualsRequest;
 use App\Exceptions\Individual\IndividualNotFoundException;
 use App\Exceptions\Individual\SuchIndividualAlreadyExistsException;
-use App\Exceptions\SomethingWentWrongException;
 use App\Models\Document;
 use App\Models\DocumentImage;
 use App\Models\Field;
@@ -15,20 +15,22 @@ use App\Models\Task;
 use App\Presenters\IndividualPresenter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 
 class IndividualsController extends Controller
 {
     private string $dbrainApiUrl;
     private string $dbrainToken;
     private IndividualPresenter $individualPresenter;
+    private SearchIndividualsAction $searchIndividualsAction;
 
-    public function __construct(IndividualPresenter $individualPresenter)
-    {
+    public function __construct(
+        IndividualPresenter $individualPresenter,
+        SearchIndividualsAction $searchIndividualsAction
+    ) {
         $this->dbrainApiUrl = config('dbrain.api_url');
         $this->dbrainToken = config('dbrain.token');
         $this->individualPresenter = $individualPresenter;
+        $this->searchIndividualsAction = $searchIndividualsAction;
     }
 
     public function individualsView()
@@ -137,74 +139,16 @@ class IndividualsController extends Controller
 
     public function search(Request $request)
     {
-        $snilsNumber = $request->snils;
-        $innNumber = $request->inn;
-        $passportNumber = $request->passport;
-
-        $name = $request->name;
-        $surname = $request->surname;
-        $patronymic = $request->patronymic;
-
-        $documentQuery = Document::query();
-
-        if ($snilsNumber) {
-            $documentQuery->where('type', '=', 'snils_front')
-                ->whereHas('fields', function ($query) use ($snilsNumber){
-                    return $query
-                        ->where('type', '=', 'number')
-                        ->where('value', 'like', '%' . $snilsNumber . '%');
-                });
-        }
-
-        if ($passportNumber) {
-            $documentQuery->whereIn('type', ['passport_main', 'passport_main_handwritten'])
-                ->whereHas('fields', function ($query) use ($passportNumber){
-                    return $query
-                        ->where('type', '=', 'series_and_number')
-                        ->where('value', 'like', '%' . $passportNumber . '%');
-                });
-        }
-
-        if ($innNumber) {
-            $documentQuery->where('type', '=', 'inn_person')
-                ->whereHas('fields', function ($query) use ($innNumber){
-                    return $query
-                        ->where('type', '=', 'number')
-                        ->where('value', 'like', '%' . $innNumber . '%');
-                });
-        }
-
-        $fieldQuery = Field::query();
-
-        if ($name && $surname && $patronymic) {
-            $fio = $surname . ' ' . $name . ' ' . $patronymic;
-            $fieldQuery
-                ->whereIn('type', FieldTypes::getFioTypes())
-                ->where(DB::raw('LOWER(value)'), 'like', '%' . $fio . '%');
-        } else {
-            if ($name) {
-                $documentQuery->whereHas('fields', function ($query) use ($name) {
-                    return $query->whereIn('type', FieldTypes::getNameTypes())
-                        ->where(DB::raw('LOWER(value)'), 'like', '%' . $name . '%');
-                });
-            }
-
-            if ($surname) {
-                $documentQuery->whereHas('fields', function ($query) use ($surname) {
-                    return $query->whereIn('type', FieldTypes::getSurnameTypes())
-                        ->where(DB::raw('LOWER(value)'), 'like', '%' . $surname . '%');
-                });
-            }
-
-            if ($patronymic) {
-                $documentQuery->whereHas('fields', function ($query) use ($patronymic) {
-                    return $query->whereIn('type', FieldTypes::getPatronymicTypes())
-                        ->where(DB::raw('LOWER(value)'), 'like', '%' . $patronymic . '%');
-                });
-            }
-        }
-
-        $individuals = $documentQuery->get()->map(fn($document) => $document->individual)->all();
+        $individuals = $this->searchIndividualsAction->execute(
+            new SearchIndividualsRequest(
+                $request->snils,
+                $request->inn,
+                $request->passport,
+                $request->name,
+                $request->surname,
+                $request->patronymic,
+            )
+        )->getIndividuals();
 
         return response()->json($individuals);
     }

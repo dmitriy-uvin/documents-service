@@ -344,7 +344,10 @@ class FieldTypes
             'name_eng',
             'name_rus',
             'first_name',
-            'name'
+            'name',
+            'born_full_name',
+            'full_name',
+            'fio'
         ];
     }
 
@@ -359,6 +362,9 @@ class FieldTypes
             'a_veh_driver_surname',
             'b_vehicle_owner_surname',
             'b_veh_driver_surname',
+            'born_full_name',
+            'full_name',
+            'fio'
         ];
     }
 
@@ -376,6 +382,9 @@ class FieldTypes
             'b_vehicle_owner_patronym',
             'b_veh_driver_patronym',
             'third',
+            'born_full_name',
+            'full_name',
+            'fio'
         ];
     }
 
@@ -383,7 +392,8 @@ class FieldTypes
     {
         return [
             'born_full_name',
-            'full_name'
+            'full_name',
+            'fio'
         ];
     }
 }
