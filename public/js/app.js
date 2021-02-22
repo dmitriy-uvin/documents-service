@@ -2085,6 +2085,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_document_documentService__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../services/document/documentService */ "./resources/js/services/document/documentService.js");
 /* harmony import */ var _events_eventBus__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../events/eventBus */ "./resources/js/events/eventBus.js");
 /* harmony import */ var _constants_documentTypes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../constants/documentTypes */ "./resources/js/constants/documentTypes.js");
+/* harmony import */ var _mixins_individualsMixin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../mixins/individualsMixin */ "./resources/js/mixins/individualsMixin.js");
 
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -2196,17 +2197,57 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "ClassificationComponent",
   props: ['details'],
+  mixins: [_mixins_individualsMixin__WEBPACK_IMPORTED_MODULE_4__.default],
   data: function data() {
     return {
       recognizedData: {},
       recognizableDocTypes: _constants_documentTypes__WEBPACK_IMPORTED_MODULE_3__.default.recognizable,
-      goTo: {}
+      goTo: {},
+      editableId: '',
+      editing: false
     };
   },
   watch: {
@@ -5325,8 +5366,8 @@ __webpack_require__.r(__webpack_exports__);
     "number_top": "Номер СТС (верхняя часть)",
     "series_bottom": "Серия СТС (нижняя часть)",
     "number_bottom": "Номер СТС (нижняя часть)",
-    "surname": "Собственник: фамилия (на английском)",
-    "name": "Собственник: имя (на английском)",
+    "surname": "Фамилия (на английском)",
+    "name": "Имя (на английском)",
     "third_name": "Отчество",
     "date_of_issue": "Дата выдачи",
     "valid_before": "Действителен до",
@@ -5349,7 +5390,7 @@ __webpack_require__.r(__webpack_exports__);
     "category_tb_begin": "Категория Tb: начало действия",
     "category_tb_end": "Категория Tb: конец действия",
     "series_number": "Серия и номер документа",
-    "patronymic": "Patronymic",
+    "patronymic": "Отчество (на английском)",
     "date_from": "Дата выдачи",
     "date_end": "Действительно до",
     "place_of_issue": "Место выдачи",
@@ -5460,10 +5501,10 @@ __webpack_require__.r(__webpack_exports__);
     "total_sum": "Общая сумма сделки",
     "signature": "Подписи",
     "electronic_signature": "Электронная подпись",
-    "surname_rus": "Собственник: фамилия (на русском)",
-    "surname_eng": "Surname",
-    "name_rus": "Собственник: имя (на русском)",
-    "name_eng": "Name",
+    "surname_rus": "Фамилия (на русском)",
+    "surname_eng": "Фамилия (на английском)",
+    "name_rus": "Имя (на русском)",
+    "name_eng": "Имя (на английском)",
     "sex_rus": "Пол владельца на русском языке",
     "sex_eng": "Пол владельца транслитерацией",
     "patter": "Отчество",
@@ -5586,9 +5627,9 @@ __webpack_require__.r(__webpack_exports__);
     "signature_1": "Подпись №1",
     "signature_2": "Подпись №2",
     "rntrc": "РНОКПП. Регистрационный номер учетной карточки налогоплательщика (при наличии)",
-    "surname_ukr": "Прiзвище",
-    "name_ukr": "Iм'я",
-    "third": "По Батьковi",
+    "surname_ukr": "Фамилия (на украинском)",
+    "name_ukr": "Имя (на украинском)",
+    "third": "Отчество (на украинском)",
     "gender": "Пол",
     "authority": "Орган, выдавший документ",
     "patronymic_rus": "Собственник: отчество (на русском)",
@@ -83939,9 +83980,12 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "col-md-6" }, [
-                    _c("h2", { staticClass: "subtitle" }, [
-                      _vm._v("\n                    Document Type: "),
-                      _c("b", [_vm._v(_vm._s(task.document_type))])
+                    _c("h2", { staticClass: "subtitle font-weight-bold" }, [
+                      _vm._v(
+                        "\n                    " +
+                          _vm._s(_vm.getDocumentNameByKey(task.document_type)) +
+                          "\n                "
+                      )
                     ]),
                     _vm._v(" "),
                     _vm.recognizedDataExists(taskKey, task.id)
@@ -83961,7 +84005,9 @@ var render = function() {
                                     [
                                       _vm._v(
                                         "\n                            " +
-                                          _vm._s(field_name) +
+                                          _vm._s(
+                                            _vm.getFieldNameByKey(field_name)
+                                          ) +
                                           "\n                        "
                                       )
                                     ]
@@ -83969,14 +84015,50 @@ var render = function() {
                                   _vm._v(" "),
                                   _c(
                                     "div",
-                                    { staticClass: "col-md-5 text-right" },
+                                    { staticClass: "col-md-4 text-right" },
                                     [
-                                      _vm._v(
-                                        "\n                            " +
-                                          _vm._s(field.text) +
-                                          "\n                        "
-                                      )
-                                    ]
+                                      _vm.editing &&
+                                      _vm.editableId ===
+                                        taskKey + "=" + field_name
+                                        ? _c(
+                                            "b-field",
+                                            [
+                                              _c("b-input", {
+                                                attrs: {
+                                                  value: field.text,
+                                                  type:
+                                                    field.text.length > 15
+                                                      ? "textarea"
+                                                      : ""
+                                                },
+                                                model: {
+                                                  value:
+                                                    _vm.recognizedData[taskKey][
+                                                      task.id
+                                                    ].fields[field_name].text,
+                                                  callback: function($$v) {
+                                                    _vm.$set(
+                                                      _vm.recognizedData[
+                                                        taskKey
+                                                      ][task.id].fields[
+                                                        field_name
+                                                      ],
+                                                      "text",
+                                                      $$v
+                                                    )
+                                                  },
+                                                  expression:
+                                                    "recognizedData[taskKey][task.id].fields[field_name].text"
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          )
+                                        : _c("span", [
+                                            _vm._v(_vm._s(field.text))
+                                          ])
+                                    ],
+                                    1
                                   ),
                                   _vm._v(" "),
                                   _c(
@@ -84004,6 +84086,66 @@ var render = function() {
                                         ]
                                       )
                                     ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    { staticClass: "col-md-1" },
+                                    [
+                                      _vm.editing &&
+                                      _vm.editableId ===
+                                        taskKey + "=" + field_name
+                                        ? _c(
+                                            "b-tooltip",
+                                            {
+                                              attrs: {
+                                                label: "Сохранить",
+                                                position: "is-left"
+                                              }
+                                            },
+                                            [
+                                              _c("b-button", {
+                                                attrs: {
+                                                  type: "is-success",
+                                                  "icon-left": "save"
+                                                },
+                                                on: {
+                                                  click: function($event) {
+                                                    _vm.editing = false
+                                                    _vm.editableId = ""
+                                                  }
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          )
+                                        : _c(
+                                            "b-tooltip",
+                                            {
+                                              attrs: {
+                                                label: "Отредактировать",
+                                                position: "is-left"
+                                              }
+                                            },
+                                            [
+                                              _c("b-button", {
+                                                attrs: {
+                                                  type: "is-info",
+                                                  "icon-left": "pencil-alt"
+                                                },
+                                                on: {
+                                                  click: function($event) {
+                                                    _vm.editing = true
+                                                    _vm.editableId =
+                                                      taskKey + "=" + field_name
+                                                  }
+                                                }
+                                              })
+                                            ],
+                                            1
+                                          )
+                                    ],
+                                    1
                                   )
                                 ])
                               }
@@ -84143,16 +84285,18 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "row mb-2" }, [
       _c("div", { staticClass: "col-md-4 text-left" }, [
-        _c("b", [_vm._v("Field Name")])
+        _c("b", [_vm._v("Название поля")])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-md-5 text-right" }, [
-        _c("b", [_vm._v("Value")])
+      _c("div", { staticClass: "col-md-4 text-center" }, [
+        _c("b", [_vm._v("Значение")])
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "col-md-3 text-right" }, [
-        _c("b", [_vm._v("Confidence")])
-      ])
+        _c("b", [_vm._v("Уверенность")])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-md-1 text-right" })
     ])
   }
 ]

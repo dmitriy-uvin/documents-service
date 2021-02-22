@@ -137,10 +137,6 @@ class DocumentsController extends Controller
             throw new TaskNotFoundException();
         }
 
-//        if (!in_array($task->document_type, array_keys(DocumentTypes::recognizableDocumentTypes()))) {
-//            throw new NotRecognizableDocumentTypeException();
-//        }
-
 
         $individual = Individual::find($request->individual_id);
 

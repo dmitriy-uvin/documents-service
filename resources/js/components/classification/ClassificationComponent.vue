@@ -9,19 +9,22 @@
                     <img :src="'storage/' + task.document_path" alt="Document Crop image"/>
                 </div>
                 <div class="col-md-6">
-                    <h2 class="subtitle">
-                        Document Type: <b>{{ task.document_type }}</b>
+                    <h2 class="subtitle font-weight-bold">
+                        {{ getDocumentNameByKey(task.document_type) }}
                     </h2>
                     <div class="fields-data" v-if="recognizedDataExists(taskKey, task.id)">
                         <div class="row mb-2">
                             <div class="col-md-4 text-left">
-                                <b>Field Name</b>
+                                <b>Название поля</b>
                             </div>
-                            <div class="col-md-5 text-right">
-                                <b>Value</b>
+                            <div class="col-md-4 text-center">
+                                <b>Значение</b>
                             </div>
                             <div class="col-md-3 text-right">
-                                <b>Confidence</b>
+                                <b>Уверенность</b>
+                            </div>
+                            <div class="col-md-1 text-right">
+
                             </div>
                         </div>
                         <div
@@ -29,10 +32,17 @@
                             v-for="(field, field_name) in recognizedData[taskKey][task.id].fields"
                         >
                             <div class="col-md-4 text-left">
-                                {{ field_name }}
+                                {{ getFieldNameByKey(field_name) }}
                             </div>
-                            <div class="col-md-5 text-right">
-                                {{ field.text }}
+                            <div class="col-md-4 text-right">
+                                <b-field v-if="editing && editableId === taskKey + '=' + field_name">
+                                    <b-input
+                                        :value="field.text"
+                                        v-model="recognizedData[taskKey][task.id].fields[field_name].text"
+                                        :type="field.text.length > 15 ? 'textarea' : ''"
+                                    />
+                                </b-field>
+                                <span v-else>{{ field.text }}</span>
                             </div>
                             <div class="col-md-3 text-right">
                                 <span
@@ -41,6 +51,32 @@
                                 >
                                     {{ field.confidence.toFixed(2) }}
                                 </span>
+                            </div>
+                            <div class="col-md-1">
+                                <b-tooltip
+                                    label="Сохранить"
+                                    position="is-left"
+                                    v-if="editing && editableId === taskKey + '=' + field_name"
+                                >
+                                    <b-button
+                                        type="is-success"
+                                        icon-left="save"
+                                        @click="editing = false; editableId = ''"
+                                    >
+                                    </b-button>
+                                </b-tooltip>
+                                <b-tooltip
+                                    label="Отредактировать"
+                                    position="is-left"
+                                    v-else
+                                >
+                                    <b-button
+                                        @click="editing = true; editableId = taskKey + '=' + field_name"
+                                        type="is-info"
+                                        icon-left="pencil-alt"
+                                    >
+                                    </b-button>
+                                </b-tooltip>
                             </div>
                         </div>
                     </div>
@@ -101,13 +137,17 @@
 import documentService from "../../services/document/documentService";
 import EventBus from "../../events/eventBus";
 import documentTypes from "../../constants/documentTypes";
+import individualsMixin from "../../mixins/individualsMixin";
 export default {
     name: "ClassificationComponent",
     props: ['details'],
+    mixins: [individualsMixin],
     data: () => ({
         recognizedData: {},
         recognizableDocTypes: documentTypes.recognizable,
-        goTo: {}
+        goTo: {},
+        editableId: '',
+        editing: false
     }),
     watch: {
         details() {
