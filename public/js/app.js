@@ -3190,6 +3190,31 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _mixins_datetimeMixin__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../mixins/datetimeMixin */ "./resources/js/mixins/datetimeMixin.js");
+/* harmony import */ var _mixins_individualsMixin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../mixins/individualsMixin */ "./resources/js/mixins/individualsMixin.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3234,10 +3259,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "History",
-  mixins: [_mixins_datetimeMixin__WEBPACK_IMPORTED_MODULE_0__.default],
-  props: ['historyData']
+  mixins: [_mixins_datetimeMixin__WEBPACK_IMPORTED_MODULE_0__.default, _mixins_individualsMixin__WEBPACK_IMPORTED_MODULE_1__.default],
+  props: ['historyData'],
+  data: function data() {
+    return {
+      beforeImageModal: false,
+      afterImageModal: false
+    };
+  }
 });
 
 /***/ }),
@@ -4009,20 +4041,56 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   mounted: function mounted() {
     var _this = this;
 
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
         while (1) {
-          switch (_context.prev = _context.next) {
+          switch (_context2.prev = _context2.next) {
             case 0:
-              _context.next = 2;
+              _context2.next = 2;
               return _this.loadIndividual();
 
             case 2:
+              document.addEventListener('keypress', /*#__PURE__*/function () {
+                var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(event) {
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+                    while (1) {
+                      switch (_context.prev = _context.next) {
+                        case 0:
+                          if (!(event.key === 'Enter')) {
+                            _context.next = 4;
+                            break;
+                          }
+
+                          if (!(_this.editing && _this.editableId)) {
+                            _context.next = 4;
+                            break;
+                          }
+
+                          _context.next = 4;
+                          return _this.onSave({
+                            id: _this.editableId,
+                            value: _this.editableValue
+                          });
+
+                        case 4:
+                        case "end":
+                          return _context.stop();
+                      }
+                    }
+                  }, _callee);
+                }));
+
+                return function (_x) {
+                  return _ref.apply(this, arguments);
+                };
+              }());
+
+            case 3:
             case "end":
-              return _context.stop();
+              return _context2.stop();
           }
         }
-      }, _callee);
+      }, _callee2);
     }))();
   },
   watch: {
@@ -4039,38 +4107,38 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     onDeleteDocument: function onDeleteDocument(documentId) {
       var _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
-                _context2.prev = 0;
+                _context3.prev = 0;
                 _this2.deleteLoading = true;
-                _context2.next = 4;
+                _context3.next = 4;
                 return _services_document_documentService__WEBPACK_IMPORTED_MODULE_4__.default.deleteDocument(documentId);
 
               case 4:
                 _this2.deleteLoading = false;
-                _context2.next = 7;
+                _context3.next = 7;
                 return _this2.loadIndividual();
 
               case 7:
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('warning', 'Документ был успешно удален!');
-                _context2.next = 14;
+                _context3.next = 14;
                 break;
 
               case 10:
-                _context2.prev = 10;
-                _context2.t0 = _context2["catch"](0);
+                _context3.prev = 10;
+                _context3.t0 = _context3["catch"](0);
                 _this2.deleteLoading = false;
-                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context2.t0.message);
+                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context3.t0.message);
 
               case 14:
               case "end":
-                return _context2.stop();
+                return _context3.stop();
             }
           }
-        }, _callee2, null, [[0, 10]]);
+        }, _callee3, null, [[0, 10]]);
       }))();
     },
     confirmDeletingDocument: function confirmDeletingDocument(docId) {
@@ -4099,34 +4167,34 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     loadIndividual: function loadIndividual() {
       var _this4 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
         var response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
           while (1) {
-            switch (_context3.prev = _context3.next) {
+            switch (_context4.prev = _context4.next) {
               case 0:
-                _context3.prev = 0;
-                _context3.next = 3;
+                _context4.prev = 0;
+                _context4.next = 3;
                 return _services_individual_individualService__WEBPACK_IMPORTED_MODULE_2__.default.getIndividualUserById(_this4.id);
 
               case 3:
-                response = _context3.sent;
+                response = _context4.sent;
                 _this4.individual = response;
                 _this4.historyData = response.history;
-                _context3.next = 11;
+                _context4.next = 11;
                 break;
 
               case 8:
-                _context3.prev = 8;
-                _context3.t0 = _context3["catch"](0);
-                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context3.t0.message);
+                _context4.prev = 8;
+                _context4.t0 = _context4["catch"](0);
+                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context4.t0.message);
 
               case 11:
               case "end":
-                return _context3.stop();
+                return _context4.stop();
             }
           }
-        }, _callee3, null, [[0, 8]]);
+        }, _callee4, null, [[0, 8]]);
       }))();
     },
     onDrop: function onDrop(event) {
@@ -4188,18 +4256,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     onUploadDocuments: function onUploadDocuments() {
       var _this6 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
         var formData;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
           while (1) {
-            switch (_context4.prev = _context4.next) {
+            switch (_context5.prev = _context5.next) {
               case 0:
                 if (!_this6.documentFiles.length) {
-                  _context4.next = 16;
+                  _context5.next = 16;
                   break;
                 }
 
-                _context4.prev = 1;
+                _context5.prev = 1;
                 _this6.loading = true;
                 formData = new FormData();
 
@@ -4207,40 +4275,40 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   formData.append('documents[]', file);
                 });
 
-                _context4.next = 7;
+                _context5.next = 7;
                 return _services_document_documentService__WEBPACK_IMPORTED_MODULE_4__.default.classifyDocuments(formData);
 
               case 7:
-                _this6.details = _context4.sent;
+                _this6.details = _context5.sent;
                 _this6.receivedDetails = true;
                 _this6.loading = false;
-                _context4.next = 16;
+                _context5.next = 16;
                 break;
 
               case 12:
-                _context4.prev = 12;
-                _context4.t0 = _context4["catch"](1);
+                _context5.prev = 12;
+                _context5.t0 = _context5["catch"](1);
                 _this6.loading = false;
-                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context4.t0.message);
+                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context5.t0.message);
 
               case 16:
               case "end":
-                return _context4.stop();
+                return _context5.stop();
             }
           }
-        }, _callee4, null, [[1, 12]]);
+        }, _callee5, null, [[1, 12]]);
       }))();
     },
     replaceDocument: function replaceDocument(taskId, docType) {
       var _this7 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
         var documentId;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
           while (1) {
-            switch (_context5.prev = _context5.next) {
+            switch (_context6.prev = _context6.next) {
               case 0:
-                _context5.prev = 0;
+                _context6.prev = 0;
                 documentId = "";
 
                 _this7.individual.documents.map(function (document) {
@@ -4251,7 +4319,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this7.makeTaskLoading(taskId, true);
 
-                _context5.next = 6;
+                _context6.next = 6;
                 return _services_document_documentService__WEBPACK_IMPORTED_MODULE_4__.default.replaceDocument({
                   task_id: taskId,
                   document_id: documentId
@@ -4264,42 +4332,42 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this7.dontChange(taskId);
 
-                _context5.next = 11;
+                _context6.next = 11;
                 return _this7.loadIndividual();
 
               case 11:
-                _context5.next = 17;
+                _context6.next = 17;
                 break;
 
               case 13:
-                _context5.prev = 13;
-                _context5.t0 = _context5["catch"](0);
+                _context6.prev = 13;
+                _context6.t0 = _context6["catch"](0);
 
                 _this7.makeTaskLoading(taskId, false);
 
-                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context5.t0.message);
+                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context6.t0.message);
 
               case 17:
               case "end":
-                return _context5.stop();
+                return _context6.stop();
             }
           }
-        }, _callee5, null, [[0, 13]]);
+        }, _callee6, null, [[0, 13]]);
       }))();
     },
     addDocument: function addDocument(taskId) {
       var _this8 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee7() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee7$(_context7) {
           while (1) {
-            switch (_context6.prev = _context6.next) {
+            switch (_context7.prev = _context7.next) {
               case 0:
-                _context6.prev = 0;
+                _context7.prev = 0;
 
                 _this8.makeTaskLoading(taskId, true);
 
-                _context6.next = 4;
+                _context7.next = 4;
                 return _services_document_documentService__WEBPACK_IMPORTED_MODULE_4__.default.saveDocumentForIndividual({
                   task_id: taskId,
                   individual_id: _this8.individual.id
@@ -4308,30 +4376,30 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 4:
                 _this8.makeTaskLoading(taskId, false);
 
-                _context6.next = 7;
+                _context7.next = 7;
                 return _this8.loadIndividual();
 
               case 7:
                 _this8.dontChange(taskId);
 
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('success', 'Документ был успешно добавлен!');
-                _context6.next = 15;
+                _context7.next = 15;
                 break;
 
               case 11:
-                _context6.prev = 11;
-                _context6.t0 = _context6["catch"](0);
+                _context7.prev = 11;
+                _context7.t0 = _context7["catch"](0);
 
                 _this8.makeTaskLoading(taskId, false);
 
-                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context6.t0.message);
+                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context7.t0.message);
 
               case 15:
               case "end":
-                return _context6.stop();
+                return _context7.stop();
             }
           }
-        }, _callee6, null, [[0, 11]]);
+        }, _callee7, null, [[0, 11]]);
       }))();
     },
     onEdit: function onEdit(editId, fieldValue) {
@@ -4342,68 +4410,55 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     onSave: function onSave(field) {
       var _this9 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee7() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee7$(_context7) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee8() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee8$(_context8) {
           while (1) {
-            switch (_context7.prev = _context7.next) {
+            switch (_context8.prev = _context8.next) {
               case 0:
                 if (_this9.editableValue) {
-                  _context7.next = 4;
+                  _context8.next = 4;
                   break;
                 }
 
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', 'Поле не может быть пустым!');
-                _context7.next = 27;
+                _context8.next = 22;
                 break;
 
               case 4:
-                if (!(_this9.editableValue !== field.value)) {
-                  _context7.next = 25;
-                  break;
-                }
-
-                _context7.prev = 5;
+                _context8.prev = 4;
                 _this9.editLoading = true;
-                _context7.next = 9;
+                _context8.next = 8;
                 return _services_document_documentService__WEBPACK_IMPORTED_MODULE_4__.default.updateField({
                   field_id: field.id,
                   new_value: _this9.editableValue
                 });
 
-              case 9:
+              case 8:
                 _this9.editLoading = false;
                 _this9.editing = false;
                 _this9.editableId = '';
-                _context7.next = 14;
+                _context8.next = 13;
                 return _this9.loadIndividual();
 
-              case 14:
+              case 13:
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('success', 'Поле успешно обновлено!');
-                _context7.next = 23;
+                _context8.next = 22;
                 break;
 
-              case 17:
-                _context7.prev = 17;
-                _context7.t0 = _context7["catch"](5);
+              case 16:
+                _context8.prev = 16;
+                _context8.t0 = _context8["catch"](4);
                 _this9.editLoading = false;
                 _this9.editing = false;
                 _this9.editableId = '';
-                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context7.t0.message);
+                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context8.t0.message);
 
-              case 23:
-                _context7.next = 27;
-                break;
-
-              case 25:
-                _this9.editing = false;
-                _this9.editableId = '';
-
-              case 27:
+              case 22:
               case "end":
-                return _context7.stop();
+                return _context8.stop();
             }
           }
-        }, _callee7, null, [[5, 17]]);
+        }, _callee8, null, [[4, 16]]);
       }))();
     }
   },
@@ -28651,6 +28706,30 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
 ___CSS_LOADER_EXPORT___.push([module.id, "\n.dadata-input {\n  border-radius: 5px;\n  padding: 10px 15px;\n  border: 1px solid rgba(29, 29, 27, 0.3);\n  transition: all 0.2s ease;\n}\n.suggestions-nowrap {\n  white-space: nowrap\n}\n.suggestions-input {\n  -ms-box-sizing: border-box;\n  box-sizing: border-box;\n  width: 100%\n}\n.suggestions-input::-ms-clear {\n  display: none\n}\n.suggestions-wrapper {\n  position: relative;\n  margin: 0;\n  padding: 0;\n  vertical-align: top;\n  -webkit-text-size-adjust: 100%\n}\n.suggestions-addon {\n  display: none;\n  opacity: 0;\n  position: absolute\n}\n.suggestions-addon[data-addon-type=spinner] {\n  background: rgba(255, 255, 255, .75) url(data:image/gif;base64,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) 50% 50% no-repeat;\n  border-radius: 50%\n}\n.suggestions-addon[data-addon-type=clear] {\n  background: transparent url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0nMTAwJyBoZWlnaHQ9JzEwMCcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJz48Zz48cGF0aCBkPSdtMjAsMjBtMTAsMGwyMCwyMGwyMCwtMjBsMTAsMTBsLTIwLDIwbDIwLDIwbC0xMCwxMGwtMjAsLTIwbC0yMCwyMGwtMTAsLTEwbDIwLC0yMGwtMjAsLTIwbDEwLC0xMCcgZmlsbD0nIzk5OScvPjwvZz48L3N2Zz4=) 50% 50% no-repeat;\n  background-size: contain;\n  cursor: pointer;\n  opacity: .8\n}\n.suggestions-addon[data-addon-type=clear]:hover {\n  opacity: 1\n}\n.suggestions-suggestions {\n  background: #fff;\n  border: 1px solid #999;\n  -ms-box-sizing: border-box;\n  box-sizing: border-box;\n  cursor: default;\n  z-index: 9999;\n  -webkit-text-size-adjust: 100%\n}\n.suggestions-suggestions strong {\n  font-weight: 400;\n  color: #39f\n}\n.suggestions-suggestions.suggestions-mobile {\n  border-style: none\n}\n.suggestions-suggestions.suggestions-mobile .suggestions-suggestion {\n  border-bottom: 1px solid #ddd\n}\n.suggestions-suggestion {\n  padding: 4px 4px;\n  overflow: hidden\n}\n.suggestions-suggestion:hover {\n  background: #f7f7f7\n}\n.suggestions-selected {\n  background: #f0f0f0\n}\n.suggestions-selected:hover {\n  background: #f0f0f0\n}\n.suggestions-hint {\n  padding: 4px 4px;\n  white-space: nowrap;\n  overflow: hidden;\n  color: #777;\n  font-size: 85%;\n  line-height: 20px\n}\n.suggestions-constraints {\n  list-style: none !important;\n  margin: 0 !important;\n  padding: 0 !important;\n  position: absolute !important;\n  white-space: nowrap !important\n}\n.suggestions-constraints:empty {\n  display: none !important\n}\n.suggestions-constraints li {\n  background: #f8f8f8;\n  border: 1px solid #ccc;\n  border-radius: 3px;\n  cursor: default;\n  display: inline-block;\n  margin: 0 4px 0 0;\n  padding: 0 .5em\n}\n.suggestions-constraints li .suggestions-remove {\n  height: 1em;\n  width: 1em;\n  display: inline-block;\n  margin: 0 0 0 .25em;\n  background: transparent url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0nMTAwJyBoZWlnaHQ9JzEwMCcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJz48Zz48cGF0aCBkPSdtMjAsMjBtMTAsMGwyMCwyMGwyMCwtMjBsMTAsMTBsLTIwLDIwbDIwLDIwbC0xMCwxMGwtMjAsLTIwbC0yMCwyMGwtMTAsLTEwbDIwLC0yMGwtMjAsLTIwbDEwLC0xMCcgZmlsbD0nIzk5OScvPjwvZz48L3N2Zz4=) 50% 50% no-repeat;\n  background-size: contain;\n  cursor: pointer;\n  opacity: .8\n}\n.suggestions-constraints li .suggestions-remove:hover {\n  opacity: 1\n}\n.suggestions-constraints li span {\n  vertical-align: middle\n}\n.suggestions-subtext {\n  color: #777;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis\n}\n.suggestions-subtext_inline {\n  display: inline-block;\n  min-width: 6em;\n  vertical-align: bottom;\n  margin: 0 .5em 0 0\n}\n.suggestions-subtext-delimiter {\n  display: inline-block;\n  width: 2px\n}\n.suggestions-subtext_label {\n  margin: 0 0 0 .25em;\n  border-radius: 3px;\n  padding: 0 3px;\n  background: #f5f5f5;\n  font-size: 85%\n}\n.suggestions-value[data-suggestion-status=LIQUIDATED] {\n  position: relative\n}\n.suggestions-value[data-suggestion-status=LIQUIDATED]:after {\n  position: absolute;\n  left: 0;\n  right: 0;\n  top: 50%;\n  border-top: 1px solid rgba(0, 0, 0, .4);\n  content: \"\"\n}\n.suggestions-promo {\n  font-size: 85%;\n  display: none;\n  color: #777;\n  padding: 4px;\n  text-align: center\n}\n.suggestions-promo a {\n  color: #777;\n  display: block;\n  filter: grayscale(100%);\n  line-height: 20px;\n  text-decoration: none\n}\n.suggestions-promo a:hover {\n  filter: grayscale(0)\n}\n.suggestions-promo svg {\n  height: 20px;\n  vertical-align: bottom\n}\n.suggestions-promo-desktop {\n  position: absolute;\n  top: 0;\n  right: 0;\n  text-align: left\n}\n", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/individual/History.vue?vue&type=style&index=0&id=7c017cee&scoped=true&lang=css&":
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/individual/History.vue?vue&type=style&index=0&id=7c017cee&scoped=true&lang=css& ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "\n.text-underline[data-v-7c017cee] {\n    text-decoration: underline;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -81954,6 +82033,36 @@ var update = _style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMP
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/individual/History.vue?vue&type=style&index=0&id=7c017cee&scoped=true&lang=css&":
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/individual/History.vue?vue&type=style&index=0&id=7c017cee&scoped=true&lang=css& ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_History_vue_vue_type_style_index_0_id_7c017cee_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./History.vue?vue&type=style&index=0&id=7c017cee&scoped=true&lang=css& */ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/individual/History.vue?vue&type=style&index=0&id=7c017cee&scoped=true&lang=css&");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_History_vue_vue_type_style_index_0_id_7c017cee_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_1__.default, options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_History_vue_vue_type_style_index_0_id_7c017cee_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_1__.default.locals || {});
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/individual/IndividualList.vue?vue&type=style&index=0&id=64f9faf2&scoped=true&lang=css&":
 /*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/individual/IndividualList.vue?vue&type=style&index=0&id=64f9faf2&scoped=true&lang=css& ***!
@@ -82798,15 +82907,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _History_vue_vue_type_template_id_7c017cee_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./History.vue?vue&type=template&id=7c017cee&scoped=true& */ "./resources/js/components/individual/History.vue?vue&type=template&id=7c017cee&scoped=true&");
 /* harmony import */ var _History_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./History.vue?vue&type=script&lang=js& */ "./resources/js/components/individual/History.vue?vue&type=script&lang=js&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _History_vue_vue_type_style_index_0_id_7c017cee_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./History.vue?vue&type=style&index=0&id=7c017cee&scoped=true&lang=css& */ "./resources/js/components/individual/History.vue?vue&type=style&index=0&id=7c017cee&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
+;
 
 
 /* normalize component */
-;
-var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__.default)(
   _History_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
   _History_vue_vue_type_template_id_7c017cee_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render,
   _History_vue_vue_type_template_id_7c017cee_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
@@ -83486,6 +83597,19 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _style_loader_dist_cjs_js_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_vue_loader_lib_loaders_stylePostLoader_js_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_vue_loader_lib_index_js_vue_loader_options_DadataSuggestions_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../style-loader/dist/cjs.js!../../../css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!../../../vue-loader/lib/loaders/stylePostLoader.js!../../../postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!../../../vue-loader/lib/index.js??vue-loader-options!./DadataSuggestions.vue?vue&type=style&index=0&lang=css& */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./node_modules/vue-dadata-suggestions/src/components/DadataSuggestions.vue?vue&type=style&index=0&lang=css&");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/individual/History.vue?vue&type=style&index=0&id=7c017cee&scoped=true&lang=css&":
+/*!*****************************************************************************************************************!*\
+  !*** ./resources/js/components/individual/History.vue?vue&type=style&index=0&id=7c017cee&scoped=true&lang=css& ***!
+  \*****************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_History_vue_vue_type_style_index_0_id_7c017cee_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader/dist/cjs.js!../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./History.vue?vue&type=style&index=0&id=7c017cee&scoped=true&lang=css& */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/individual/History.vue?vue&type=style&index=0&id=7c017cee&scoped=true&lang=css&");
 
 
 /***/ }),
@@ -85317,8 +85441,103 @@ var render = function() {
                   _vm._v(" "),
                   history.type === "document_update"
                     ? _c("span", [
-                        _vm._v("\n                обновил документ "),
-                        _c("b", [_vm._v("#" + _vm._s(history.document_id))])
+                        _vm._v("обновил документ "),
+                        _c("b", [_vm._v("#" + _vm._s(history.document_id))]),
+                        _vm._v(".")
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  history.type === "document_update"
+                    ? _c("div", [
+                        _c("div", { staticClass: "row col-md-6" }, [
+                          _c(
+                            "div",
+                            {
+                              staticClass: "col-md-6 cursor-pointer",
+                              on: {
+                                click: function($event) {
+                                  _vm.beforeImageModal = true
+                                }
+                              }
+                            },
+                            [
+                              _c("span", { staticClass: "font-weight-bold" }, [
+                                _vm._v("До")
+                              ]),
+                              _vm._v(" "),
+                              _c("b-image", {
+                                attrs: { src: "/storage/" + history.before }
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "b-modal",
+                                {
+                                  model: {
+                                    value: _vm.beforeImageModal,
+                                    callback: function($$v) {
+                                      _vm.beforeImageModal = $$v
+                                    },
+                                    expression: "beforeImageModal"
+                                  }
+                                },
+                                [
+                                  _c("p", { staticClass: "image is-4by3" }, [
+                                    _c("img", {
+                                      attrs: {
+                                        src: "/storage/" + history.before
+                                      }
+                                    })
+                                  ])
+                                ]
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              staticClass: "col-md-6 cursor-pointer",
+                              on: {
+                                click: function($event) {
+                                  _vm.afterImageModal = true
+                                }
+                              }
+                            },
+                            [
+                              _c("span", { staticClass: "font-weight-bold" }, [
+                                _vm._v("После")
+                              ]),
+                              _vm._v(" "),
+                              _c("b-image", {
+                                attrs: { src: "/storage/" + history.after }
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "b-modal",
+                                {
+                                  model: {
+                                    value: _vm.afterImageModal,
+                                    callback: function($$v) {
+                                      _vm.afterImageModal = $$v
+                                    },
+                                    expression: "afterImageModal"
+                                  }
+                                },
+                                [
+                                  _c("p", { staticClass: "image is-4by3" }, [
+                                    _c("img", {
+                                      attrs: {
+                                        src: "/storage/" + history.after
+                                      }
+                                    })
+                                  ])
+                                ]
+                              )
+                            ],
+                            1
+                          )
+                        ])
                       ])
                     : _vm._e(),
                   _vm._v(" "),
@@ -85859,7 +86078,9 @@ var render = function() {
         fn: function() {
           return [
             _vm._v(
-              "\n        " + _vm._s(_vm.getFullName(_vm.individual)) + "\n    "
+              "\n            " +
+                _vm._s(_vm.getFullName(_vm.individual)) +
+                "\n        "
             )
           ]
         },
@@ -85923,7 +86144,7 @@ var render = function() {
                                               },
                                               [
                                                 _vm._v(
-                                                  "\n                                        Удалить\n                                    "
+                                                  "\n                                            Удалить\n                                        "
                                                 )
                                               ]
                                             )
@@ -85959,11 +86180,11 @@ var render = function() {
                                   },
                                   [
                                     _vm._v(
-                                      "\n                                Добавлено: " +
+                                      "\n                                    Добавлено: " +
                                         _vm._s(
                                           _vm.createdAt(document.created_at)
                                         ) +
-                                        "\n                            "
+                                        "\n                                "
                                     )
                                   ]
                                 ),
@@ -86020,13 +86241,13 @@ var render = function() {
                                                 },
                                                 [
                                                   _vm._v(
-                                                    "\n                                        " +
+                                                    "\n                                            " +
                                                       _vm._s(
                                                         _vm.getFieldNameByKey(
                                                           field.type
                                                         )
                                                       ) +
-                                                      "\n                                    "
+                                                      "\n                                        "
                                                   )
                                                 ]
                                               ),
@@ -86096,13 +86317,13 @@ var render = function() {
                                                     },
                                                     [
                                                       _vm._v(
-                                                        "\n                                        " +
+                                                        "\n                                            " +
                                                           _vm._s(
                                                             field.confidence.toFixed(
                                                               2
                                                             )
                                                           ) +
-                                                          "\n                                    "
+                                                          "\n                                        "
                                                       )
                                                     ]
                                                   )
@@ -86132,15 +86353,6 @@ var render = function() {
                                                                 "save",
                                                               loading:
                                                                 _vm.editLoading
-                                                            },
-                                                            on: {
-                                                              click: function(
-                                                                $event
-                                                              ) {
-                                                                return _vm.onSave(
-                                                                  field
-                                                                )
-                                                              }
                                                             }
                                                           })
                                                         ],
@@ -86223,7 +86435,7 @@ var render = function() {
                             [
                               _c("span", { staticClass: "dropzone-title" }, [
                                 _vm._v(
-                                  "\n                    Выберите файлы для распознавания\n                "
+                                  "\n                        Выберите файлы для распознавания\n                    "
                                 )
                               ]),
                               _vm._v(" "),
@@ -86238,11 +86450,11 @@ var render = function() {
                             { staticClass: "text-center user-select-none" },
                             [
                               _vm._v(
-                                "\n                            Форматы JPEG, PNG, BMP, TIFF, GIF, PDF, DJVU — весом до 10 МБ."
+                                "\n                                Форматы JPEG, PNG, BMP, TIFF, GIF, PDF, DJVU — весом до 10 МБ."
                               ),
                               _c("br"),
                               _vm._v(
-                                "\n                            Поддерживаются многостраничные файлы и распознавание нескольких документов в одном файле.\n                        "
+                                "\n                                Поддерживаются многостраничные файлы и распознавание нескольких документов в одном файле.\n                            "
                               )
                             ]
                           ),
@@ -86274,9 +86486,9 @@ var render = function() {
                                   { staticClass: "file-preview mr-2" },
                                   [
                                     _vm._v(
-                                      "\n                            " +
+                                      "\n                                " +
                                         _vm._s(filePreview) +
-                                        "\n                        "
+                                        "\n                            "
                                     )
                                   ]
                                 )
@@ -86314,7 +86526,7 @@ var render = function() {
                                           },
                                           [
                                             _vm._v(
-                                              "\n                                    Загрузить\n                                "
+                                              "\n                                        Загрузить\n                                    "
                                             )
                                           ]
                                         )
@@ -86339,7 +86551,7 @@ var render = function() {
                                           },
                                           [
                                             _vm._v(
-                                              "\n                                    Очистить\n                                "
+                                              "\n                                        Очистить\n                                    "
                                             )
                                           ]
                                         )
@@ -86372,7 +86584,7 @@ var render = function() {
                                           ),
                                           _c("br"),
                                           _vm._v(
-                                            "\n                                    Заменить его на новый экземпляр?"
+                                            "\n                                        Заменить его на новый экземпляр?"
                                           )
                                         ])
                                       ]),
@@ -86463,7 +86675,7 @@ var render = function() {
                                                         },
                                                         [
                                                           _vm._v(
-                                                            "\n                                                Не заменять\n                                            "
+                                                            "\n                                                    Не заменять\n                                                "
                                                           )
                                                         ]
                                                       )
@@ -86498,7 +86710,7 @@ var render = function() {
                                                         },
                                                         [
                                                           _vm._v(
-                                                            "\n                                                Заменить на новый!\n                                            "
+                                                            "\n                                                    Заменить на новый!\n                                                "
                                                           )
                                                         ]
                                                       )
@@ -86591,7 +86803,7 @@ var render = function() {
                                                   },
                                                   [
                                                     _vm._v(
-                                                      "\n                                        Отмена\n                                    "
+                                                      "\n                                            Отмена\n                                        "
                                                     )
                                                   ]
                                                 ),
@@ -86616,7 +86828,7 @@ var render = function() {
                                                   },
                                                   [
                                                     _vm._v(
-                                                      "\n                                        Добавить\n                                    "
+                                                      "\n                                            Добавить\n                                        "
                                                     )
                                                   ]
                                                 )
@@ -86649,7 +86861,7 @@ var render = function() {
                                     },
                                     [
                                       _vm._v(
-                                        "\n                                Готово!\n                            "
+                                        "\n                                    Готово!\n                                "
                                       )
                                     ]
                                   )

@@ -56,6 +56,7 @@
                                     <div
                                         class="row mb-2"
                                         v-for="field in document.fields">
+
                                         <div class="col-md-4 d-flex align-items-center">
                                             {{ getFieldNameByKey(field.type) }}
                                         </div>
@@ -86,9 +87,8 @@
                                                 <b-button
                                                     type="is-success"
                                                     icon-left="save"
-                                                    :loading="editLoading"
-                                                    @click="onSave(field)"
-                                                >
+                                                    :loading="editLoading">
+<!--                                                    @click="onSave(field)"-->
                                                 </b-button>
                                             </b-tooltip>
                                             <b-tooltip
@@ -316,6 +316,16 @@ export default {
     }),
     async mounted() {
         await this.loadIndividual();
+        document.addEventListener('keypress', async (event) => {
+            if (event.key === 'Enter') {
+                if (this.editing && this.editableId) {
+                    await this.onSave({
+                        id: this.editableId,
+                        value: this.editableValue
+                    });
+                }
+            }
+        })
     },
     watch: {
         details() {
@@ -489,28 +499,29 @@ export default {
             if (!this.editableValue) {
                 EventBus.$emit('error', 'Поле не может быть пустым!');
             } else {
-                if (this.editableValue !== field.value) {
-                    try {
-                        this.editLoading = true;
-                        await documentService.updateField({
-                            field_id: field.id,
-                            new_value: this.editableValue
-                        });
-                        this.editLoading = false;
-                        this.editing = false;
-                        this.editableId = '';
-                        await this.loadIndividual();
-                        EventBus.$emit('success', 'Поле успешно обновлено!');
-                    } catch (error) {
-                        this.editLoading = false;
-                        this.editing = false;
-                        this.editableId = '';
-                        EventBus.$emit('error', error.message);
-                    }
-                } else {
+                try {
+                    this.editLoading = true;
+                    await documentService.updateField({
+                        field_id: field.id,
+                        new_value: this.editableValue
+                    });
+                    this.editLoading = false;
                     this.editing = false;
                     this.editableId = '';
+                    await this.loadIndividual();
+                    EventBus.$emit('success', 'Поле успешно обновлено!');
+                } catch (error) {
+                    this.editLoading = false;
+                    this.editing = false;
+                    this.editableId = '';
+                    EventBus.$emit('error', error.message);
                 }
+                // if (this.editableValue !== field.value) {
+                //
+                // } else {
+                //     this.editing = false;
+                //     this.editableId = '';
+                // }
             }
         }
     },

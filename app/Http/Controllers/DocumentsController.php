@@ -99,22 +99,28 @@ class DocumentsController extends Controller
         }
 
         $documentObj = Document::find($request->document_id);
+        $pathBefore = $documentObj->lastDocumentImage()->path;
 
         $document = fopen(storage_path('app/public/' . $task->document_path), 'r');
         $recognizeTaskId = $this->apiService->getRecognizeTaskId($document);
 
         $response = $this->apiService->getRecognizeResponse($recognizeTaskId);
 
+        $newDocImage = new DocumentImage();
+        $newDocImage->path = $task->document_path;
+        $newDocImage->document()->associate($documentObj);
+        $newDocImage->save();
+
         $documentObj->fields()->delete();
-        Storage::delete('public/' . $documentObj->documentImage->path);
-        $documentObj->documentImage()->update(['path' => $task->document_path]);
         $documentObj->save();
 
         History::create([
             'type' => 'document_update',
             'author_id' => Auth::id(),
             'document_id' => $documentObj->id,
-            'individual_id' => $documentObj->individual->id
+            'individual_id' => $documentObj->individual->id,
+            'before' => $pathBefore,
+            'after' => $documentObj->lastDocumentImage()->path
         ]);
 
         foreach ($response['items'][0]['fields'] as $fieldType => $field) {
@@ -138,7 +144,6 @@ class DocumentsController extends Controller
         if (!$task) {
             throw new TaskNotFoundException();
         }
-
 
         $individual = Individual::find($request->individual_id);
 

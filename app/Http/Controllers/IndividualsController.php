@@ -12,6 +12,7 @@ use App\Models\Field;
 use App\Models\History;
 use App\Models\Individual;
 use App\Models\Task;
+use App\Presenters\IndividualPresenter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -21,11 +22,13 @@ class IndividualsController extends Controller
 {
     private string $dbrainApiUrl;
     private string $dbrainToken;
+    private IndividualPresenter $individualPresenter;
 
-    public function __construct()
+    public function __construct(IndividualPresenter $individualPresenter)
     {
         $this->dbrainApiUrl = config('dbrain.api_url');
         $this->dbrainToken = config('dbrain.token');
+        $this->individualPresenter = $individualPresenter;
     }
 
     public function individualsView()
@@ -35,9 +38,10 @@ class IndividualsController extends Controller
 
     public function getIndividuals()
     {
-        $individuals = Individual::orderBy('created_at', 'desc')->get()->all();
+        $individuals = Individual::orderBy('created_at', 'desc')->get();
+
         return response()->json(
-            $individuals
+            $this->individualPresenter->presentCollection($individuals)
         );
     }
 
@@ -56,7 +60,9 @@ class IndividualsController extends Controller
             throw new IndividualNotFoundException();
         }
 
-        return response()->json($individual);
+        return response()->json(
+            $this->individualPresenter->present($individual)
+        );
     }
 
     public function save(Request $request)

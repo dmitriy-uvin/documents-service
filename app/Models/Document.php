@@ -35,6 +35,11 @@ class Document extends Model
 
     public function documentImage()
     {
-        return $this->hasOne(DocumentImage::class);
+        return $this->hasMany(DocumentImage::class);
+    }
+
+    public function lastDocumentImage()
+    {
+        return $this->documentImage()->get()->last();
     }
 }
