@@ -25,6 +25,9 @@ export default {
         EventBus.$on('success', function (message) {
             this.$buefy.toast.open(eventsList.success(message));
         });
+        EventBus.$on('warning', function (message) {
+            this.$buefy.toast.open(eventsList.warning(message));
+        });
     }
 }
 </script>

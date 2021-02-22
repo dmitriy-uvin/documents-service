@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Constants\DocumentTypes;
 use App\Constants\TaskConstants;
 use App\Events\TestEvent;
+use App\Exceptions\Document\DocumentNotFoundException;
 use App\Exceptions\Document\NotRecognizableDocumentTypeException;
+use App\Exceptions\Document\UnableToDeleteDocumentException;
 use App\Exceptions\Field\FieldNotFoundException;
 use App\Exceptions\Individual\IndividualNotFoundException;
 use App\Exceptions\Task\TaskNotFoundException;
@@ -232,6 +234,33 @@ class DocumentsController extends Controller
         }
 
         return response()->json($allResponses);
+    }
+
+    public function deleteDocument(string $id)
+    {
+        $document = Document::find($id);
+
+        if (!$document) {
+            throw new DocumentNotFoundException();
+        }
+        $individual = $document->individual;
+
+        if ($individual->documents()->count() <= 1) {
+            throw new UnableToDeleteDocumentException();
+        }
+
+        $docId = $document->id;
+
+        $document->delete();
+
+        History::create([
+            'type' => 'document_delete',
+            'author_id' => Auth::id(),
+            'individual_id' => $individual->id,
+            'document_id' => $docId
+        ]);
+
+        return response()->json(null, 204);
     }
 
     private function saveDocument($document, $name)

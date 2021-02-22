@@ -25,5 +25,8 @@ export default {
     },
     async updateField(payload) {
         return await axiosService.put('/fields/update', payload);
+    },
+    async deleteDocument(docId) {
+        return await axiosService.delete('/documents/' + docId);
     }
 }

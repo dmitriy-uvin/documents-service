@@ -78,6 +78,11 @@ Route::group([
             ->name('users.block');
     });
 
+    Route::middleware(['admin.or.developer'])->group(function () {
+        Route::delete('/documents/{id}', [\App\Http\Controllers\DocumentsController::class, 'deleteDocument'])
+            ->name('documents.delete.id');
+    });
+
     Route::get('/users/{id}', [\App\Http\Controllers\UsersController::class, 'getUserById'])
         ->name('users.id');
 });

@@ -15,6 +15,21 @@
                         >
                             <div class="col-md-5">
                                 <img :src="'/storage/' + document.document_image.path" />
+                                <div
+                                    class="d-flex justify-content-center mt-4"
+                                    v-if="isAvailableToDeleteDocument()"
+                                >
+                                    <div class="col-md-6">
+                                        <b-button
+                                            type="is-danger"
+                                            expanded
+                                            :loading="deleteLoading"
+                                            @click="confirmDeletingDocument(document.id)"
+                                        >
+                                            Удалить
+                                        </b-button>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-7">
                                 <h2 class="subtitle m-0">
@@ -255,41 +270,7 @@
                 </b-tab-item>
 
                 <b-tab-item label="История">
-                    <div class="history" v-if="historyData.length">
-                        <div
-                            class="mb-3"
-                            v-for="history in historyData"
-                            @key="history.id"
-                        >
-                            <b-message type="is-info">
-                                <span class="author-name">
-                                    {{ history.author.first_name + ' ' + history.author.second_name + ' ' + history.author.patronymic }}
-                                </span>
-                                <span class="author-role">
-                                    ({{ history.author.role[0].name}})
-                                </span>
-                                <span v-if="history.type === 'field'">
-                                    отредактировал поле - <b>{{ getFieldNameByKey(history.field.type) }}</b>,
-                                    Документ <b>#{{ history.field.document_id }}</b>
-                                    До: <span class="text-success">{{ JSON.parse(history.before).value }}</span>,
-                                    После: <span class="text-danger">{{ JSON.parse(history.after).value }}</span>
-                                </span>
-                                <span class="" v-if="history.type === 'document_add'">
-                                    добавил документ <b>#{{ history.document_id }}</b>
-                                </span>
-                                <span class="" v-if="history.type === 'document_update'">
-                                    обновил документ <b>#{{ history.document_id }}</b>
-                                </span>
-                                <br>
-                                <small>
-                                    <b class="text-black-50">{{ createdAt(history.created_at) }}</b>
-                                </small>
-                            </b-message>
-                        </div>
-                    </div>
-                    <div class="" v-else>
-                        <b-message type="is-warning">История пуста!</b-message>
-                    </div>
+                    <History :history-data="individual.history"/>
                 </b-tab-item>
             </b-tabs>
         </template>
@@ -305,11 +286,13 @@ import EventBus from "../../events/eventBus";
 import datetimeMixin from "../../mixins/datetimeMixin";
 import uploadDocumentsMixin from "../../mixins/uploadDocumentsMixin";
 import documentTypes from "../../constants/documentTypes";
+import History from "./History";
 
 export default {
     name: "IndividualPage",
     components: {
-        DefaultLayout
+        DefaultLayout,
+        History
     },
     mixins: [individualsMixin, datetimeMixin, uploadDocumentsMixin],
     props: ['id'],
@@ -328,7 +311,8 @@ export default {
         editing: false,
         editableValue: '',
         editLoading: false,
-        historyData: []
+        historyData: [],
+        deleteLoading: false
     }),
     async mounted() {
         await this.loadIndividual();
@@ -344,6 +328,31 @@ export default {
         }
     },
     methods: {
+        async onDeleteDocument(documentId) {
+            try {
+                this.deleteLoading = true;
+                await documentService.deleteDocument(documentId);
+                this.deleteLoading = false;
+                await this.loadIndividual();
+                EventBus.$emit('warning', 'Документ был успешно удален!');
+            } catch (error) {
+                this.deleteLoading = false;
+                EventBus.$emit('error', error.message);
+            }
+        },
+        confirmDeletingDocument(docId) {
+            this.$buefy.dialog.confirm({
+                title: 'Удаление документа',
+                message: 'Вы уверенны что хотите <b>удалить</b> документ? Это действие нельзя будет отменить.',
+                confirmText: 'Удалить документ',
+                type: 'is-danger',
+                hasIcon: true,
+                onConfirm: () => this.onDeleteDocument(docId)
+            });
+        },
+        isAvailableToDeleteDocument() {
+            return this.individual.documents.length > 1;
+        },
         getDocumentImagePath(documentType) {
             const document = this.individual.documents.find(document => document.type === documentType);
 

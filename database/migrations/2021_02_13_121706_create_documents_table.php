@@ -18,6 +18,7 @@ class CreateDocumentsTable extends Migration
             $table->unsignedBigInteger('individual_id');
             $table->string('type');
             $table->timestamps();
+            $table->timestamp('deleted_at');
 
             $table->foreign('individual_id')
                 ->references('id')

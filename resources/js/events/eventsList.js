@@ -38,5 +38,13 @@ export default {
             position: 'is-top',
             duration: 2500
         }
+    },
+    warning(message) {
+        return {
+            message,
+            type: 'is-warning',
+            position: 'is-top',
+            duration: 2500
+        }
     }
 }

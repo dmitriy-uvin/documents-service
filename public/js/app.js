@@ -3170,7 +3170,74 @@ __webpack_require__.r(__webpack_exports__);
     _events_eventBus__WEBPACK_IMPORTED_MODULE_0__.default.$on('success', function (message) {
       this.$buefy.toast.open(_events_eventsList__WEBPACK_IMPORTED_MODULE_1__.default.success(message));
     });
+    _events_eventBus__WEBPACK_IMPORTED_MODULE_0__.default.$on('warning', function (message) {
+      this.$buefy.toast.open(_events_eventsList__WEBPACK_IMPORTED_MODULE_1__.default.warning(message));
+    });
   }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/individual/History.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/individual/History.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _mixins_datetimeMixin__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../mixins/datetimeMixin */ "./resources/js/mixins/datetimeMixin.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: "History",
+  mixins: [_mixins_datetimeMixin__WEBPACK_IMPORTED_MODULE_0__.default],
+  props: ['historyData']
 });
 
 /***/ }),
@@ -3598,6 +3665,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_datetimeMixin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../mixins/datetimeMixin */ "./resources/js/mixins/datetimeMixin.js");
 /* harmony import */ var _mixins_uploadDocumentsMixin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../mixins/uploadDocumentsMixin */ "./resources/js/mixins/uploadDocumentsMixin.js");
 /* harmony import */ var _constants_documentTypes__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../constants/documentTypes */ "./resources/js/constants/documentTypes.js");
+/* harmony import */ var _History__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./History */ "./resources/js/components/individual/History.vue");
 
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -3901,25 +3969,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 
 
 
@@ -3931,7 +3981,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "IndividualPage",
   components: {
-    DefaultLayout: _layouts_DefaultLayout__WEBPACK_IMPORTED_MODULE_1__.default
+    DefaultLayout: _layouts_DefaultLayout__WEBPACK_IMPORTED_MODULE_1__.default,
+    History: _History__WEBPACK_IMPORTED_MODULE_9__.default
   },
   mixins: [_mixins_individualsMixin__WEBPACK_IMPORTED_MODULE_3__.default, _mixins_datetimeMixin__WEBPACK_IMPORTED_MODULE_6__.default, _mixins_uploadDocumentsMixin__WEBPACK_IMPORTED_MODULE_7__.default],
   props: ['id'],
@@ -3951,7 +4002,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       editing: false,
       editableValue: '',
       editLoading: false,
-      historyData: []
+      historyData: [],
+      deleteLoading: false
     };
   },
   mounted: function mounted() {
@@ -3984,6 +4036,60 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   methods: {
+    onDeleteDocument: function onDeleteDocument(documentId) {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.prev = 0;
+                _this2.deleteLoading = true;
+                _context2.next = 4;
+                return _services_document_documentService__WEBPACK_IMPORTED_MODULE_4__.default.deleteDocument(documentId);
+
+              case 4:
+                _this2.deleteLoading = false;
+                _context2.next = 7;
+                return _this2.loadIndividual();
+
+              case 7:
+                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('warning', 'Документ был успешно удален!');
+                _context2.next = 14;
+                break;
+
+              case 10:
+                _context2.prev = 10;
+                _context2.t0 = _context2["catch"](0);
+                _this2.deleteLoading = false;
+                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context2.t0.message);
+
+              case 14:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, null, [[0, 10]]);
+      }))();
+    },
+    confirmDeletingDocument: function confirmDeletingDocument(docId) {
+      var _this3 = this;
+
+      this.$buefy.dialog.confirm({
+        title: 'Удаление документа',
+        message: 'Вы уверенны что хотите <b>удалить</b> документ? Это действие нельзя будет отменить.',
+        confirmText: 'Удалить документ',
+        type: 'is-danger',
+        hasIcon: true,
+        onConfirm: function onConfirm() {
+          return _this3.onDeleteDocument(docId);
+        }
+      });
+    },
+    isAvailableToDeleteDocument: function isAvailableToDeleteDocument() {
+      return this.individual.documents.length > 1;
+    },
     getDocumentImagePath: function getDocumentImagePath(documentType) {
       var document = this.individual.documents.find(function (document) {
         return document.type === documentType;
@@ -3991,36 +4097,36 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return document.document_image.path;
     },
     loadIndividual: function loadIndividual() {
-      var _this2 = this;
+      var _this4 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
         var response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
-                _context2.prev = 0;
-                _context2.next = 3;
-                return _services_individual_individualService__WEBPACK_IMPORTED_MODULE_2__.default.getIndividualUserById(_this2.id);
+                _context3.prev = 0;
+                _context3.next = 3;
+                return _services_individual_individualService__WEBPACK_IMPORTED_MODULE_2__.default.getIndividualUserById(_this4.id);
 
               case 3:
-                response = _context2.sent;
-                _this2.individual = response;
-                _this2.historyData = response.history;
-                _context2.next = 11;
+                response = _context3.sent;
+                _this4.individual = response;
+                _this4.historyData = response.history;
+                _context3.next = 11;
                 break;
 
               case 8:
-                _context2.prev = 8;
-                _context2.t0 = _context2["catch"](0);
-                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context2.t0.message);
+                _context3.prev = 8;
+                _context3.t0 = _context3["catch"](0);
+                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context3.t0.message);
 
               case 11:
               case "end":
-                return _context2.stop();
+                return _context3.stop();
             }
           }
-        }, _callee2, null, [[0, 8]]);
+        }, _callee3, null, [[0, 8]]);
       }))();
     },
     onDrop: function onDrop(event) {
@@ -4049,13 +4155,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       if (!this.details.length) this.endUploadingDocuments();
     },
     addFiles: function addFiles(files) {
-      var _this3 = this;
+      var _this5 = this;
 
       _toConsumableArray(files).map(function (file) {
-        if (file.size < _this3.maxFileSize) {
-          if (_this3.availableTypes.includes(file.type)) {
-            if (!_this3.fileNames.includes(file.name)) {
-              _this3.documentFiles.push(file);
+        if (file.size < _this5.maxFileSize) {
+          if (_this5.availableTypes.includes(file.type)) {
+            if (!_this5.fileNames.includes(file.name)) {
+              _this5.documentFiles.push(file);
             }
           }
         }
@@ -4080,72 +4186,72 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       })));
     },
     onUploadDocuments: function onUploadDocuments() {
-      var _this4 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
-        var formData;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                if (!_this4.documentFiles.length) {
-                  _context3.next = 16;
-                  break;
-                }
-
-                _context3.prev = 1;
-                _this4.loading = true;
-                formData = new FormData();
-
-                _this4.documentFiles.map(function (file) {
-                  formData.append('documents[]', file);
-                });
-
-                _context3.next = 7;
-                return _services_document_documentService__WEBPACK_IMPORTED_MODULE_4__.default.classifyDocuments(formData);
-
-              case 7:
-                _this4.details = _context3.sent;
-                _this4.receivedDetails = true;
-                _this4.loading = false;
-                _context3.next = 16;
-                break;
-
-              case 12:
-                _context3.prev = 12;
-                _context3.t0 = _context3["catch"](1);
-                _this4.loading = false;
-                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context3.t0.message);
-
-              case 16:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3, null, [[1, 12]]);
-      }))();
-    },
-    replaceDocument: function replaceDocument(taskId, docType) {
-      var _this5 = this;
+      var _this6 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
-        var documentId;
+        var formData;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                _context4.prev = 0;
+                if (!_this6.documentFiles.length) {
+                  _context4.next = 16;
+                  break;
+                }
+
+                _context4.prev = 1;
+                _this6.loading = true;
+                formData = new FormData();
+
+                _this6.documentFiles.map(function (file) {
+                  formData.append('documents[]', file);
+                });
+
+                _context4.next = 7;
+                return _services_document_documentService__WEBPACK_IMPORTED_MODULE_4__.default.classifyDocuments(formData);
+
+              case 7:
+                _this6.details = _context4.sent;
+                _this6.receivedDetails = true;
+                _this6.loading = false;
+                _context4.next = 16;
+                break;
+
+              case 12:
+                _context4.prev = 12;
+                _context4.t0 = _context4["catch"](1);
+                _this6.loading = false;
+                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context4.t0.message);
+
+              case 16:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, null, [[1, 12]]);
+      }))();
+    },
+    replaceDocument: function replaceDocument(taskId, docType) {
+      var _this7 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
+        var documentId;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _context5.prev = 0;
                 documentId = "";
 
-                _this5.individual.documents.map(function (document) {
+                _this7.individual.documents.map(function (document) {
                   if (document.type === docType) {
                     documentId = document.id;
                   }
                 });
 
-                _this5.makeTaskLoading(taskId, true);
+                _this7.makeTaskLoading(taskId, true);
 
-                _context4.next = 6;
+                _context5.next = 6;
                 return _services_document_documentService__WEBPACK_IMPORTED_MODULE_4__.default.replaceDocument({
                   task_id: taskId,
                   document_id: documentId
@@ -4154,78 +4260,78 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 6:
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('success', 'Документ был успешно заменен!');
 
-                _this5.makeTaskLoading(taskId, false);
+                _this7.makeTaskLoading(taskId, false);
 
-                _this5.dontChange(taskId);
+                _this7.dontChange(taskId);
 
-                _context4.next = 11;
-                return _this5.loadIndividual();
+                _context5.next = 11;
+                return _this7.loadIndividual();
 
               case 11:
-                _context4.next = 17;
+                _context5.next = 17;
                 break;
 
               case 13:
-                _context4.prev = 13;
-                _context4.t0 = _context4["catch"](0);
-
-                _this5.makeTaskLoading(taskId, false);
-
-                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context4.t0.message);
-
-              case 17:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4, null, [[0, 13]]);
-      }))();
-    },
-    addDocument: function addDocument(taskId) {
-      var _this6 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
-          while (1) {
-            switch (_context5.prev = _context5.next) {
-              case 0:
-                _context5.prev = 0;
-
-                _this6.makeTaskLoading(taskId, true);
-
-                _context5.next = 4;
-                return _services_document_documentService__WEBPACK_IMPORTED_MODULE_4__.default.saveDocumentForIndividual({
-                  task_id: taskId,
-                  individual_id: _this6.individual.id
-                });
-
-              case 4:
-                _this6.makeTaskLoading(taskId, false);
-
-                _context5.next = 7;
-                return _this6.loadIndividual();
-
-              case 7:
-                _this6.dontChange(taskId);
-
-                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('success', 'Документ был успешно добавлен!');
-                _context5.next = 15;
-                break;
-
-              case 11:
-                _context5.prev = 11;
+                _context5.prev = 13;
                 _context5.t0 = _context5["catch"](0);
 
-                _this6.makeTaskLoading(taskId, false);
+                _this7.makeTaskLoading(taskId, false);
 
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context5.t0.message);
 
-              case 15:
+              case 17:
               case "end":
                 return _context5.stop();
             }
           }
-        }, _callee5, null, [[0, 11]]);
+        }, _callee5, null, [[0, 13]]);
+      }))();
+    },
+    addDocument: function addDocument(taskId) {
+      var _this8 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                _context6.prev = 0;
+
+                _this8.makeTaskLoading(taskId, true);
+
+                _context6.next = 4;
+                return _services_document_documentService__WEBPACK_IMPORTED_MODULE_4__.default.saveDocumentForIndividual({
+                  task_id: taskId,
+                  individual_id: _this8.individual.id
+                });
+
+              case 4:
+                _this8.makeTaskLoading(taskId, false);
+
+                _context6.next = 7;
+                return _this8.loadIndividual();
+
+              case 7:
+                _this8.dontChange(taskId);
+
+                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('success', 'Документ был успешно добавлен!');
+                _context6.next = 15;
+                break;
+
+              case 11:
+                _context6.prev = 11;
+                _context6.t0 = _context6["catch"](0);
+
+                _this8.makeTaskLoading(taskId, false);
+
+                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context6.t0.message);
+
+              case 15:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6, null, [[0, 11]]);
       }))();
     },
     onEdit: function onEdit(editId, fieldValue) {
@@ -4234,70 +4340,70 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.editableValue = fieldValue;
     },
     onSave: function onSave(field) {
-      var _this7 = this;
+      var _this9 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee7() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee7$(_context7) {
           while (1) {
-            switch (_context6.prev = _context6.next) {
+            switch (_context7.prev = _context7.next) {
               case 0:
-                if (_this7.editableValue) {
-                  _context6.next = 4;
+                if (_this9.editableValue) {
+                  _context7.next = 4;
                   break;
                 }
 
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', 'Поле не может быть пустым!');
-                _context6.next = 27;
+                _context7.next = 27;
                 break;
 
               case 4:
-                if (!(_this7.editableValue !== field.value)) {
-                  _context6.next = 25;
+                if (!(_this9.editableValue !== field.value)) {
+                  _context7.next = 25;
                   break;
                 }
 
-                _context6.prev = 5;
-                _this7.editLoading = true;
-                _context6.next = 9;
+                _context7.prev = 5;
+                _this9.editLoading = true;
+                _context7.next = 9;
                 return _services_document_documentService__WEBPACK_IMPORTED_MODULE_4__.default.updateField({
                   field_id: field.id,
-                  new_value: _this7.editableValue
+                  new_value: _this9.editableValue
                 });
 
               case 9:
-                _this7.editLoading = false;
-                _this7.editing = false;
-                _this7.editableId = '';
-                _context6.next = 14;
-                return _this7.loadIndividual();
+                _this9.editLoading = false;
+                _this9.editing = false;
+                _this9.editableId = '';
+                _context7.next = 14;
+                return _this9.loadIndividual();
 
               case 14:
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('success', 'Поле успешно обновлено!');
-                _context6.next = 23;
+                _context7.next = 23;
                 break;
 
               case 17:
-                _context6.prev = 17;
-                _context6.t0 = _context6["catch"](5);
-                _this7.editLoading = false;
-                _this7.editing = false;
-                _this7.editableId = '';
-                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context6.t0.message);
+                _context7.prev = 17;
+                _context7.t0 = _context7["catch"](5);
+                _this9.editLoading = false;
+                _this9.editing = false;
+                _this9.editableId = '';
+                _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context7.t0.message);
 
               case 23:
-                _context6.next = 27;
+                _context7.next = 27;
                 break;
 
               case 25:
-                _this7.editing = false;
-                _this7.editableId = '';
+                _this9.editing = false;
+                _this9.editableId = '';
 
               case 27:
               case "end":
-                return _context6.stop();
+                return _context7.stop();
             }
           }
-        }, _callee6, null, [[5, 17]]);
+        }, _callee7, null, [[5, 17]]);
       }))();
     }
   },
@@ -5732,6 +5838,14 @@ __webpack_require__.r(__webpack_exports__);
       position: 'is-top',
       duration: 2500
     };
+  },
+  warning: function warning(message) {
+    return {
+      message: message,
+      type: 'is-warning',
+      position: 'is-top',
+      duration: 2500
+    };
   }
 });
 
@@ -6220,6 +6334,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }
       }, _callee7);
+    }))();
+  },
+  deleteDocument: function deleteDocument(docId) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee8() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee8$(_context8) {
+        while (1) {
+          switch (_context8.prev = _context8.next) {
+            case 0:
+              _context8.next = 2;
+              return _axiosService__WEBPACK_IMPORTED_MODULE_1__.default.delete('/documents/' + docId);
+
+            case 2:
+              return _context8.abrupt("return", _context8.sent);
+
+            case 3:
+            case "end":
+              return _context8.stop();
+          }
+        }
+      }, _callee8);
     }))();
   }
 });
@@ -82651,6 +82785,45 @@ component.options.__file = "resources/js/components/events/Toast.vue"
 
 /***/ }),
 
+/***/ "./resources/js/components/individual/History.vue":
+/*!********************************************************!*\
+  !*** ./resources/js/components/individual/History.vue ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _History_vue_vue_type_template_id_7c017cee_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./History.vue?vue&type=template&id=7c017cee&scoped=true& */ "./resources/js/components/individual/History.vue?vue&type=template&id=7c017cee&scoped=true&");
+/* harmony import */ var _History_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./History.vue?vue&type=script&lang=js& */ "./resources/js/components/individual/History.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _History_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _History_vue_vue_type_template_id_7c017cee_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render,
+  _History_vue_vue_type_template_id_7c017cee_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  "7c017cee",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/individual/History.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/components/individual/IndividualList.vue":
 /*!***************************************************************!*\
   !*** ./resources/js/components/individual/IndividualList.vue ***!
@@ -83118,6 +83291,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/individual/History.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************!*\
+  !*** ./resources/js/components/individual/History.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_History_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./History.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/individual/History.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_History_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
 /***/ "./resources/js/components/individual/IndividualList.vue?vue&type=script&lang=js&":
 /*!****************************************************************************************!*\
   !*** ./resources/js/components/individual/IndividualList.vue?vue&type=script&lang=js& ***!
@@ -83462,6 +83651,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Toast_vue_vue_type_template_id_5f5654dc_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Toast_vue_vue_type_template_id_5f5654dc_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Toast.vue?vue&type=template&id=5f5654dc&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/events/Toast.vue?vue&type=template&id=5f5654dc&scoped=true&");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/individual/History.vue?vue&type=template&id=7c017cee&scoped=true&":
+/*!***************************************************************************************************!*\
+  !*** ./resources/js/components/individual/History.vue?vue&type=template&id=7c017cee&scoped=true& ***!
+  \***************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_History_vue_vue_type_template_id_7c017cee_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_History_vue_vue_type_template_id_7c017cee_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_History_vue_vue_type_template_id_7c017cee_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./History.vue?vue&type=template&id=7c017cee&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/individual/History.vue?vue&type=template&id=7c017cee&scoped=true&");
 
 
 /***/ }),
@@ -85022,6 +85228,139 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/individual/History.vue?vue&type=template&id=7c017cee&scoped=true&":
+/*!******************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/individual/History.vue?vue&type=template&id=7c017cee&scoped=true& ***!
+  \******************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "history" },
+    _vm._l(_vm.historyData, function(history) {
+      return _vm.historyData.length
+        ? _c(
+            "div",
+            { staticClass: "mb-3", on: { key: history.id } },
+            [
+              _c(
+                "b-message",
+                {
+                  attrs: {
+                    type: history.type.includes("delete")
+                      ? "is-warning"
+                      : "is-info"
+                  }
+                },
+                [
+                  _c("span", { staticClass: "author-name" }, [
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(
+                          history.author.first_name +
+                            " " +
+                            history.author.second_name +
+                            " " +
+                            history.author.patronymic
+                        ) +
+                        "\n            "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "author-role" }, [
+                    _vm._v(
+                      "\n                (" +
+                        _vm._s(history.author.role[0].name) +
+                        ")\n            "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  history.type === "field"
+                    ? _c("span", [
+                        _vm._v("\n                отредактировал поле - "),
+                        _c("b", [
+                          _vm._v(
+                            _vm._s(_vm.getFieldNameByKey(history.field.type))
+                          )
+                        ]),
+                        _vm._v(",\n                Документ "),
+                        _c("b", [
+                          _vm._v("#" + _vm._s(history.field.document_id))
+                        ]),
+                        _vm._v("\n                До: "),
+                        _c("span", { staticClass: "text-success" }, [
+                          _vm._v(_vm._s(JSON.parse(history.before).value))
+                        ]),
+                        _vm._v(",\n                После: "),
+                        _c("span", { staticClass: "text-danger" }, [
+                          _vm._v(_vm._s(JSON.parse(history.after).value))
+                        ])
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  history.type === "document_add"
+                    ? _c("span", [
+                        _vm._v("\n                добавил документ "),
+                        _c("b", [_vm._v("#" + _vm._s(history.document_id))])
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  history.type === "document_update"
+                    ? _c("span", [
+                        _vm._v("\n                обновил документ "),
+                        _c("b", [_vm._v("#" + _vm._s(history.document_id))])
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  history.type === "document_delete"
+                    ? _c("span", [
+                        _vm._v("\n                удалил документ "),
+                        _c("b", [_vm._v("#" + _vm._s(history.document_id))])
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("br"),
+                  _vm._v(" "),
+                  _c("small", [
+                    _c("b", { staticClass: "text-black-50" }, [
+                      _vm._v(_vm._s(_vm.createdAt(history.created_at)))
+                    ])
+                  ])
+                ]
+              )
+            ],
+            1
+          )
+        : _c(
+            "div",
+            [
+              _c("b-message", { attrs: { type: "is-warning" } }, [
+                _vm._v("История пуста!")
+              ])
+            ],
+            1
+          )
+    }),
+    0
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/individual/IndividualList.vue?vue&type=template&id=64f9faf2&scoped=true&":
 /*!*************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/individual/IndividualList.vue?vue&type=template&id=64f9faf2&scoped=true& ***!
@@ -85552,7 +85891,48 @@ var render = function() {
                                     src:
                                       "/storage/" + document.document_image.path
                                   }
-                                })
+                                }),
+                                _vm._v(" "),
+                                _vm.isAvailableToDeleteDocument()
+                                  ? _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "d-flex justify-content-center mt-4"
+                                      },
+                                      [
+                                        _c(
+                                          "div",
+                                          { staticClass: "col-md-6" },
+                                          [
+                                            _c(
+                                              "b-button",
+                                              {
+                                                attrs: {
+                                                  type: "is-danger",
+                                                  expanded: "",
+                                                  loading: _vm.deleteLoading
+                                                },
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.confirmDeletingDocument(
+                                                      document.id
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                                        Удалить\n                                    "
+                                                )
+                                              ]
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e()
                               ]),
                               _vm._v(" "),
                               _c("div", { staticClass: "col-md-7" }, [
@@ -86283,146 +86663,16 @@ var render = function() {
                       )
                 ]),
                 _vm._v(" "),
-                _c("b-tab-item", { attrs: { label: "История" } }, [
-                  _vm.historyData.length
-                    ? _c(
-                        "div",
-                        { staticClass: "history" },
-                        _vm._l(_vm.historyData, function(history) {
-                          return _c(
-                            "div",
-                            { staticClass: "mb-3", on: { key: history.id } },
-                            [
-                              _c("b-message", { attrs: { type: "is-info" } }, [
-                                _c("span", { staticClass: "author-name" }, [
-                                  _vm._v(
-                                    "\n                                " +
-                                      _vm._s(
-                                        history.author.first_name +
-                                          " " +
-                                          history.author.second_name +
-                                          " " +
-                                          history.author.patronymic
-                                      ) +
-                                      "\n                            "
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "author-role" }, [
-                                  _vm._v(
-                                    "\n                                (" +
-                                      _vm._s(history.author.role[0].name) +
-                                      ")\n                            "
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                history.type === "field"
-                                  ? _c("span", [
-                                      _vm._v(
-                                        "\n                                отредактировал поле - "
-                                      ),
-                                      _c("b", [
-                                        _vm._v(
-                                          _vm._s(
-                                            _vm.getFieldNameByKey(
-                                              history.field.type
-                                            )
-                                          )
-                                        )
-                                      ]),
-                                      _vm._v(
-                                        ",\n                                Документ "
-                                      ),
-                                      _c("b", [
-                                        _vm._v(
-                                          "#" +
-                                            _vm._s(history.field.document_id)
-                                        )
-                                      ]),
-                                      _vm._v(
-                                        "\n                                До: "
-                                      ),
-                                      _c(
-                                        "span",
-                                        { staticClass: "text-success" },
-                                        [
-                                          _vm._v(
-                                            _vm._s(
-                                              JSON.parse(history.before).value
-                                            )
-                                          )
-                                        ]
-                                      ),
-                                      _vm._v(
-                                        ",\n                                После: "
-                                      ),
-                                      _c(
-                                        "span",
-                                        { staticClass: "text-danger" },
-                                        [
-                                          _vm._v(
-                                            _vm._s(
-                                              JSON.parse(history.after).value
-                                            )
-                                          )
-                                        ]
-                                      )
-                                    ])
-                                  : _vm._e(),
-                                _vm._v(" "),
-                                history.type === "document_add"
-                                  ? _c("span", {}, [
-                                      _vm._v(
-                                        "\n                                добавил документ "
-                                      ),
-                                      _c("b", [
-                                        _vm._v(
-                                          "#" + _vm._s(history.document_id)
-                                        )
-                                      ])
-                                    ])
-                                  : _vm._e(),
-                                _vm._v(" "),
-                                history.type === "document_update"
-                                  ? _c("span", {}, [
-                                      _vm._v(
-                                        "\n                                обновил документ "
-                                      ),
-                                      _c("b", [
-                                        _vm._v(
-                                          "#" + _vm._s(history.document_id)
-                                        )
-                                      ])
-                                    ])
-                                  : _vm._e(),
-                                _vm._v(" "),
-                                _c("br"),
-                                _vm._v(" "),
-                                _c("small", [
-                                  _c("b", { staticClass: "text-black-50" }, [
-                                    _vm._v(
-                                      _vm._s(_vm.createdAt(history.created_at))
-                                    )
-                                  ])
-                                ])
-                              ])
-                            ],
-                            1
-                          )
-                        }),
-                        0
-                      )
-                    : _c(
-                        "div",
-                        {},
-                        [
-                          _c("b-message", { attrs: { type: "is-warning" } }, [
-                            _vm._v("История пуста!")
-                          ])
-                        ],
-                        1
-                      )
-                ])
+                _c(
+                  "b-tab-item",
+                  { attrs: { label: "История" } },
+                  [
+                    _c("History", {
+                      attrs: { "history-data": _vm.individual.history }
+                    })
+                  ],
+                  1
+                )
               ],
               1
             )
