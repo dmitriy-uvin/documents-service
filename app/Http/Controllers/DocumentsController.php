@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Constants\DocumentTypes;
 use App\Constants\TaskConstants;
-use App\Events\TestEvent;
 use App\Exceptions\Document\DocumentNotFoundException;
-use App\Exceptions\Document\NotRecognizableDocumentTypeException;
 use App\Exceptions\Document\UnableToDeleteDocumentException;
 use App\Exceptions\Field\FieldNotFoundException;
 use App\Exceptions\Individual\IndividualNotFoundException;
@@ -20,7 +17,6 @@ use App\Models\Task;
 use App\Services\DbrainApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -85,7 +81,6 @@ class DocumentsController extends Controller
         $recognizeTaskId = $this->apiService->getRecognizeTaskId($document);
         fclose($document);
         $response = $this->apiService->getRecognizeResponse($recognizeTaskId);
-
 
         return response()->json($response);
     }

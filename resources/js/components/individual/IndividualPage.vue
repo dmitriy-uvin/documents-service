@@ -185,7 +185,11 @@
                             v-for="task in details"
                             @key="task.id"
                         >
-                            <div v-if="individualDocumentTypes.includes(task.document_type) && task.document_type !== 'other'">
+                            <div v-if="
+                                individualDocumentTypes.includes(task.document_type)
+                                &&
+                                !docTypesDuplicates.includes(task.document_type)"
+                            >
                                 <p class="text-center">
                                     <b>У данного физического лица уже существует документ такого типа!<br>
                                         Заменить его на новый экземпляр?</b>
@@ -324,10 +328,16 @@ export default {
         document.addEventListener('keypress', async (event) => {
             if (event.key === 'Enter') {
                 if (this.editing && this.editableId) {
-                    await this.onSave({
-                        id: this.editableId,
-                        value: this.editableValue
-                    });
+                    const field = this.findField(this.editableId);
+                    if (field) {
+                        if (field.value !== this.editableValue) {
+                            await this.onSave(field);
+                        } else {
+                            this.editing = false;
+                            this.editableId = '';
+                            this.editableValue = '';
+                        }
+                    }
                 }
             }
         });
@@ -343,6 +353,18 @@ export default {
         }
     },
     methods: {
+        findField(fieldId) {
+            const documents = this.individual.documents;
+            let fieldFound = null;
+            documents.map(document => {
+                document.fields.map(field => {
+                    if (field.id === fieldId) {
+                        fieldFound = field;
+                    }
+                });
+            });
+            return fieldFound;
+        },
         async onDeleteDocument(documentId) {
             try {
                 this.deleteLoading = true;
@@ -504,35 +526,37 @@ export default {
             if (!this.editableValue) {
                 EventBus.$emit('error', 'Поле не может быть пустым!');
             } else {
-                try {
-                    this.editLoading = true;
-                    await documentService.updateField({
-                        field_id: field.id,
-                        new_value: this.editableValue
-                    });
-                    this.editLoading = false;
+                if (this.editableValue !== field.value) {
+                    try {
+                        this.editLoading = true;
+                        await documentService.updateField({
+                            field_id: field.id,
+                            new_value: this.editableValue
+                        });
+                        this.editLoading = false;
+                        this.editing = false;
+                        this.editableId = '';
+                        await this.loadIndividual();
+                        EventBus.$emit('success', 'Поле успешно обновлено!');
+                    } catch (error) {
+                        this.editLoading = false;
+                        this.editing = false;
+                        this.editableId = '';
+                        EventBus.$emit('error', error.message);
+                    }
+                } else {
                     this.editing = false;
                     this.editableId = '';
-                    await this.loadIndividual();
-                    EventBus.$emit('success', 'Поле успешно обновлено!');
-                } catch (error) {
-                    this.editLoading = false;
-                    this.editing = false;
-                    this.editableId = '';
-                    EventBus.$emit('error', error.message);
                 }
-                // if (this.editableValue !== field.value) {
-                //
-                // } else {
-                //     this.editing = false;
-                //     this.editableId = '';
-                // }
             }
         }
     },
     computed: {
         individualDocumentTypes() {
             return this.individual.documents.map(document => document.type);
+        },
+        docTypesDuplicates() {
+            return Object.keys(documentTypes.canBeDuplicated);
         }
     },
 }

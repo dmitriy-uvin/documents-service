@@ -117,9 +117,7 @@ export default {
             return key !== 'not_document';
         },
         canBeDuplicated(key) {
-            const types = Object.keys(documentTypes.notRecognizable);
-            types.push('passport_registration');
-            return types.includes(key);
+            return Object.keys(documentTypes.canBeDuplicated).includes(key);
         }
     }
 }

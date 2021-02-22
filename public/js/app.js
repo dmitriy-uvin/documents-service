@@ -4021,6 +4021,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -4072,27 +4076,46 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 2:
               document.addEventListener('keypress', /*#__PURE__*/function () {
                 var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(event) {
+                  var field;
                   return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
                     while (1) {
                       switch (_context.prev = _context.next) {
                         case 0:
                           if (!(event.key === 'Enter')) {
-                            _context.next = 4;
+                            _context.next = 12;
                             break;
                           }
 
                           if (!(_this.editing && _this.editableId)) {
-                            _context.next = 4;
+                            _context.next = 12;
                             break;
                           }
 
-                          _context.next = 4;
-                          return _this.onSave({
-                            id: _this.editableId,
-                            value: _this.editableValue
-                          });
+                          field = _this.findField(_this.editableId);
 
-                        case 4:
+                          if (!field) {
+                            _context.next = 12;
+                            break;
+                          }
+
+                          if (!(field.value !== _this.editableValue)) {
+                            _context.next = 9;
+                            break;
+                          }
+
+                          _context.next = 7;
+                          return _this.onSave(field);
+
+                        case 7:
+                          _context.next = 12;
+                          break;
+
+                        case 9:
+                          _this.editing = false;
+                          _this.editableId = '';
+                          _this.editableValue = '';
+
+                        case 12:
                         case "end":
                           return _context.stop();
                       }
@@ -4124,6 +4147,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   methods: {
+    findField: function findField(fieldId) {
+      var documents = this.individual.documents;
+      var fieldFound = null;
+      documents.map(function (document) {
+        document.fields.map(function (field) {
+          if (field.id === fieldId) {
+            fieldFound = field;
+          }
+        });
+      });
+      return fieldFound;
+    },
     onDeleteDocument: function onDeleteDocument(documentId) {
       var _this2 = this;
 
@@ -4441,44 +4476,57 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 }
 
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', 'Поле не может быть пустым!');
-                _context8.next = 22;
+                _context8.next = 27;
                 break;
 
               case 4:
-                _context8.prev = 4;
+                if (!(_this9.editableValue !== field.value)) {
+                  _context8.next = 25;
+                  break;
+                }
+
+                _context8.prev = 5;
                 _this9.editLoading = true;
-                _context8.next = 8;
+                _context8.next = 9;
                 return _services_document_documentService__WEBPACK_IMPORTED_MODULE_4__.default.updateField({
                   field_id: field.id,
                   new_value: _this9.editableValue
                 });
 
-              case 8:
+              case 9:
                 _this9.editLoading = false;
                 _this9.editing = false;
                 _this9.editableId = '';
-                _context8.next = 13;
+                _context8.next = 14;
                 return _this9.loadIndividual();
 
-              case 13:
+              case 14:
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('success', 'Поле успешно обновлено!');
-                _context8.next = 22;
+                _context8.next = 23;
                 break;
 
-              case 16:
-                _context8.prev = 16;
-                _context8.t0 = _context8["catch"](4);
+              case 17:
+                _context8.prev = 17;
+                _context8.t0 = _context8["catch"](5);
                 _this9.editLoading = false;
                 _this9.editing = false;
                 _this9.editableId = '';
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context8.t0.message);
 
-              case 22:
+              case 23:
+                _context8.next = 27;
+                break;
+
+              case 25:
+                _this9.editing = false;
+                _this9.editableId = '';
+
+              case 27:
               case "end":
                 return _context8.stop();
             }
           }
-        }, _callee8, null, [[4, 16]]);
+        }, _callee8, null, [[5, 17]]);
       }))();
     }
   },
@@ -4487,6 +4535,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return this.individual.documents.map(function (document) {
         return document.type;
       });
+    },
+    docTypesDuplicates: function docTypesDuplicates() {
+      return Object.keys(_constants_documentTypes__WEBPACK_IMPORTED_MODULE_8__.default.canBeDuplicated);
     }
   }
 });
@@ -5498,6 +5549,25 @@ __webpack_require__.r(__webpack_exports__);
     "uzb_passport_main": "Паспорт гражданина Узбекистана: главный разворот",
     "vehicle_registration_certificate_back": "Свидетельство о регистрации ТС: обратная сторона",
     "vehicle_registration_certificate_front": "Свидетельство о регистрации ТС: лицевая сторона"
+  },
+  canBeDuplicated: {
+    "passport_registration": "Паспорт гражданина РФ: страница «Место жительства»",
+    "other": "Форма документа не определена",
+    "driver_license_1999_plastic_back": "Водительское Удостоверение: пластиковый образец 1999 года (обратная сторона)",
+    "inn_organisation": "ИНН юрлица",
+    "military_id": "Военный билет РФ",
+    "mts_acts": "Акт",
+    "not_document": "Не является документом",
+    "ogrnip": "ОГРНИП",
+    "passport_blank_page": "Паспорт РФ: пустая страница",
+    "passport_children": "Паспорт РФ: страница Дети",
+    "passport_last_rf": "Паспорт РФ: задний разворот",
+    "passport_marriage": "Паспорт РФ: страница «Семейное положение»",
+    "passport_military": "Паспорт РФ: страница «Воинская обязанность»",
+    "passport_previous_docs": "Паспорт РФ: страница «Сведения о ранее выданных паспортах»",
+    "passport_zero_page": "Паспорт РФ: передний разворот",
+    "registration_certificate": "Сертификат о регистрации права",
+    "snils_back": "СНИЛС: устаревший образец, обратная сторона"
   }
 });
 
@@ -6042,9 +6112,7 @@ __webpack_require__.r(__webpack_exports__);
       return key !== 'not_document';
     },
     canBeDuplicated: function canBeDuplicated(key) {
-      var types = Object.keys(_constants_documentTypes__WEBPACK_IMPORTED_MODULE_0__.default.notRecognizable);
-      types.push('passport_registration');
-      return types.includes(key);
+      return Object.keys(_constants_documentTypes__WEBPACK_IMPORTED_MODULE_0__.default.canBeDuplicated).includes(key);
     }
   }
 });
@@ -86667,7 +86735,10 @@ var render = function() {
                               [
                                 _vm.individualDocumentTypes.includes(
                                   task.document_type
-                                ) && task.document_type !== "other"
+                                ) &&
+                                !_vm.docTypesDuplicates.includes(
+                                  task.document_type
+                                )
                                   ? _c("div", [
                                       _c("p", { staticClass: "text-center" }, [
                                         _c("b", [
