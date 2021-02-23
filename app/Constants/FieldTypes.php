@@ -344,7 +344,7 @@ class FieldTypes
             'name_eng',
             'name_rus',
             'first_name',
-            'name'
+            'name',
         ];
     }
 

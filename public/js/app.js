@@ -4113,6 +4113,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4147,7 +4155,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       editableValue: '',
       editLoading: false,
       historyData: [],
-      deleteLoading: false
+      deleteLoading: false,
+      forceAdd: false
     };
   },
   mounted: function mounted() {
@@ -4499,50 +4508,60 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     addDocument: function addDocument(taskId) {
-      var _this8 = this;
+      var _arguments = arguments,
+          _this8 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee7() {
+        var force;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee7$(_context7) {
           while (1) {
             switch (_context7.prev = _context7.next) {
               case 0:
-                _context7.prev = 0;
+                force = _arguments.length > 1 && _arguments[1] !== undefined ? _arguments[1] : false;
+                _context7.prev = 1;
 
                 _this8.makeTaskLoading(taskId, true);
 
-                _context7.next = 4;
+                _context7.next = 5;
                 return _services_document_documentService__WEBPACK_IMPORTED_MODULE_4__.default.saveDocumentForIndividual({
                   task_id: taskId,
-                  individual_id: _this8.individual.id
+                  individual_id: _this8.individual.id,
+                  force: force
                 });
 
-              case 4:
+              case 5:
+                _this8.forceAdd = false;
+
                 _this8.makeTaskLoading(taskId, false);
 
-                _context7.next = 7;
+                _context7.next = 9;
                 return _this8.loadIndividual();
 
-              case 7:
+              case 9:
                 _this8.dontChange(taskId);
 
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('success', 'Документ был успешно добавлен!');
-                _context7.next = 15;
+                _context7.next = 18;
                 break;
 
-              case 11:
-                _context7.prev = 11;
-                _context7.t0 = _context7["catch"](0);
+              case 13:
+                _context7.prev = 13;
+                _context7.t0 = _context7["catch"](1);
+
+                if (_context7.t0.type === 'another_person_document') {
+                  _this8.forceAdd = true;
+                }
 
                 _this8.makeTaskLoading(taskId, false);
 
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context7.t0.message);
 
-              case 15:
+              case 18:
               case "end":
                 return _context7.stop();
             }
           }
-        }, _callee7, null, [[0, 11]]);
+        }, _callee7, null, [[1, 13]]);
       }))();
     },
     onEdit: function onEdit(editId, fieldValue) {
@@ -87081,7 +87100,37 @@ var render = function() {
                                                     "\n                                            Добавить\n                                        "
                                                   )
                                                 ]
-                                              )
+                                              ),
+                                              _vm._v(" "),
+                                              _vm.forceAdd
+                                                ? _c(
+                                                    "b-button",
+                                                    {
+                                                      attrs: {
+                                                        type: "is-danger",
+                                                        loading:
+                                                          _vm.tasksLoading[
+                                                            task.id
+                                                          ].loading
+                                                      },
+                                                      on: {
+                                                        click: function(
+                                                          $event
+                                                        ) {
+                                                          return _vm.addDocument(
+                                                            task.id,
+                                                            true
+                                                          )
+                                                        }
+                                                      }
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        "\n                                            Принудительно добавить\n                                        "
+                                                      )
+                                                    ]
+                                                  )
+                                                : _vm._e()
                                             ],
                                             1
                                           )

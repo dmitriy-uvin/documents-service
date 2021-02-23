@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -39,14 +40,14 @@ class Handler extends ExceptionHandler
         });
     }
 
-    public function render($request, Throwable $exception): JsonResponse
+    public function render($request, Throwable $exception): Response
     {
         if ($exception instanceof \DomainException) {
             return new JsonResponse(
                 [
                     'message' => $exception->getMessage(),
                     'code' => $exception->getCode(),
-                    'type' => $exception->getType()
+                    'type' => method_exists($exception, 'getType') ? $exception->getType() : ''
                 ],
                 JsonResponse::HTTP_BAD_REQUEST
             );

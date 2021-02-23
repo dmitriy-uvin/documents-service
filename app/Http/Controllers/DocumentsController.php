@@ -153,49 +153,51 @@ class DocumentsController extends Controller
         $recognizeTaskId = $this->apiService->getRecognizeTaskId($document);
         $response = $this->apiService->getRecognizeResponse($recognizeTaskId);
 
-        $individualName = FioService::getIndividualName($individual);
-        $nameFromResponse = FioService::getNameFromResponse($response);
+        if (!$request->force) {
+            $individualName = FioService::getIndividualName($individual);
+            $nameFromResponse = FioService::getNameFromResponse($response['items'][0]['fields']);
 
-        if ($individualName && $nameFromResponse) {
-            if ($individualName !== $nameFromResponse) {
-                throw new DocumentForAnotherPersonException("Вы загружаете документ другого человека! 1");
+            if ($individualName && $nameFromResponse) {
+                if ($individualName !== $nameFromResponse) {
+                    throw new DocumentForAnotherPersonException();
+                }
             }
-        }
 
-        $individualSurname = FioService::getIndividualSurname($individual);
-        $surnameFromResponse = FioService::getSurnameFromResponse($response);
+            $individualSurname = FioService::getIndividualSurname($individual);
+            $surnameFromResponse = FioService::getSurnameFromResponse($response['items'][0]['fields']);
 
-        if ($individualSurname && $surnameFromResponse) {
-            if ($individualSurname !== $surnameFromResponse) {
-                throw new DocumentForAnotherPersonException("Вы загружаете документ другого человека! 2");
+            if ($individualSurname && $surnameFromResponse) {
+                if ($individualSurname !== $surnameFromResponse) {
+                    throw new DocumentForAnotherPersonException();
+                }
             }
-        }
 
-        $individualPatronymic = FioService::getIndividualPatronymic($individual);
-        $patronymicFromResponse = FioService::getPatronymicFromResponse($response);
+            $individualPatronymic = FioService::getIndividualPatronymic($individual);
+            $patronymicFromResponse = FioService::getPatronymicFromResponse($response['items'][0]['fields']);
 
-        if ($individualPatronymic && $patronymicFromResponse) {
-            if ($individualPatronymic !== $patronymicFromResponse) {
-                throw new DocumentForAnotherPersonException("Вы загружаете документ другого человека! 3");
+            if ($individualPatronymic && $patronymicFromResponse) {
+                if ($individualPatronymic !== $patronymicFromResponse) {
+                    throw new DocumentForAnotherPersonException();
+                }
             }
-        }
 
-        $individualFio = FioService::getIndividualFio($individual);
-        $fioFromResponse = FioService::getFioFromResponse($response);
+            $individualFio = FioService::getIndividualFio($individual);
+            $fioFromResponse = FioService::getFioFromResponse($response['items'][0]['fields']);
 
-        if ($individualFio && $fioFromResponse) {
-            if ($individualFio !== $fioFromResponse) {
-                throw new DocumentForAnotherPersonException("Вы загружаете документ другого человека! 4");
+            if ($individualFio && $fioFromResponse) {
+                if ($individualFio !== $fioFromResponse) {
+                    throw new DocumentForAnotherPersonException();
+                }
             }
-        }
 
-        $individualBirthDate = FioService::getIndividualBirthDate($individual);
-        $birthDateFromResponse = FioService::getBirthDateFromResponse($response);
-
-        if ($individualBirthDate && $birthDateFromResponse) {
-            if ($individualBirthDate !== $birthDateFromResponse) {
-                throw new DocumentForAnotherPersonException("Вы загружаете документ другого человека! 5");
-            }
+//            $individualBirthDate = FioService::getIndividualBirthDate($individual);
+//            $birthDateFromResponse = FioService::getBirthDateFromResponse($response);
+//
+//            if ($individualBirthDate && $birthDateFromResponse) {
+//                if ($individualBirthDate !== $birthDateFromResponse) {
+//                    throw new DocumentForAnotherPersonException();
+//                }
+//            }
         }
 
         $documentObj = new Document();

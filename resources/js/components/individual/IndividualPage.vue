@@ -260,6 +260,14 @@
                                         >
                                             Добавить
                                         </b-button>
+                                        <b-button
+                                            type="is-danger"
+                                            v-if="forceAdd"
+                                            @click="addDocument(task.id, true)"
+                                            :loading="tasksLoading[task.id].loading"
+                                        >
+                                            Принудительно добавить
+                                        </b-button>
                                     </div>
                                 </div>
                             </div>
@@ -324,7 +332,8 @@ export default {
         editableValue: '',
         editLoading: false,
         historyData: [],
-        deleteLoading: false
+        deleteLoading: false,
+        forceAdd: false
     }),
     async mounted() {
         await this.loadIndividual();
@@ -504,18 +513,23 @@ export default {
                 EventBus.$emit('error', error.message);
             }
         },
-        async addDocument(taskId) {
+        async addDocument(taskId, force = false) {
             try {
                 this.makeTaskLoading(taskId, true);
                 await documentService.saveDocumentForIndividual({
                     task_id: taskId,
-                    individual_id: this.individual.id
+                    individual_id: this.individual.id,
+                    force
                 });
+                this.forceAdd = false;
                 this.makeTaskLoading(taskId, false);
                 await this.loadIndividual();
                 this.dontChange(taskId);
                 EventBus.$emit('success', 'Документ был успешно добавлен!');
             } catch (error) {
+                if (error.type === 'another_person_document') {
+                    this.forceAdd = true;
+                }
                 this.makeTaskLoading(taskId, false);
                 EventBus.$emit('error', error.message);
             }

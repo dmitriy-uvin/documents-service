@@ -8,9 +8,9 @@ use Illuminate\Support\Str;
 
 class FioService
 {
-    public static function getNameFromResponse(array $response) {
+    public static function getNameFromResponse(array $fields) {
         $name = null;
-        foreach ($response['items'][0]['fields'] as $fieldType => $item) {
+        foreach ($fields as $fieldType => $item) {
             if (in_array($fieldType, FieldTypes::getNameTypes())) {
                 $name = $item['text'] ?? '';
             }
@@ -18,9 +18,9 @@ class FioService
         return Str::lower($name);
     }
 
-    public static function getSurnameFromResponse(array $response) {
+    public static function getSurnameFromResponse(array $fields) {
         $surname = null;
-        foreach ($response['items'][0]['fields'] as $fieldType => $item) {
+        foreach ($fields as $fieldType => $item) {
             if (in_array($fieldType, FieldTypes::getSurnameTypes())) {
                 $surname = $item['text'] ?? '';
             }
@@ -28,12 +28,12 @@ class FioService
         return Str::lower($surname);
     }
 
-    public static function getFioFromResponse(array $response) {
+    public static function getFioFromResponse(array $fields) {
         $fio = null;
         $name = null;
         $surname = null;
         $patronymic = null;
-        foreach ($response['items'][0]['fields'] as $fieldType => $item) {
+        foreach ($fields as $fieldType => $item) {
             if (in_array($fieldType, FieldTypes::getFioTypes())) {
                 $fio = $item['text'] ?? '';
             }
@@ -49,9 +49,9 @@ class FioService
         return Str::lower($fio);
     }
 
-    public static function getPatronymicFromResponse(array $response) {
+    public static function getPatronymicFromResponse(array $fields) {
         $patronymic = null;
-        foreach ($response['items'][0]['fields'] as $fieldType => $item) {
+        foreach ($fields as $fieldType => $item) {
             if (in_array($fieldType, FieldTypes::getPatronymicTypes())) {
                 $patronymic = $item['text'] ?? '';
             }
@@ -59,12 +59,12 @@ class FioService
         return Str::lower($patronymic);
     }
 
-    public static function getBirthDateFromResponse(array $response) {
+    public static function getBirthDateFromResponse(array $fields) {
         $birthDate = null;
         $birthDay = null;
         $birthMonth = null;
         $birthYear = null;
-        foreach ($response['items'][0]['fields'] as $fieldType => $item) {
+        foreach ($fields as $fieldType => $item) {
             if (in_array($fieldType, FieldTypes::getBornFullDateTypes())) {
                 $birthDate = $item['text'] ?? '';
             }
@@ -150,9 +150,9 @@ class FioService
     public static function getIndividualFio(Individual $individual)
     {
         $fio = null;
-        $birthDay = null;
-        $birthMonth = null;
-        $birthYear = null;
+        $name = null;
+        $surname = null;
+        $patronymic = null;
         $docs = $individual->documents;
         foreach ($docs as $doc) {
             $fields = $doc->fields;

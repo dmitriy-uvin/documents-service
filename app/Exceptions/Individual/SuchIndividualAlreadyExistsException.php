@@ -9,9 +9,9 @@ class SuchIndividualAlreadyExistsException extends BaseException
 {
     protected $message = "Физическое лицо с данными докментами уже существует!";
 
-    public function __construct($code = 0, $type = "", $message = "", Throwable $previous = null)
+    public function __construct($code = 0, $type = "existing_individual", $message = "", Throwable $previous = null)
     {
         $message = $this->message;
-        parent::__construct($code, $type, $message, $previous);
+        parent::__construct($type, $code, $message, $previous);
     }
 }
