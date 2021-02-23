@@ -36,28 +36,18 @@
                     восстановил документ <b>#{{ history.document_id }}</b>.
                 </span>
                 <div v-if="history.type === 'document_update'">
-                    <div class="row col-md-6">
+                    <div class="row col-md-8">
                         <div class="col-md-6 cursor-pointer" @click="beforeImageModal = true">
                             <span class="font-weight-bold">До</span>
                             <b-image
                                 :src="'/storage/' + history.before"
                             ></b-image>
-                            <b-modal v-model="beforeImageModal">
-                                <p class="image is-4by3">
-                                    <img :src="'/storage/' + history.before">
-                                </p>
-                            </b-modal>
                         </div>
                         <div class="col-md-6 cursor-pointer" @click="afterImageModal = true">
                             <span class="font-weight-bold">После</span>
                             <b-image
                                 :src="'/storage/' + history.after"
                             ></b-image>
-                            <b-modal v-model="afterImageModal">
-                                <p class="image is-4by3">
-                                    <img :src="'/storage/' + history.after">
-                                </p>
-                            </b-modal>
                         </div>
                     </div>
                 </div>

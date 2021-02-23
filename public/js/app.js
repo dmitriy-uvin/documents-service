@@ -3305,16 +3305,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -85707,7 +85697,7 @@ var render = function() {
                   _vm._v(" "),
                   history.type === "document_update"
                     ? _c("div", [
-                        _c("div", { staticClass: "row col-md-6" }, [
+                        _c("div", { staticClass: "row col-md-8" }, [
                           _c(
                             "div",
                             {
@@ -85725,29 +85715,7 @@ var render = function() {
                               _vm._v(" "),
                               _c("b-image", {
                                 attrs: { src: "/storage/" + history.before }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "b-modal",
-                                {
-                                  model: {
-                                    value: _vm.beforeImageModal,
-                                    callback: function($$v) {
-                                      _vm.beforeImageModal = $$v
-                                    },
-                                    expression: "beforeImageModal"
-                                  }
-                                },
-                                [
-                                  _c("p", { staticClass: "image is-4by3" }, [
-                                    _c("img", {
-                                      attrs: {
-                                        src: "/storage/" + history.before
-                                      }
-                                    })
-                                  ])
-                                ]
-                              )
+                              })
                             ],
                             1
                           ),
@@ -85769,29 +85737,7 @@ var render = function() {
                               _vm._v(" "),
                               _c("b-image", {
                                 attrs: { src: "/storage/" + history.after }
-                              }),
-                              _vm._v(" "),
-                              _c(
-                                "b-modal",
-                                {
-                                  model: {
-                                    value: _vm.afterImageModal,
-                                    callback: function($$v) {
-                                      _vm.afterImageModal = $$v
-                                    },
-                                    expression: "afterImageModal"
-                                  }
-                                },
-                                [
-                                  _c("p", { staticClass: "image is-4by3" }, [
-                                    _c("img", {
-                                      attrs: {
-                                        src: "/storage/" + history.after
-                                      }
-                                    })
-                                  ])
-                                ]
-                              )
+                              })
                             ],
                             1
                           )

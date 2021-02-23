@@ -146,29 +146,21 @@ class IndividualsController extends Controller
     {
         foreach ($documentsPayload as $taskId => $item) {
             $findName = '';
-            $findNameType = '';
             $findSurname = '';
-            $findSurnameType = '';
             $findPatronymic = '';
-            $findPatronymicType = '';
             $findFio = '';
-            $findFioType = '';
             foreach ($item['fields'] as $type => $field) {
                 if (in_array($type, FieldTypes::getNameTypes())) {
                     $findName = Str::lower($field['text']);
-                    $findNameType = $type;
                 }
                 if (in_array($type, FieldTypes::getSurnameTypes())) {
                     $findSurname = Str::lower($field['text']);
-                    $findSurnameType = $type;
                 }
                 if (in_array($type, FieldTypes::getPatronymicTypes())) {
                     $findPatronymic = Str::lower($field['text']);
-                    $findPatronymicType = $type;
                 }
                 if (in_array($type, FieldTypes::getFioTypes())) {
                     $findFio = Str::lower($field['text']);
-                    $findFioType = $type;
                 }
             }
 
@@ -271,9 +263,7 @@ class IndividualsController extends Controller
                         $percents += $perc;
                     }
                 }
-//                throw new SomethingWentWrongException(
-//                    $docName
-//                );
+
                 if ($percents && $counter) {
                     $result = $percents / $counter;
                     if ($result > 85) {
@@ -284,9 +274,6 @@ class IndividualsController extends Controller
                 }
             }
         }
-//        throw new SomethingWentWrongException(
-//            777
-//        );
     }
 
     public function search(Request $request)
