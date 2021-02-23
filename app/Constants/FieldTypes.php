@@ -344,10 +344,7 @@ class FieldTypes
             'name_eng',
             'name_rus',
             'first_name',
-            'name',
-            'born_full_name',
-            'full_name',
-            'fio'
+            'name'
         ];
     }
 
@@ -361,10 +358,7 @@ class FieldTypes
             'a_vehicle_owner_surname',
             'a_veh_driver_surname',
             'b_vehicle_owner_surname',
-            'b_veh_driver_surname',
-            'born_full_name',
-            'full_name',
-            'fio'
+            'b_veh_driver_surname'
         ];
     }
 
@@ -382,9 +376,6 @@ class FieldTypes
             'b_vehicle_owner_patronym',
             'b_veh_driver_patronym',
             'third',
-            'born_full_name',
-            'full_name',
-            'fio'
         ];
     }
 
@@ -394,6 +385,15 @@ class FieldTypes
             'born_full_name',
             'full_name',
             'fio'
+        ];
+    }
+
+    public static function getBornFullDateTypes(): array
+    {
+        return [
+            "date_of_birth",
+            "a_date_of_birth",
+            "b_date_of_birth",
         ];
     }
 }

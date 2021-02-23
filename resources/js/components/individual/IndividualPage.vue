@@ -264,17 +264,17 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="d-flex justify-content-center">
-                            <div class="col-md-3">
-                                <b-button
-                                    type="is-success"
-                                    @click="endUploadingDocuments"
-                                    expanded
-                                >
-                                    Готово!
-                                </b-button>
-                            </div>
-                        </div>
+<!--                        <div class="d-flex justify-content-center">-->
+<!--                            <div class="col-md-3">-->
+<!--                                <b-button-->
+<!--                                    type="is-success"-->
+<!--                                    @click="endUploadingDocuments"-->
+<!--                                    expanded-->
+<!--                                >-->
+<!--                                    Готово!-->
+<!--                                </b-button>-->
+<!--                            </div>-->
+<!--                        </div>-->
                     </div>
                 </b-tab-item>
 

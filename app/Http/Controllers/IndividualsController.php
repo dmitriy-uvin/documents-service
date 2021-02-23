@@ -131,7 +131,10 @@ class IndividualsController extends Controller
                 $diff = $findFields->diffAssoc($fields);
 
                 if (count($diff) < $fieldsCount / 4) {
-                    throw new SuchIndividualAlreadyExistsException();
+                    throw new SuchIndividualAlreadyExistsException(
+                        $findDoc->individual->id,
+                        'existing_individual'
+                    );
                 }
             }
         }

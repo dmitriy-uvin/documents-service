@@ -127,6 +127,16 @@
                             Перейти
                         </b-button>
                     </div>
+                    <div class="col-md-12">
+                        <b-button
+                            type="is-danger"
+                            expanded
+                            v-if="recognizedData[taskKey].existing"
+                            @click="goToExisting(recognizedData[taskKey].existing)"
+                        >
+                            К существующему лицу
+                        </b-button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -149,6 +159,17 @@ export default {
         editableId: '',
         editing: false
     }),
+    mounted() {
+        const self = this;
+        document.addEventListener('keypress', (event) => {
+           if (event.key === 'Enter') {
+               if (self.editing) {
+                   self.editing = false;
+                   self.editableId = '';
+               }
+           }
+        });
+    },
     watch: {
         details() {
             Object.keys(this.details).map(key => {
@@ -202,6 +223,9 @@ export default {
         goToIndividual(taskKey) {
             window.location.href = '/individuals/' + this.goTo[taskKey];
         },
+        goToExisting(id) {
+            window.location.href = '/individuals/' + id;
+        },
         async saveIndividual(taskKey) {
             try {
                 const payloadRecognizedData = {};
@@ -234,6 +258,10 @@ export default {
                 this.changePropertyForTaskKey('saved', taskKey, true);
                 EventBus.$emit('success', 'Физическое лицо было добавлено!');
             } catch(error) {
+                if (error.type === 'existing_individual') {
+                    this.recognizedData[taskKey].existing = error.code;
+                    console.log(this.recognizedData[taskKey]);
+                }
                 this.changePropertyForTaskKey('loading', taskKey, false);
                 EventBus.$emit('error', error.message);
             }

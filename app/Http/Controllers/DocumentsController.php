@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Constants\TaskConstants;
 use App\Exceptions\Document\DocumentAlreadyRestoredException;
+use App\Exceptions\Document\DocumentForAnotherPersonException;
 use App\Exceptions\Document\DocumentNotFoundException;
 use App\Exceptions\Document\UnableToDeleteDocumentException;
 use App\Exceptions\Field\FieldNotFoundException;
@@ -16,6 +17,7 @@ use App\Models\History;
 use App\Models\Individual;
 use App\Models\Task;
 use App\Services\DbrainApiService;
+use App\Services\FioService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -148,24 +150,58 @@ class DocumentsController extends Controller
         }
 
         $document = fopen(storage_path('app/public/' . $task->document_path), 'r');
-
         $recognizeTaskId = $this->apiService->getRecognizeTaskId($document);
-
         $response = $this->apiService->getRecognizeResponse($recognizeTaskId);
 
+        $individualName = FioService::getIndividualName($individual);
+        $nameFromResponse = FioService::getNameFromResponse($response);
+
+        if ($individualName && $nameFromResponse) {
+            if ($individualName !== $nameFromResponse) {
+                throw new DocumentForAnotherPersonException("Вы загружаете документ другого человека! 1");
+            }
+        }
+
+        $individualSurname = FioService::getIndividualSurname($individual);
+        $surnameFromResponse = FioService::getSurnameFromResponse($response);
+
+        if ($individualSurname && $surnameFromResponse) {
+            if ($individualSurname !== $surnameFromResponse) {
+                throw new DocumentForAnotherPersonException("Вы загружаете документ другого человека! 2");
+            }
+        }
+
+        $individualPatronymic = FioService::getIndividualPatronymic($individual);
+        $patronymicFromResponse = FioService::getPatronymicFromResponse($response);
+
+        if ($individualPatronymic && $patronymicFromResponse) {
+            if ($individualPatronymic !== $patronymicFromResponse) {
+                throw new DocumentForAnotherPersonException("Вы загружаете документ другого человека! 3");
+            }
+        }
+
+        $individualFio = FioService::getIndividualFio($individual);
+        $fioFromResponse = FioService::getFioFromResponse($response);
+
+        if ($individualFio && $fioFromResponse) {
+            if ($individualFio !== $fioFromResponse) {
+                throw new DocumentForAnotherPersonException("Вы загружаете документ другого человека! 4");
+            }
+        }
+
+        $individualBirthDate = FioService::getIndividualBirthDate($individual);
+        $birthDateFromResponse = FioService::getBirthDateFromResponse($response);
+
+        if ($individualBirthDate && $birthDateFromResponse) {
+            if ($individualBirthDate !== $birthDateFromResponse) {
+                throw new DocumentForAnotherPersonException("Вы загружаете документ другого человека! 5");
+            }
+        }
 
         $documentObj = new Document();
         $documentObj->type = $task->document_type;
         $documentObj->individual()->associate($individual);
         $documentObj->save();
-
-        History::create([
-            'type' => 'document_add',
-            'author_id' => Auth::id(),
-            'document_id' => $documentObj->id,
-            'individual_id' => $individual->id,
-            'before' => $task->document_path
-        ]);
 
         $documentImage = new DocumentImage();
         $documentImage->path = $task->document_path;
@@ -180,6 +216,14 @@ class DocumentsController extends Controller
             $fieldObj->document()->associate($documentObj);
             $fieldObj->save();
         }
+
+        History::create([
+            'type' => 'document_add',
+            'author_id' => Auth::id(),
+            'document_id' => $documentObj->id,
+            'individual_id' => $individual->id,
+            'before' => $task->document_path
+        ]);
 
         return response()->json([
             "success" => true

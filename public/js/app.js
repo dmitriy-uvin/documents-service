@@ -2233,6 +2233,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2249,6 +2259,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       editableId: '',
       editing: false
     };
+  },
+  mounted: function mounted() {
+    var self = this;
+    document.addEventListener('keypress', function (event) {
+      if (event.key === 'Enter') {
+        if (self.editing) {
+          self.editing = false;
+          self.editableId = '';
+        }
+      }
+    });
   },
   watch: {
     details: function details() {
@@ -2331,6 +2352,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     goToIndividual: function goToIndividual(taskKey) {
       window.location.href = '/individuals/' + this.goTo[taskKey];
     },
+    goToExisting: function goToExisting(id) {
+      window.location.href = '/individuals/' + id;
+    },
     saveIndividual: function saveIndividual(taskKey) {
       var _this3 = this;
 
@@ -2374,18 +2398,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this3.changePropertyForTaskKey('saved', taskKey, true);
 
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_2__.default.$emit('success', 'Физическое лицо было добавлено!');
-                _context2.next = 17;
+                _context2.next = 18;
                 break;
 
               case 13:
                 _context2.prev = 13;
                 _context2.t0 = _context2["catch"](0);
 
+                if (_context2.t0.type === 'existing_individual') {
+                  _this3.recognizedData[taskKey].existing = _context2.t0.code;
+                  console.log(_this3.recognizedData[taskKey]);
+                }
+
                 _this3.changePropertyForTaskKey('loading', taskKey, false);
 
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_2__.default.$emit('error', _context2.t0.message);
 
-              case 17:
+              case 18:
               case "end":
                 return _context2.stop();
             }
@@ -3286,11 +3315,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
 
 
 
@@ -3302,8 +3326,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       beforeImageModal: false,
-      afterImageModal: false,
-      imageModal: false
+      afterImageModal: false
     };
   },
   methods: {
@@ -84767,7 +84790,35 @@ var render = function() {
                           ],
                           1
                         )
-                      : _vm._e()
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "col-md-12" },
+                      [
+                        _vm.recognizedData[taskKey].existing
+                          ? _c(
+                              "b-button",
+                              {
+                                attrs: { type: "is-danger", expanded: "" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.goToExisting(
+                                      _vm.recognizedData[taskKey].existing
+                                    )
+                                  }
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                        К существующему лицу\n                    "
+                                )
+                              ]
+                            )
+                          : _vm._e()
+                      ],
+                      1
+                    )
                   ])
                 ]
               )
@@ -85608,38 +85659,11 @@ var render = function() {
                     ? _c("div", [
                         _c(
                           "div",
-                          {
-                            staticClass: "col-md-6 cursor-pointer",
-                            on: {
-                              click: function($event) {
-                                _vm.imageModal = true
-                              }
-                            }
-                          },
+                          { staticClass: "col-md-6" },
                           [
                             _c("b-image", {
                               attrs: { src: "/storage/" + history.before }
-                            }),
-                            _vm._v(" "),
-                            _c(
-                              "b-modal",
-                              {
-                                model: {
-                                  value: _vm.imageModal,
-                                  callback: function($$v) {
-                                    _vm.imageModal = $$v
-                                  },
-                                  expression: "imageModal"
-                                }
-                              },
-                              [
-                                _c("p", { staticClass: "image is-4by3" }, [
-                                  _c("img", {
-                                    attrs: { src: "/storage/" + history.before }
-                                  })
-                                ])
-                              ]
-                            )
+                            })
                           ],
                           1
                         )
@@ -86823,168 +86847,61 @@ var render = function() {
                     : _c(
                         "div",
                         {},
-                        [
-                          _vm._l(_vm.details, function(task) {
-                            return _c(
-                              "div",
-                              { staticClass: "row mb-2", on: { key: task.id } },
-                              [
-                                _vm.individualDocumentTypes.includes(
-                                  task.document_type
-                                ) &&
-                                !_vm.docTypesDuplicates.includes(
-                                  task.document_type
-                                )
-                                  ? _c("div", [
-                                      _c("p", { staticClass: "text-center" }, [
-                                        _c("b", [
-                                          _vm._v(
-                                            "У данного физического лица уже существует документ такого типа!"
-                                          ),
-                                          _c("br"),
-                                          _vm._v(
-                                            "\n                                        Заменить его на новый экземпляр?"
-                                          )
-                                        ])
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("div", { staticClass: "row" }, [
-                                        _c("div", { staticClass: "col-md-6" }, [
-                                          _c(
-                                            "h2",
-                                            {
-                                              staticClass:
-                                                "text-center subtitle"
-                                            },
-                                            [_vm._v("Текущий документ")]
-                                          ),
-                                          _vm._v(" "),
-                                          _c("img", {
-                                            attrs: {
-                                              src:
-                                                "/storage/" +
-                                                _vm.getDocumentImagePath(
-                                                  task.document_type
-                                                ),
-                                              alt: ""
-                                            }
-                                          })
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("div", { staticClass: "col-md-6" }, [
-                                          _c(
-                                            "h2",
-                                            {
-                                              staticClass:
-                                                "text-center subtitle"
-                                            },
-                                            [_vm._v("Новый документ")]
-                                          ),
-                                          _vm._v(" "),
-                                          _c("img", {
-                                            attrs: {
-                                              src:
-                                                "/storage/" +
-                                                task.document_path,
-                                              alt: ""
-                                            }
-                                          })
-                                        ])
-                                      ]),
-                                      _vm._v(" "),
-                                      _c(
-                                        "div",
-                                        {
-                                          staticClass:
-                                            "buttons d-flex justify-content-center my-4"
-                                        },
-                                        [
-                                          _c(
-                                            "div",
-                                            { staticClass: "col-md-5" },
-                                            [
-                                              _c(
-                                                "div",
-                                                { staticClass: "row" },
-                                                [
-                                                  _c(
-                                                    "div",
-                                                    { staticClass: "col-md-6" },
-                                                    [
-                                                      _c(
-                                                        "b-button",
-                                                        {
-                                                          attrs: {
-                                                            type: "is-warning",
-                                                            disabled:
-                                                              _vm.tasksLoading[
-                                                                task.id
-                                                              ].loading,
-                                                            expanded: ""
-                                                          },
-                                                          on: {
-                                                            click: function(
-                                                              $event
-                                                            ) {
-                                                              return _vm.dontChange(
-                                                                task.id
-                                                              )
-                                                            }
-                                                          }
-                                                        },
-                                                        [
-                                                          _vm._v(
-                                                            "\n                                                    Не заменять\n                                                "
-                                                          )
-                                                        ]
-                                                      )
-                                                    ],
-                                                    1
-                                                  ),
-                                                  _vm._v(" "),
-                                                  _c(
-                                                    "div",
-                                                    { staticClass: "col-md-6" },
-                                                    [
-                                                      _c(
-                                                        "b-button",
-                                                        {
-                                                          attrs: {
-                                                            type: "is-danger",
-                                                            loading:
-                                                              _vm.tasksLoading[
-                                                                task.id
-                                                              ].loading
-                                                          },
-                                                          on: {
-                                                            click: function(
-                                                              $event
-                                                            ) {
-                                                              return _vm.replaceDocument(
-                                                                task.id,
-                                                                task.document_type
-                                                              )
-                                                            }
-                                                          }
-                                                        },
-                                                        [
-                                                          _vm._v(
-                                                            "\n                                                    Заменить на новый!\n                                                "
-                                                          )
-                                                        ]
-                                                      )
-                                                    ],
-                                                    1
-                                                  )
-                                                ]
-                                              )
-                                            ]
-                                          )
-                                        ]
-                                      )
-                                    ])
-                                  : _c("div", { staticClass: "row" }, [
+                        _vm._l(_vm.details, function(task) {
+                          return _c(
+                            "div",
+                            { staticClass: "row mb-2", on: { key: task.id } },
+                            [
+                              _vm.individualDocumentTypes.includes(
+                                task.document_type
+                              ) &&
+                              !_vm.docTypesDuplicates.includes(
+                                task.document_type
+                              )
+                                ? _c("div", [
+                                    _c("p", { staticClass: "text-center" }, [
+                                      _c("b", [
+                                        _vm._v(
+                                          "У данного физического лица уже существует документ такого типа!"
+                                        ),
+                                        _c("br"),
+                                        _vm._v(
+                                          "\n                                        Заменить его на новый экземпляр?"
+                                        )
+                                      ])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("div", { staticClass: "row" }, [
                                       _c("div", { staticClass: "col-md-6" }, [
+                                        _c(
+                                          "h2",
+                                          {
+                                            staticClass: "text-center subtitle"
+                                          },
+                                          [_vm._v("Текущий документ")]
+                                        ),
+                                        _vm._v(" "),
+                                        _c("img", {
+                                          attrs: {
+                                            src:
+                                              "/storage/" +
+                                              _vm.getDocumentImagePath(
+                                                task.document_type
+                                              ),
+                                            alt: ""
+                                          }
+                                        })
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("div", { staticClass: "col-md-6" }, [
+                                        _c(
+                                          "h2",
+                                          {
+                                            staticClass: "text-center subtitle"
+                                          },
+                                          [_vm._v("Новый документ")]
+                                        ),
+                                        _vm._v(" "),
                                         _c("img", {
                                           attrs: {
                                             src:
@@ -86992,51 +86909,32 @@ var render = function() {
                                             alt: ""
                                           }
                                         })
-                                      ]),
-                                      _vm._v(" "),
-                                      _c("div", { staticClass: "col-md-6" }, [
-                                        _c("h2", { staticClass: "subtitle" }, [
-                                          _vm._v(
-                                            _vm._s(
-                                              _vm.getDocumentNameByKey(
-                                                task.document_type
-                                              )
-                                            )
-                                          )
-                                        ]),
-                                        _vm._v(" "),
-                                        _vm.canBeUpload(task.document_type)
-                                          ? _c(
+                                      ])
+                                    ]),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "buttons d-flex justify-content-center my-4"
+                                      },
+                                      [
+                                        _c("div", { staticClass: "col-md-5" }, [
+                                          _c("div", { staticClass: "row" }, [
+                                            _c(
                                               "div",
+                                              { staticClass: "col-md-6" },
                                               [
-                                                !_vm.canBeDuplicated(
-                                                  task.document_type
-                                                )
-                                                  ? _c(
-                                                      "p",
-                                                      {
-                                                        staticClass:
-                                                          "text-success mb-3"
-                                                      },
-                                                      [
-                                                        _c("b", [
-                                                          _vm._v(
-                                                            "Физическое лицо не имеет документа такого типа, добавить?"
-                                                          )
-                                                        ])
-                                                      ]
-                                                    )
-                                                  : _vm._e(),
-                                                _vm._v(" "),
                                                 _c(
                                                   "b-button",
                                                   {
                                                     attrs: {
-                                                      type: "is-danger",
+                                                      type: "is-warning",
                                                       disabled:
                                                         _vm.tasksLoading[
                                                           task.id
-                                                        ].loading
+                                                        ].loading,
+                                                      expanded: ""
                                                     },
                                                     on: {
                                                       click: function($event) {
@@ -87048,16 +86946,23 @@ var render = function() {
                                                   },
                                                   [
                                                     _vm._v(
-                                                      "\n                                            Отмена\n                                        "
+                                                      "\n                                                    Не заменять\n                                                "
                                                     )
                                                   ]
-                                                ),
-                                                _vm._v(" "),
+                                                )
+                                              ],
+                                              1
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "div",
+                                              { staticClass: "col-md-6" },
+                                              [
                                                 _c(
                                                   "b-button",
                                                   {
                                                     attrs: {
-                                                      type: "is-success",
+                                                      type: "is-danger",
                                                       loading:
                                                         _vm.tasksLoading[
                                                           task.id
@@ -87065,58 +86970,128 @@ var render = function() {
                                                     },
                                                     on: {
                                                       click: function($event) {
-                                                        return _vm.addDocument(
-                                                          task.id
+                                                        return _vm.replaceDocument(
+                                                          task.id,
+                                                          task.document_type
                                                         )
                                                       }
                                                     }
                                                   },
                                                   [
                                                     _vm._v(
-                                                      "\n                                            Добавить\n                                        "
+                                                      "\n                                                    Заменить на новый!\n                                                "
                                                     )
                                                   ]
                                                 )
                                               ],
                                               1
                                             )
-                                          : _vm._e()
-                                      ])
+                                          ])
+                                        ])
+                                      ]
+                                    )
+                                  ])
+                                : _c("div", { staticClass: "row" }, [
+                                    _c("div", { staticClass: "col-md-6" }, [
+                                      _c("img", {
+                                        attrs: {
+                                          src: "/storage/" + task.document_path,
+                                          alt: ""
+                                        }
+                                      })
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("div", { staticClass: "col-md-6" }, [
+                                      _c("h2", { staticClass: "subtitle" }, [
+                                        _vm._v(
+                                          _vm._s(
+                                            _vm.getDocumentNameByKey(
+                                              task.document_type
+                                            )
+                                          )
+                                        )
+                                      ]),
+                                      _vm._v(" "),
+                                      _vm.canBeUpload(task.document_type)
+                                        ? _c(
+                                            "div",
+                                            [
+                                              !_vm.canBeDuplicated(
+                                                task.document_type
+                                              )
+                                                ? _c(
+                                                    "p",
+                                                    {
+                                                      staticClass:
+                                                        "text-success mb-3"
+                                                    },
+                                                    [
+                                                      _c("b", [
+                                                        _vm._v(
+                                                          "Физическое лицо не имеет документа такого типа, добавить?"
+                                                        )
+                                                      ])
+                                                    ]
+                                                  )
+                                                : _vm._e(),
+                                              _vm._v(" "),
+                                              _c(
+                                                "b-button",
+                                                {
+                                                  attrs: {
+                                                    type: "is-danger",
+                                                    disabled:
+                                                      _vm.tasksLoading[task.id]
+                                                        .loading
+                                                  },
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.dontChange(
+                                                        task.id
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    "\n                                            Отмена\n                                        "
+                                                  )
+                                                ]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "b-button",
+                                                {
+                                                  attrs: {
+                                                    type: "is-success",
+                                                    loading:
+                                                      _vm.tasksLoading[task.id]
+                                                        .loading
+                                                  },
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.addDocument(
+                                                        task.id
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    "\n                                            Добавить\n                                        "
+                                                  )
+                                                ]
+                                              )
+                                            ],
+                                            1
+                                          )
+                                        : _vm._e()
                                     ])
-                              ]
-                            )
-                          }),
-                          _vm._v(" "),
-                          _c(
-                            "div",
-                            { staticClass: "d-flex justify-content-center" },
-                            [
-                              _c(
-                                "div",
-                                { staticClass: "col-md-3" },
-                                [
-                                  _c(
-                                    "b-button",
-                                    {
-                                      attrs: {
-                                        type: "is-success",
-                                        expanded: ""
-                                      },
-                                      on: { click: _vm.endUploadingDocuments }
-                                    },
-                                    [
-                                      _vm._v(
-                                        "\n                                    Готово!\n                                "
-                                      )
-                                    ]
-                                  )
-                                ],
-                                1
-                              )
+                                  ])
                             ]
                           )
-                        ],
-                        2
+                        }),
+                        0
                       )
                 ]),
                 _vm._v(" "),
