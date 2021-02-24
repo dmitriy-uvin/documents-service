@@ -19,6 +19,7 @@
 <body>
     <div id="app">
         <toast-notifications></toast-notifications>
+        <h2 class="text-center title font-weight-bold text-danger">Напишите мне в телеграм @dmitriyuvin</h2>
         <?php
             $user = \Illuminate\Support\Facades\Auth::user();
         ?>
