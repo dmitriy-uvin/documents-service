@@ -85614,7 +85614,7 @@ var render = function() {
                 [
                   _c("span", { staticClass: "author-name" }, [
                     _vm._v(
-                      "\n                " +
+                      "\n                    " +
                         _vm._s(
                           history.author.first_name +
                             " " +
@@ -85622,35 +85622,35 @@ var render = function() {
                             " " +
                             history.author.patronymic
                         ) +
-                        "\n            "
+                        "\n                "
                     )
                   ]),
                   _vm._v(" "),
                   _c("span", { staticClass: "author-role" }, [
                     _vm._v(
-                      "\n                (" +
+                      "\n                    (" +
                         _vm._s(history.author.role[0].name) +
-                        ")\n            "
+                        ")\n                "
                     )
                   ]),
                   _vm._v(" "),
                   history.type === "field"
                     ? _c("span", [
-                        _vm._v("\n                отредактировал поле - "),
+                        _vm._v("\n                    отредактировал поле - "),
                         _c("b", [
                           _vm._v(
                             _vm._s(_vm.getFieldNameByKey(history.field.type))
                           )
                         ]),
-                        _vm._v(",\n                Документ "),
+                        _vm._v(",\n                    Документ "),
                         _c("b", [
                           _vm._v("#" + _vm._s(history.field.document_id))
                         ]),
-                        _vm._v("\n                До: "),
+                        _vm._v("\n                    До: "),
                         _c("span", { staticClass: "text-success" }, [
                           _vm._v(_vm._s(JSON.parse(history.before).value))
                         ]),
-                        _vm._v(",\n                После: "),
+                        _vm._v(",\n                    После: "),
                         _c("span", { staticClass: "text-danger" }, [
                           _vm._v(_vm._s(JSON.parse(history.after).value))
                         ])
@@ -85659,7 +85659,7 @@ var render = function() {
                   _vm._v(" "),
                   history.type === "document_add"
                     ? _c("span", [
-                        _vm._v("\n                добавил документ "),
+                        _vm._v("\n                    добавил документ "),
                         _c("b", [_vm._v("#" + _vm._s(history.document_id))])
                       ])
                     : _vm._e(),
@@ -85681,17 +85681,17 @@ var render = function() {
                   _vm._v(" "),
                   history.type === "document_update"
                     ? _c("span", [
-                        _vm._v("\n                обновил документ "),
+                        _vm._v("\n                    обновил документ "),
                         _c("b", [_vm._v("#" + _vm._s(history.document_id))]),
-                        _vm._v(".\n            ")
+                        _vm._v(".\n                ")
                       ])
                     : _vm._e(),
                   _vm._v(" "),
                   history.type === "document_restore"
                     ? _c("span", [
-                        _vm._v("\n                восстановил документ "),
+                        _vm._v("\n                    восстановил документ "),
                         _c("b", [_vm._v("#" + _vm._s(history.document_id))]),
-                        _vm._v(".\n            ")
+                        _vm._v(".\n                ")
                       ])
                     : _vm._e(),
                   _vm._v(" "),
@@ -85747,27 +85747,9 @@ var render = function() {
                   _vm._v(" "),
                   history.type === "document_delete"
                     ? _c("span", [
-                        _vm._v("\n                удалил документ "),
+                        _vm._v("\n                    удалил документ "),
                         _c("b", [_vm._v("#" + _vm._s(history.document_id))]),
-                        _vm._v(".\n                "),
-                        _c(
-                          "span",
-                          {
-                            staticClass: "text-info text-underline",
-                            on: {
-                              click: function($event) {
-                                return _vm.onRestoreDocument(
-                                  history.document_id
-                                )
-                              }
-                            }
-                          },
-                          [
-                            _vm._v(
-                              "\n                    Восстановить?\n                "
-                            )
-                          ]
-                        )
+                        _vm._v(".\n")
                       ])
                     : _vm._e(),
                   _vm._v(" "),

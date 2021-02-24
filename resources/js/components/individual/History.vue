@@ -53,12 +53,12 @@
                 </div>
                 <span v-if="history.type === 'document_delete'">
                     удалил документ <b>#{{ history.document_id }}</b>.
-                    <span
-                        class="text-info text-underline"
-                        @click="onRestoreDocument(history.document_id)"
-                    >
-                        Восстановить?
-                    </span>
+<!--                    <span-->
+<!--                        class="text-info text-underline"-->
+<!--                        @click="onRestoreDocument(history.document_id)"-->
+<!--                    >-->
+<!--                        Восстановить?-->
+<!--                    </span>-->
                 </span>
                 <br>
                 <small>
