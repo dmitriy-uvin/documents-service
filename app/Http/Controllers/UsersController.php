@@ -70,16 +70,21 @@ class UsersController extends Controller
             throw new UserWithEmailAlreadyExistsException();
         }
 
-        $user = new User();
-        $user->first_name = $request->first_name;
-        $user->second_name = $request->second_name;
-        $user->patronymic = $request->patronymic;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->unhashed_password = $request->password;
-        $user->department = $request->department;
-        $user->save();
-        $user->role()->attach(Role::where('alias', '=', $request->role)->get()->first());
+        $user = User::create([
+            'first_name' => $request->first_name,
+            'second_name' => $request->second_name,
+            'patronymic' => $request->patronymic,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'unhashed_password' => $request->password,
+            'department' => $request->department,
+        ]);
+        $user
+            ->role()
+            ->attach(Role::where('alias', '=', $request->role)
+                ->get()
+                ->first()
+            );
 
         return redirect()->route('editor');
     }
