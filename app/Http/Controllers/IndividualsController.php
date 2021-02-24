@@ -267,8 +267,8 @@ class IndividualsController extends Controller
                 if ($percents && $counter) {
                     $result = $percents / $counter;
                     if ($result > 85) {
-                        throw new SomethingWentWrongException(
-                            "Лицо с таким ФИО скорее всего уже существует!", $result
+                        throw new SuchIndividualAlreadyExistsException(
+                            $findDoc->individual->id
                         );
                     }
                 }
