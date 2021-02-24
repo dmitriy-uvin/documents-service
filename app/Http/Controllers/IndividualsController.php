@@ -264,8 +264,26 @@ class IndividualsController extends Controller
                     }
                 }
 
+                $result = 0;
                 if ($percents && $counter) {
-                    $result = $percents / $counter;
+                    if ($findFio && $docFio || $findFio && !$docFio) {
+                        if ($counter === 1) {
+                            $result = $percents / $counter;
+                        }
+                    }
+
+                    if ($findName && $findSurname && $findPatronymic && $docFio) {
+                        if ($counter === 1) {
+                            $result = $percents / $counter;
+                        }
+                    }
+
+                    if ($findPatronymic && $findName && $findSurname && $docName && $docSurname && $docPatronymic) {
+                        if ($counter === 3) {
+                            $result = $percents / $counter;
+                        }
+                    }
+
                     if ($result > 85) {
                         throw new SuchIndividualAlreadyExistsException(
                             $findDoc->individual->id
