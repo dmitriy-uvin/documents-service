@@ -379,7 +379,11 @@ class IndividualsController extends Controller
             }
         }
 
-        $individuals = $documentQuery->get()->map(fn($document) => $document->individual)->all();
+        $individuals = $documentQuery
+            ->get()
+            ->map(fn($document) => $document->individual)
+            ->unique('id')
+            ->all();
 
         return response()->json($individuals);
     }
