@@ -318,9 +318,9 @@ class IndividualsController extends Controller
         $innNumber = $request->inn;
         $passportNumber = $request->passport;
 
-        $name = $request->name;
-        $surname = $request->surname;
-        $patronymic = $request->patronymic;
+        $name = Str::lower($request->name);
+        $surname = Str::lower($request->surname);
+        $patronymic = Str::lower($request->patronymic);
 
         $documentQuery = Document::query();
 
@@ -351,45 +351,38 @@ class IndividualsController extends Controller
                 });
         }
 
-//        if ($name && $surname && $patronymic) {
-//
-//        }
+        $documentQuery->whereHas('fields', function ($query) use ($name) {
+            return $query->whereIn('type', FieldTypes::getNameTypes())
+                ->where(DB::raw('LOWER(value)'), 'like', '%' . $name . '%');
+        });
 
-        if ($name) {
-            $documentQuery->whereHas('fields', function ($query) use ($name) {
-                return $query->whereIn('type', FieldTypes::getNameTypes())
-                    ->where(DB::raw('LOWER(value)'), 'like', '%' . $name . '%');
-            });
-        }
+        $documentQuery->whereHas('fields', function ($query) use ($surname) {
+            return $query->whereIn('type', FieldTypes::getSurnameTypes())
+                ->where(DB::raw('LOWER(value)'), 'like', '%' . $surname . '%');
+        });
 
-        if ($surname) {
-            $documentQuery->whereHas('fields', function ($query) use ($surname) {
-                return $query->whereIn('type', FieldTypes::getSurnameTypes())
-                    ->where(DB::raw('LOWER(value)'), 'like', '%' . $surname . '%');
-            });
-        }
-
-        if ($patronymic) {
-            $documentQuery->whereHas('fields', function ($query) use ($patronymic) {
-                return $query->whereIn('type', FieldTypes::getPatronymicTypes())
-                    ->where(DB::raw('LOWER(value)'), 'like', '%' . $patronymic . '%');
-            });
-        }
-
-        if (!count($documentQuery->get()->all())) {
-            $documentQuery = Document::query();
-            $fio = trim($surname . ' ' . $name . ' ' . $patronymic);
-            $documentQuery->whereHas('fields', function ($query) use ($fio) {
-                return $query->whereIn('type', FieldTypes::getFioTypes())
-                    ->where(DB::raw('LOWER(value)'), 'like', '%' . $fio . '%');
-            });
-        }
+        $documentQuery->whereHas('fields', function ($query) use ($patronymic) {
+            return $query->whereIn('type', FieldTypes::getPatronymicTypes())
+                ->where(DB::raw('LOWER(value)'), 'like', '%' . $patronymic . '%');
+        });
 
         $individuals = $documentQuery
             ->get()
             ->map(fn($document) => $document->individual)
-            ->unique('id')
-            ->all();
+            ->unique('id');
+
+        $documentQuery = Document::query();
+
+        $fio = trim($surname . ' ' . $name . ' ' . $patronymic);
+        $documentQuery->whereHas('fields', function ($query) use ($fio) {
+            return $query->whereIn('type', FieldTypes::getFioTypes())
+                ->where(DB::raw('LOWER(value)'), 'like', '%' . $fio . '%');
+        });
+
+        $individuals = $individuals->merge($documentQuery
+            ->get()
+            ->map(fn($document) => $document->individual)
+            ->unique('id'))->all();
 
         return response()->json($individuals);
     }
