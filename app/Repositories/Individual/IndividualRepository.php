@@ -14,6 +14,10 @@ class IndividualRepository
             $query = $criterion->apply($query);
         }
 
-        return $query->get()->map(fn($document) => $document->individual)->all();
+        return $query
+            ->get()
+            ->map(fn($document) => $document->individual)
+            ->unique('id')
+            ->all();
     }
 }
