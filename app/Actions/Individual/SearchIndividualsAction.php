@@ -24,31 +24,47 @@ class SearchIndividualsAction
     {
         $criteria = [];
         if ($request->getSnilsNumber()) {
-            $criteria[] = new SnilsNumberCriterion($request->getSnilsNumber());
+            $criteria[] = new SnilsNumberCriterion(
+                $request->getSnilsNumber()
+            );
         }
 
         if ($request->getPassportNumber()) {
-            $criteria[] = new PassportNumberCriterion($request->getPassportNumber());
+            $criteria[] = new PassportNumberCriterion(
+                $request->getPassportNumber()
+            );
         }
 
         if ($request->getInnNumber()) {
-            $criteria[] = new InnNumberCriterion($request->getInnNumber());
+            $criteria[] = new InnNumberCriterion(
+                $request->getInnNumber()
+            );
         }
 
         if ($request->getName()) {
-            $criteria[] = new NameCriterion($request->getName());
+            $criteria[] = new NameCriterion(
+                $request->getName()
+            );
         }
 
         if ($request->getSurname()) {
-            $criteria[] = new SurnameCriterion($request->getSurname());
+            $criteria[] = new SurnameCriterion(
+                $request->getSurname()
+            );
         }
 
         if ($request->getPatronymic()) {
-            $criteria = new PatronymicCriterion($request->getPatronymic());
+            $criteria[] = new PatronymicCriterion(
+                $request->getPatronymic()
+            );
         }
 
         if ($request->getName() && $request->getSurname() && $request->getPatronymic()) {
-            $criteria[] = new FioCriterion($request->getName(), $request->getSurname(), $request->getPatronymic());
+            $criteria[] = new FioCriterion(
+                $request->getName(),
+                $request->getSurname(),
+                $request->getPatronymic()
+            );
         }
 
         return new SearchIndividualsResponse(
