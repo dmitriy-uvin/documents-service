@@ -18,15 +18,15 @@ php artisan migrate
 php artisan db:seed
 ```
 Будут созданы 4 пользователя с разными ролями:
-- Developer
-developer@developer.com
-password
-- Administrator
-admin@gmail.com
-123123123
-- Manager
-manager@gmail.com
-123123123
-- Worker
-worker1@gmail.com
-123123123
+- Developer<br>
+Login: developer@developer.com<br>
+Password: password
+- Administrator<br>
+Login: admin@gmail.com<br>
+Password: 123123123
+- Manager<br>
+Login: manager@gmail.com<br>
+Password: 123123123
+- Worker<br>
+Login: worker1@gmail.com<br>
+Password: 123123123
