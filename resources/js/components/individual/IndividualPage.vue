@@ -38,7 +38,8 @@
                                 <p class="mb-2 text-black-50 font-weight-bold">
                                     Добавлено: {{ createdAt(document.created_at) }}
                                 </p>
-                                <div v-if="Object.keys(recDocTypes).includes(document.type)">
+<!--                                <div v-if="Object.keys(recDocTypes).includes(document.type)">-->
+                                <div v-if="document.fields.length">
                                     <div class="row mb-2">
                                         <div class="col-md-4 text-left">
                                             <b>Название поля</b>
@@ -55,8 +56,8 @@
                                     </div>
                                     <div
                                         class="row mb-2"
-                                        v-for="field in document.fields">
-
+                                        v-for="field in document.fields"
+                                    >
                                         <div class="col-md-4 d-flex align-items-center">
                                             {{ getFieldNameByKey(field.type) }}
                                         </div>
@@ -107,7 +108,6 @@
                                                     </b-button>
                                                 </b-tooltip>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
@@ -236,12 +236,6 @@
                                 </div>
                                 <div class="col-md-6">
                                     <h2 class="subtitle">{{ getDocumentNameByKey(task.document_type) }}</h2>
-<!--                                    <div v-if="cannotBeRecognized(task.document_type)">-->
-<!--                                        <p class="text-danger">-->
-<!--                                            <b>Документ не может быть распознан!</b>-->
-<!--                                        </p>-->
-<!--                                    </div>-->
-<!--                                    <div v-if="canBeRecognized(task.document_type)">-->
                                     <div v-if="canBeUpload(task.document_type)">
                                         <p class="text-success mb-3" v-if="!canBeDuplicated(task.document_type)">
                                             <b>Физическое лицо не имеет документа такого типа, добавить?</b>
