@@ -8,7 +8,7 @@ export default {
                 'fio',
                 'cardholder_name',
                 'born_full_name',
-                'full_name'
+                // 'full_name'
             ];
             const name = this.getName(individual);
             const surname = this.getSurname(individual);
