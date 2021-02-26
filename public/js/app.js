@@ -4105,12 +4105,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
 
 
 
@@ -6122,35 +6116,60 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _constants_fieldTypes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../constants/fieldTypes */ "./resources/js/constants/fieldTypes.js");
 
 
+var nameKeys = ['name', 'first_name', 'name_rus', 'name_eng', 'name_ukr', 'a_vehicle_owner_name', 'a_veh_driver_name', 'b_vehicle_owner_name', 'b_veh_driver_name', 'legal_name', 'legal_name_rus'];
+var surnameKeys = ['surname', 'surname_rus', 'surname_eng', 'surname_ukr', 'a_vehicle_owner_surname', 'a_veh_driver_surname', 'b_vehicle_owner_surname', 'b_veh_driver_surname'];
+var patronymicKeys = ['third_name', 'patronymic', 'patron', 'other_name', 'other_names', 'patter', 'a_vehicle_owner_patronym', 'a_veh_driver_patronym', 'b_vehicle_owner_patronym', 'b_veh_driver_patronym', 'third'];
+var fioKeys = ['fio', 'cardholder_name', 'born_full_name' // 'full_name'
+];
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   methods: {
     getFullName: function getFullName(individual) {
-      var fioKeys = ['fio', 'cardholder_name', 'born_full_name', 'full_name'];
-      var name = this.getName(individual);
-      var surname = this.getSurname(individual);
-      var patronymic = this.getPatronymic(individual);
-      var fullName = "";
+      // const name = this.getName(individual);
+      // const surname = this.getSurname(individual);
+      // const patronymic = this.getPatronymic(individual);
+      // let fullName = "";
+      //
+      // if (individual.documents) {
+      //     individual.documents.map(document => {
+      //         document.fields.map(field => {
+      //             if (fioKeys.includes(field.type)) fullName = field.value;
+      //         });
+      //     });
+      // }
+      //
+      // if (!fullName) {
+      //     if (!name && !surname && !patronymic) {
+      //         fullName = "Неизвестно"
+      //     } else {
+      //         fullName = surname + " " + name + " " + patronymic;
+      //     }
+      // }
+      var name = "";
+      var surname = "";
+      var patronymic = "";
+      var fio = "";
 
       if (individual.documents) {
-        individual.documents.map(function (document) {
-          document.fields.map(function (field) {
-            if (fioKeys.includes(field.type)) fullName = field.value;
-          });
+        var firstDocument = individual.documents[0];
+        firstDocument.fields.map(function (field) {
+          if (nameKeys.includes(field.type)) name = field.value;
+          if (surnameKeys.includes(field.type)) surname = field.value;
+          if (patronymicKeys.includes(field.type)) patronymic = field.value;
+          if (fioKeys.includes(field.type)) fio = field.value;
         });
       }
 
-      if (!fullName) {
-        if (!name && !surname && !patronymic) {
-          fullName = "Неизвестно";
-        } else {
-          fullName = surname + " " + name + " " + patronymic;
-        }
+      var fullName = "";
+
+      if (!fio) {
+        fullName = surname + ' ' + name + ' ' + patronymic;
+      } else {
+        fullName = fio;
       }
 
-      return fullName;
+      return fullName ? fullName : 'Неизвестно';
     },
     getName: function getName(individual) {
-      var nameKeys = ['name', 'first_name', 'name_rus', 'name_eng', 'name_ukr', 'a_vehicle_owner_name', 'a_veh_driver_name', 'b_vehicle_owner_name', 'b_veh_driver_name', 'legal_name', 'legal_name_rus'];
       var name = "";
 
       if (individual.documents) {
@@ -6164,7 +6183,6 @@ __webpack_require__.r(__webpack_exports__);
       return name;
     },
     getSurname: function getSurname(individual) {
-      var surnameKeys = ['surname', 'surname_rus', 'surname_eng', 'surname_ukr', 'a_vehicle_owner_surname', 'a_veh_driver_surname', 'b_vehicle_owner_surname', 'b_veh_driver_surname'];
       var surname = "";
       individual.documents.map(function (document) {
         document.fields.map(function (field) {
@@ -6174,7 +6192,6 @@ __webpack_require__.r(__webpack_exports__);
       return surname;
     },
     getPatronymic: function getPatronymic(individual) {
-      var patronymicKeys = ['third_name', 'patronymic', 'patron', 'other_name', 'other_names', 'patter', 'a_vehicle_owner_patronym', 'a_veh_driver_patronym', 'b_vehicle_owner_patronym', 'b_veh_driver_patronym', 'third'];
       var patronymic = "";
       individual.documents.map(function (document) {
         document.fields.map(function (field) {
@@ -86394,9 +86411,8 @@ var render = function() {
                                   ]
                                 ),
                                 _vm._v(" "),
-                                Object.keys(_vm.recDocTypes).includes(
-                                  document.type
-                                )
+                                document.fields.length &&
+                                document.type !== "not_document"
                                   ? _c(
                                       "div",
                                       [

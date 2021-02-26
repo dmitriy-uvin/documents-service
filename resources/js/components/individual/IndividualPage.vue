@@ -39,7 +39,7 @@
                                     Добавлено: {{ createdAt(document.created_at) }}
                                 </p>
 <!--                                <div v-if="Object.keys(recDocTypes).includes(document.type)">-->
-                                <div v-if="document.fields.length">
+                                <div v-if="document.fields.length && document.type !== 'not_document'">
                                     <div class="row mb-2">
                                         <div class="col-md-4 text-left">
                                             <b>Название поля</b>
