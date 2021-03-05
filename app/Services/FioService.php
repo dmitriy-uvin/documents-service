@@ -11,7 +11,7 @@ class FioService
     public static function getNameFromResponse(array $fields) {
         $name = null;
         foreach ($fields as $fieldType => $item) {
-            if (in_array($fieldType, FieldTypes::getNameTypes())) {
+            if (in_array($fieldType, FieldTypes::getNameTypes(), true)) {
                 $name = $item['text'] ?? '';
             }
         }
@@ -21,7 +21,7 @@ class FioService
     public static function getSurnameFromResponse(array $fields) {
         $surname = null;
         foreach ($fields as $fieldType => $item) {
-            if (in_array($fieldType, FieldTypes::getSurnameTypes())) {
+            if (in_array($fieldType, FieldTypes::getSurnameTypes(), true)) {
                 $surname = $item['text'] ?? '';
             }
         }
@@ -34,12 +34,18 @@ class FioService
         $surname = null;
         $patronymic = null;
         foreach ($fields as $fieldType => $item) {
-            if (in_array($fieldType, FieldTypes::getFioTypes())) {
+            if (in_array($fieldType, FieldTypes::getFioTypes(), true)) {
                 $fio = $item['text'] ?? '';
             }
-            if (in_array($fieldType, FieldTypes::getNameTypes())) $name = $item['text'];
-            if (in_array($fieldType, FieldTypes::getSurnameTypes())) $surname = $item['text'];
-            if (in_array($fieldType, FieldTypes::getPatronymicTypes())) $patronymic = $item['text'];
+            if (in_array($fieldType, FieldTypes::getNameTypes(), true)) {
+                $name = $item['text'];
+            }
+            if (in_array($fieldType, FieldTypes::getSurnameTypes(), true)) {
+                $surname = $item['text'];
+            }
+            if (in_array($fieldType, FieldTypes::getPatronymicTypes(), true)) {
+                $patronymic = $item['text'];
+            }
         }
 
         if ($name && $surname && $patronymic) {
@@ -52,7 +58,7 @@ class FioService
     public static function getPatronymicFromResponse(array $fields) {
         $patronymic = null;
         foreach ($fields as $fieldType => $item) {
-            if (in_array($fieldType, FieldTypes::getPatronymicTypes())) {
+            if (in_array($fieldType, FieldTypes::getPatronymicTypes(), true)) {
                 $patronymic = $item['text'] ?? '';
             }
         }
@@ -65,12 +71,18 @@ class FioService
         $birthMonth = null;
         $birthYear = null;
         foreach ($fields as $fieldType => $item) {
-            if (in_array($fieldType, FieldTypes::getBornFullDateTypes())) {
+            if (in_array($fieldType, FieldTypes::getBornFullDateTypes(), true)) {
                 $birthDate = $item['text'] ?? '';
             }
-            if ($fieldType === "day_of_birth") $birthDay = $item['text'] ?? '';
-            if ($fieldType === "month_of_birth") $birthMonth = $item['text'] ?? '';
-            if ($fieldType === "year_of_birth") $birthYear = $item['text'] ?? '';
+            if ($fieldType === "day_of_birth") {
+                $birthDay = $item['text'] ?? '';
+            }
+            if ($fieldType === "month_of_birth") {
+                $birthMonth = $item['text'] ?? '';
+            }
+            if ($fieldType === "year_of_birth") {
+                $birthYear = $item['text'] ?? '';
+            }
         }
         if ($birthDay && $birthMonth && $birthYear) {
             $birthDate = $birthDay . '.' . $birthMonth . '.' . $birthYear;
@@ -85,7 +97,7 @@ class FioService
         foreach ($docs as $doc) {
             $fields = $doc->fields;
             foreach ($fields as $field) {
-                if (in_array($field->type, FieldTypes::getNameTypes())) {
+                if (in_array($field->type, FieldTypes::getNameTypes(), true)) {
                     $name = $field->value;
                 }
             }
@@ -100,7 +112,7 @@ class FioService
         foreach ($docs as $doc) {
             $fields = $doc->fields;
             foreach ($fields as $field) {
-                if (in_array($field->type, FieldTypes::getSurnameTypes())) {
+                if (in_array($field->type, FieldTypes::getSurnameTypes(), true)) {
                     $surname = $field->value;
                 }
             }
@@ -115,7 +127,7 @@ class FioService
         foreach ($docs as $doc) {
             $fields = $doc->fields;
             foreach ($fields as $field) {
-                if (in_array($field->type, FieldTypes::getPatronymicTypes())) {
+                if (in_array($field->type, FieldTypes::getPatronymicTypes(), true)) {
                     $patronymic = $field->value;
                 }
             }
@@ -133,12 +145,18 @@ class FioService
         foreach ($docs as $doc) {
             $fields = $doc->fields;
             foreach ($fields as $field) {
-                if (in_array($field->type, FieldTypes::getBornFullDateTypes())) {
+                if (in_array($field->type, FieldTypes::getBornFullDateTypes(), true)) {
                     $birthDate = $field->value;
                 }
-                if ($field->type === "day_of_birth") $birthDay = $field->value;
-                if ($field->type === "month_of_birth") $birthMonth = $field->value;
-                if ($field->type === "year_of_birth") $birthYear = $field->value;
+                if ($field->type === "day_of_birth") {
+                    $birthDay = $field->value;
+                }
+                if ($field->type === "month_of_birth") {
+                    $birthMonth = $field->value;
+                }
+                if ($field->type === "year_of_birth") {
+                    $birthYear = $field->value;
+                }
             }
             if ($birthDay && $birthMonth && $birthYear) {
                 $birthDate = $birthDay . '.' . $birthMonth . '.' . $birthYear;
@@ -157,12 +175,18 @@ class FioService
         foreach ($docs as $doc) {
             $fields = $doc->fields;
             foreach ($fields as $field) {
-                if (in_array($field->type, FieldTypes::getFioTypes())) {
+                if (in_array($field->type, FieldTypes::getFioTypes(), true)) {
                     $fio = $field->value;
                 }
-                if (in_array($field->type, FieldTypes::getNameTypes())) $name = $field->value;
-                if (in_array($field->type, FieldTypes::getSurnameTypes())) $surname = $field->value;
-                if (in_array($field->type, FieldTypes::getPatronymicTypes())) $patronymic = $field->value;
+                if (in_array($field->type, FieldTypes::getNameTypes(), true)) {
+                    $name = $field->value;
+                }
+                if (in_array($field->type, FieldTypes::getSurnameTypes(), true)) {
+                    $surname = $field->value;
+                }
+                if (in_array($field->type, FieldTypes::getPatronymicTypes())) {
+                    $patronymic = $field->value;
+                }
             }
 
             if ($name && $surname && $patronymic) {

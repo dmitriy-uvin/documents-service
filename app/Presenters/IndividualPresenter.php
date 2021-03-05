@@ -14,7 +14,7 @@ class IndividualPresenter
         $this->documentPresenter = $documentPresenter;
     }
 
-    public function present(Individual $individual)
+    public function present(Individual $individual): array
     {
         return [
             'id' => $individual->id,
@@ -24,11 +24,10 @@ class IndividualPresenter
         ];
     }
 
-    public function presentCollection(Collection $individuals)
+    public function presentCollection(Collection $individuals): array
     {
         return $individuals
             ->map(fn ($individual) => $this->present($individual))
             ->toArray();
     }
-
 }

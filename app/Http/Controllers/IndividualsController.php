@@ -142,16 +142,16 @@ class IndividualsController extends Controller
             $findPatronymic = '';
             $findFio = '';
             foreach ($item['fields'] as $type => $field) {
-                if (in_array($type, FieldTypes::getNameTypes())) {
+                if (in_array($type, FieldTypes::getNameTypes(), true)) {
                     $findName = Str::lower($field['text']);
                 }
-                if (in_array($type, FieldTypes::getSurnameTypes())) {
+                if (in_array($type, FieldTypes::getSurnameTypes(), true)) {
                     $findSurname = Str::lower($field['text']);
                 }
-                if (in_array($type, FieldTypes::getPatronymicTypes())) {
+                if (in_array($type, FieldTypes::getPatronymicTypes(), true)) {
                     $findPatronymic = Str::lower($field['text']);
                 }
-                if (in_array($type, FieldTypes::getFioTypes())) {
+                if (in_array($type, FieldTypes::getFioTypes(), true)) {
                     $findFio = Str::lower($field['text']);
                 }
             }
@@ -223,34 +223,34 @@ class IndividualsController extends Controller
                 if (!$findFio) {
                     if (!$docFio) {
                         if ($docName && $findName) {
-                            $counter = $counter + 1;
+                            ++$counter;
                             similar_text($docName, $findName, $perc);
                             $percents += $perc;
                         }
 
                         if ($docSurname && $findSurname) {
-                            $counter = $counter + 1;
+                            ++$counter;
                             similar_text($docSurname, $findSurname, $perc);
                             $percents += $perc;
                         }
 
                         if ($docPatronymic && $findPatronymic) {
-                            $counter = $counter + 1;
+                            ++$counter;
                             similar_text($docPatronymic, $findPatronymic, $perc);
                             $percents += $perc;
                         }
                     } else {
-                        $counter = $counter + 1;
+                        ++$counter;
                         similar_text($findSurname . ' ' . $findName . ' ' . $findPatronymic, $docFio, $perc);
                         $percents += $perc;
                     }
                 } else {
                     if (!$docFio) {
-                        $counter = $counter + 1;
+                        ++$counter;
                         similar_text($findFio, $docSurname . ' ' . $docName . ' ' . $docPatronymic, $perc);
                         $percents += $perc;
                     } else {
-                        $counter = $counter + 1;
+                        ++$counter;
                         similar_text($docFio, $findFio, $perc);
                         $percents += $perc;
                     }
@@ -258,7 +258,7 @@ class IndividualsController extends Controller
 
                 $result = 0;
                 if ($percents && $counter) {
-                    if ($findFio && $docFio || $findFio && !$docFio) {
+                    if (($findFio && $docFio) || ($findFio && !$docFio)) {
                         if ($counter === 1) {
                             $result = $percents / $counter;
                         }

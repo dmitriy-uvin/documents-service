@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 
 class FieldPresenter
 {
-    public function present(Field $field)
+    public function present(Field $field): array
     {
         return [
             'id' => $field->id,
@@ -19,7 +19,7 @@ class FieldPresenter
         ];
     }
 
-    public function presentCollection(Collection $fields)
+    public function presentCollection(Collection $fields): array
     {
         return $fields
             ->map(fn ($field) => $this->present($field))

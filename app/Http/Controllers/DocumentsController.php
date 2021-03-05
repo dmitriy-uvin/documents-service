@@ -80,7 +80,7 @@ class DocumentsController extends Controller
             throw new TaskNotFoundException();
         }
 
-        $document = fopen(storage_path('app/public/' . $task->document_path), 'r');
+        $document = fopen(storage_path('app/public/' . $task->document_path), 'rb');
         $recognizeTaskId = $this->apiService->getRecognizeTaskId($document);
         fclose($document);
         $response = $this->apiService->getRecognizeResponse($recognizeTaskId);
@@ -99,7 +99,7 @@ class DocumentsController extends Controller
         $documentObj = Document::find($request->document_id);
         $pathBefore = $documentObj->lastDocumentImage()->path;
 
-        $document = fopen(storage_path('app/public/' . $task->document_path), 'r');
+        $document = fopen(storage_path('app/public/' . $task->document_path), 'rb');
         $recognizeTaskId = $this->apiService->getRecognizeTaskId($document);
 
         $response = $this->apiService->getRecognizeResponse($recognizeTaskId);
@@ -149,7 +149,7 @@ class DocumentsController extends Controller
             throw new IndividualNotFoundException();
         }
 
-        $document = fopen(storage_path('app/public/' . $task->document_path), 'r');
+        $document = fopen(storage_path('app/public/' . $task->document_path), 'rb');
         $recognizeTaskId = $this->apiService->getRecognizeTaskId($document);
         $response = $this->apiService->getRecognizeResponse($recognizeTaskId);
 
@@ -166,28 +166,22 @@ class DocumentsController extends Controller
             $individualSurname = FioService::getIndividualSurname($individual);
             $surnameFromResponse = FioService::getSurnameFromResponse($response['items'][0]['fields']);
 
-            if ($individualSurname && $surnameFromResponse) {
-                if ($individualSurname !== $surnameFromResponse) {
-                    throw new DocumentForAnotherPersonException();
-                }
+            if ($individualSurname && $surnameFromResponse && $individualSurname !== $surnameFromResponse) {
+                throw new DocumentForAnotherPersonException();
             }
 
             $individualPatronymic = FioService::getIndividualPatronymic($individual);
             $patronymicFromResponse = FioService::getPatronymicFromResponse($response['items'][0]['fields']);
 
-            if ($individualPatronymic && $patronymicFromResponse) {
-                if ($individualPatronymic !== $patronymicFromResponse) {
-                    throw new DocumentForAnotherPersonException();
-                }
+            if ($individualPatronymic && $patronymicFromResponse && $individualPatronymic !== $patronymicFromResponse) {
+                throw new DocumentForAnotherPersonException();
             }
 
             $individualFio = FioService::getIndividualFio($individual);
             $fioFromResponse = FioService::getFioFromResponse($response['items'][0]['fields']);
 
-            if ($individualFio && $fioFromResponse) {
-                if ($individualFio !== $fioFromResponse) {
-                    throw new DocumentForAnotherPersonException();
-                }
+            if ($individualFio && $fioFromResponse && $individualFio !== $fioFromResponse) {
+                throw new DocumentForAnotherPersonException();
             }
         }
 
@@ -259,7 +253,7 @@ class DocumentsController extends Controller
         $allResponses = [];
         foreach ($tasks as $task) {
             if ($task->document_type !== 'not_document') {
-                $document = fopen(storage_path('app/public/' . $task->document_path), 'r');
+                $document = fopen(storage_path('app/public/' . $task->document_path), 'rb');
                 $recognizeTaskId = $this->apiService->getRecognizeTaskId($document);
                 fclose($document);
                 $response = $this->apiService->getRecognizeResponse($recognizeTaskId);

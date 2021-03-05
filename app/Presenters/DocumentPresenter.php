@@ -14,7 +14,7 @@ class DocumentPresenter
         $this->fieldPresenter = $fieldPresenter;
     }
 
-    public function present(Document $document)
+    public function present(Document $document): array
     {
         return [
             'id' => $document->id,
@@ -27,7 +27,7 @@ class DocumentPresenter
         ];
     }
 
-    public function presentCollection(Collection $documents)
+    public function presentCollection(Collection $documents): array
     {
         return $documents
             ->map(fn ($document) => $this->present($document))

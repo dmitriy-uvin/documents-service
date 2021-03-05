@@ -15,6 +15,7 @@ use App\Http\Requests\AddUserRequest;
 use App\Http\Requests\CreateUserRequest;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -117,7 +118,13 @@ class UsersController extends Controller
             throw new UserNotFoundException();
         }
 
-        if ((int)$id === (int)Auth::id()) {
+        $authUser = Auth::user();
+
+        if (!$authUser) {
+            throw new AuthenticationException();
+        }
+
+        if ((int)$id === (int)$authUser->id) {
             if ($action === 'delete') {
                 throw new DeleteYourselfException();
             }
@@ -126,7 +133,7 @@ class UsersController extends Controller
             }
         }
 
-        if ($user->getRole()->alias === Auth::user()->getRole()->alias) {
+        if ($user->getRole()->alias === $authUser->getRole()->alias) {
             if ($action === 'delete') {
                 throw new DeleteUserWithSameRoleException();
             }
@@ -135,7 +142,7 @@ class UsersController extends Controller
             }
         }
 
-        if ($user->getRole()->alias === Roles::DEVELOPER_ALIAS && Auth::user()->getRole()->alias === Roles::ADMINISTRATOR_ALIAS) {
+        if ($user->getRole()->alias === Roles::DEVELOPER_ALIAS && $authUser->getRole()->alias === Roles::ADMINISTRATOR_ALIAS) {
             if ($action === 'delete') {
                 throw new DeleteDeveloperException();
             }

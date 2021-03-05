@@ -19,7 +19,7 @@ class DbrainApiService
     {
         $response = Http::attach(
             'image',
-            fopen($document, 'r'),
+            fopen($document, 'rb'),
             $document->getClientOriginalName()
         )->post("{$this->apiUrl}/classify?token={$this->token}&async=true");
 
@@ -32,7 +32,7 @@ class DbrainApiService
             "{$this->apiUrl}/result/{$taskId}?token={$this->token}"
         )->json();
 
-        while($classifyResponse['code'] == 202) {
+        while((int)$classifyResponse['code'] === 202) {
             $classifyResponse = Http::get(
                 "{$this->apiUrl}/result/{$taskId}?token={$this->token}"
             )->json();
@@ -57,7 +57,7 @@ class DbrainApiService
         $response = Http::get(
             "{$this->apiUrl}/result/{$taskId}?token={$this->token}"
         )->json();
-        while($response['code'] == 202) {
+        while((int)$response['code'] === 202) {
             $response = Http::get(
                 "{$this->apiUrl}/result/{$taskId}?token={$this->token}"
             )->json();
@@ -65,5 +65,4 @@ class DbrainApiService
 
         return $response;
     }
-
 }

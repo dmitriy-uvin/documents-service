@@ -27,8 +27,8 @@ class Field extends Model
     {
         $changes = $this->getDirty();
 
-        $before = json_encode(array_intersect_key($this->fresh()->toArray(), $changes));
-        $after = json_encode($changes);
+        $before = json_encode(array_intersect_key($this->fresh()->toArray(), $changes), JSON_THROW_ON_ERROR);
+        $after = json_encode($changes, JSON_THROW_ON_ERROR);
 
         return compact('before', 'after');
     }
