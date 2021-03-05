@@ -12,4 +12,5 @@ interface UserRepositoryInterface
     public function save(User $user): User;
     public function attachRole(User $user, Role $role): User;
     public function findByCriteria(EloquentCriterion ...$criteria): Collection;
+    public function getAll(): Collection;
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\User\AddUserAction;
+use App\Actions\User\GetUsersCollectionAction;
 use App\Constants\Roles;
 use App\Exceptions\User\BlockDeveloperException;
 use App\Exceptions\User\BlockUserWithSameRoleException;
@@ -23,10 +24,14 @@ use Illuminate\Support\Facades\Hash;
 class UsersController extends Controller
 {
     private AddUserAction $addUserAction;
+    private GetUsersCollectionAction $getUsersCollectionAction;
 
-    public function __construct(AddUserAction $addUserAction)
-    {
+    public function __construct(
+        AddUserAction $addUserAction,
+        GetUsersCollectionAction $getUsersCollectionAction
+    ) {
         $this->addUserAction = $addUserAction;
+        $this->getUsersCollectionAction = $getUsersCollectionAction;
     }
 
     public function addUser(AddUserRequest $request): \Illuminate\Http\RedirectResponse
@@ -48,7 +53,8 @@ class UsersController extends Controller
 
     public function getAllUsers(): \Illuminate\Http\JsonResponse
     {
-        $users = User::all();
+        $users = $this->getUsersCollectionAction->execute()->getUsers();
+
         return response()->json($users);
     }
 

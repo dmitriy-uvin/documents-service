@@ -31,4 +31,9 @@ class UserRepository implements UserRepositoryInterface
 
         return $query->get();
     }
+
+    public function getAll(): Collection
+    {
+        return User::all();
+    }
 }
