@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\Document\DocumentRepository;
+use App\Repositories\Document\DocumentRepositoryInterface;
 use App\Repositories\Individual\IndividualRepository;
 use App\Repositories\Individual\IndividualRepositoryInterface;
 use App\Repositories\Role\RoleRepository;
@@ -19,7 +21,8 @@ class AppServiceProvider extends ServiceProvider
         UserRepositoryInterface::class => UserRepository::class,
         RoleRepositoryInterface::class => RoleRepository::class,
         TaskRepositoryInterface::class => TaskRepository::class,
-        IndividualRepositoryInterface::class => IndividualRepository::class
+        IndividualRepositoryInterface::class => IndividualRepository::class,
+        DocumentRepositoryInterface::class => DocumentRepository::class
     ];
 
     /**

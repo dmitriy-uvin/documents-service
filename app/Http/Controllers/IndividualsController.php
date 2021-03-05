@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Actions\Individual\GetIndividualByIdAction;
 use App\Actions\Individual\GetIndividualByIdRequest;
 use App\Actions\Individual\GetIndividualCollectionAction;
+use App\Actions\Individual\SearchIndividualAction;
+use App\Actions\Individual\SearchIndividualRequest;
 use App\Constants\FieldTypes;
 use App\Constants\HistoryTypes;
 use App\Exceptions\Individual\CantCreateWithoutFioException;
@@ -28,15 +30,18 @@ class IndividualsController extends Controller
     private IndividualPresenter $individualPresenter;
     private GetIndividualCollectionAction $getIndividualsAction;
     private GetIndividualByIdAction $getIndividualByIdAction;
+    private SearchIndividualAction $searchIndividualAction;
 
     public function __construct(
         IndividualPresenter $individualPresenter,
         GetIndividualCollectionAction $getIndividualsAction,
-        GetIndividualByIdAction $getIndividualByIdAction
+        GetIndividualByIdAction $getIndividualByIdAction,
+        SearchIndividualAction $searchIndividualAction
     ) {
         $this->individualPresenter = $individualPresenter;
         $this->getIndividualsAction = $getIndividualsAction;
         $this->getIndividualByIdAction = $getIndividualByIdAction;
+        $this->searchIndividualAction = $searchIndividualAction;
     }
 
     public function individualsView()
@@ -60,7 +65,7 @@ class IndividualsController extends Controller
         ]);
     }
 
-    public function getIndividualById(string $id)
+    public function getIndividualById(string $id): JsonResponse
     {
         $individual = $this->getIndividualByIdAction->execute(
             new GetIndividualByIdRequest((int)$id)
@@ -144,7 +149,7 @@ class IndividualsController extends Controller
         return response()->json($response);
     }
 
-    private function checkIfIndividualExists(array $documentsPayload)
+    private function checkIfIndividualExists(array $documentsPayload): void
     {
         foreach ($documentsPayload as $taskId => $item) {
             $findName = '';
@@ -307,79 +312,19 @@ class IndividualsController extends Controller
         }
     }
 
-    public function search(Request $request)
+    public function search(Request $request): JsonResponse
     {
-        $snilsNumber = $request->snils;
-        $innNumber = $request->inn;
-        $passportNumber = $request->passport;
+        $response = $this->searchIndividualAction->execute(
+            new SearchIndividualRequest(
+                Str::lower($request->name),
+                Str::lower($request->surname),
+                Str::lower($request->patronymic),
+                $request->snils,
+                $request->inn,
+                $request->passport,
+            )
+        );
 
-        $name = Str::lower($request->name);
-        $surname = Str::lower($request->surname);
-        $patronymic = Str::lower($request->patronymic);
-
-        $documentQuery = Document::query();
-
-        if ($snilsNumber) {
-            $documentQuery->where('type', '=', 'snils_front')
-                ->whereHas('fields', function ($query) use ($snilsNumber){
-                    return $query
-                        ->where('type', '=', 'number')
-                        ->where('value', 'like', '%' . $snilsNumber . '%');
-                });
-        }
-
-        if ($passportNumber) {
-            $documentQuery->whereIn('type', ['passport_main', 'passport_main_handwritten'])
-                ->whereHas('fields', function ($query) use ($passportNumber){
-                    return $query
-                        ->where('type', '=', 'series_and_number')
-                        ->where('value', 'like', '%' . $passportNumber . '%');
-                });
-        }
-
-        if ($innNumber) {
-            $documentQuery->where('type', '=', 'inn_person')
-                ->whereHas('fields', function ($query) use ($innNumber){
-                    return $query
-                        ->where('type', '=', 'number')
-                        ->where('value', 'like', '%' . $innNumber . '%');
-                });
-        }
-
-        $documentQuery->whereHas('fields', function ($query) use ($name) {
-            return $query->whereIn('type', FieldTypes::getNameTypes())
-                ->where(DB::raw('LOWER(value)'), 'like', '%' . $name . '%');
-        });
-
-        $documentQuery->whereHas('fields', function ($query) use ($surname) {
-            return $query->whereIn('type', FieldTypes::getSurnameTypes())
-                ->where(DB::raw('LOWER(value)'), 'like', '%' . $surname . '%');
-        });
-
-        $documentQuery->whereHas('fields', function ($query) use ($patronymic) {
-            return $query->whereIn('type', FieldTypes::getPatronymicTypes())
-                ->where(DB::raw('LOWER(value)'), 'like', '%' . $patronymic . '%');
-        });
-
-        $individuals = $documentQuery
-            ->get()
-            ->map(fn($document) => $document->individual)
-            ->unique('id');
-
-        $documentQuery = Document::query();
-
-        $fio = trim($surname . ' ' . $name . ' ' . $patronymic);
-        $documentQuery->whereHas('fields', function ($query) use ($fio) {
-            return $query->whereIn('type', FieldTypes::getFioTypes())
-                ->where(DB::raw('LOWER(value)'), 'like', '%' . $fio . '%');
-        });
-
-        $individuals = $individuals
-            ->merge($documentQuery
-            ->get()
-            ->map(fn($document) => $document->individual)
-            ->unique('id'))->all();
-
-        return response()->json($individuals);
+        return response()->json($response->getIndividuals());
     }
 }
