@@ -11,6 +11,9 @@ use App\Actions\User\GetUserByIdAction;
 use App\Actions\User\GetUserByIdRequest;
 use App\Actions\User\GetUsersCollectionAction;
 use App\Http\Requests\CreateUserRequest;
+use \Illuminate\Http\JsonResponse;
+use \Illuminate\Http\RedirectResponse;
+use \App\Actions\User\AddUserRequest;
 
 class UsersController extends Controller
 {
@@ -34,7 +37,7 @@ class UsersController extends Controller
         $this->blockUserByIdAction = $blockUserByIdAction;
     }
 
-    public function getAllUsers(): \Illuminate\Http\JsonResponse
+    public function getAllUsers(): JsonResponse
     {
         $users = $this->getUsersCollectionAction->execute()->getUsers();
 
@@ -57,11 +60,10 @@ class UsersController extends Controller
         ]);
     }
 
-
-    public function createUser(CreateUserRequest $request): \Illuminate\Http\RedirectResponse
+    public function createUser(CreateUserRequest $request): RedirectResponse
     {
         $this->addUserAction->execute(
-            new \App\Actions\User\AddUserRequest(
+            new AddUserRequest(
                 $request->first_name,
                 $request->second_name,
                 $request->patronymic,
@@ -75,7 +77,7 @@ class UsersController extends Controller
         return redirect()->route('editor');
     }
 
-    public function deleteUser(string $id): \Illuminate\Http\JsonResponse
+    public function deleteUser(string $id): JsonResponse
     {
         $this->deleteUserByIdAction->execute(
             new DeleteUserByIdRequest((int)$id)
@@ -84,7 +86,7 @@ class UsersController extends Controller
         return response()->json();
     }
 
-    public function changeUserBlockStatus(string $id): \Illuminate\Http\JsonResponse
+    public function changeUserBlockStatus(string $id): JsonResponse
     {
         $response = $this->blockUserByIdAction->execute(
             new BlockUserByIdRequest((int)$id)
