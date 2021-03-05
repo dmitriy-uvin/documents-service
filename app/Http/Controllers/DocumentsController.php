@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\HistoryTypes;
 use App\Constants\TaskTypes;
-use App\Exceptions\Document\DocumentAlreadyRestoredException;
 use App\Exceptions\Document\DocumentForAnotherPersonException;
 use App\Exceptions\Document\DocumentNotFoundException;
 use App\Exceptions\Document\UnableToDeleteDocumentException;
@@ -205,7 +205,7 @@ class DocumentsController extends Controller
         }
 
         History::create([
-            'type' => 'document_add',
+            'type' => HistoryTypes::DOCUMENT_ADD,
             'author_id' => Auth::id(),
             'document_id' => $documentObj->id,
             'individual_id' => $individual->id,
@@ -229,7 +229,7 @@ class DocumentsController extends Controller
             $field->value = $request->new_value;
 
             $fHistory = new History();
-            $fHistory->type = 'field';
+            $fHistory->type = HistoryTypes::FIELD;
             $fHistory->before = $field->getDifference()['before'];
             $fHistory->after = $field->getDifference()['after'];
             $fHistory->author()->associate(Auth::id());
@@ -287,39 +287,13 @@ class DocumentsController extends Controller
         $document->delete();
 
         History::create([
-            'type' => 'document_delete',
+            'type' => HistoryTypes::DOCUMENT_DELETE,
             'author_id' => Auth::id(),
             'individual_id' => $individual->id,
             'document_id' => $docId
         ]);
 
         return response()->json(null, 204);
-    }
-
-    public function restoreDocument(Request $request)
-    {
-        $document = Document::withTrashed()->find((int)$request->id);
-
-        if (!$document) {
-            throw new DocumentNotFoundException();
-        }
-
-        if (!$document->deleted_at) {
-            throw new DocumentAlreadyRestoredException();
-        }
-
-        $document->restore();
-
-        History::create([
-            'type' => 'document_restore',
-            'author_id' => Auth::id(),
-            'individual_id' => $document->individual->id,
-            'document_id' => $document->id
-        ]);
-
-        return response()->json([
-            'success' => true
-        ]);
     }
 
     private function saveDocument($document, $name)

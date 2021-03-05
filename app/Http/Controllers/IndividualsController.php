@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Individual\GetIndividualByIdAction;
+use App\Actions\Individual\GetIndividualByIdRequest;
+use App\Actions\Individual\GetIndividualCollectionAction;
 use App\Constants\FieldTypes;
+use App\Constants\HistoryTypes;
 use App\Exceptions\Individual\CantCreateWithoutFioException;
 use App\Exceptions\Individual\IndividualNotFoundException;
 use App\Exceptions\Individual\SuchIndividualAlreadyExistsException;
@@ -17,14 +21,22 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use \Illuminate\Http\JsonResponse;
 
 class IndividualsController extends Controller
 {
     private IndividualPresenter $individualPresenter;
+    private GetIndividualCollectionAction $getIndividualsAction;
+    private GetIndividualByIdAction $getIndividualByIdAction;
 
-    public function __construct(IndividualPresenter $individualPresenter)
-    {
+    public function __construct(
+        IndividualPresenter $individualPresenter,
+        GetIndividualCollectionAction $getIndividualsAction,
+        GetIndividualByIdAction $getIndividualByIdAction
+    ) {
         $this->individualPresenter = $individualPresenter;
+        $this->getIndividualsAction = $getIndividualsAction;
+        $this->getIndividualByIdAction = $getIndividualByIdAction;
     }
 
     public function individualsView()
@@ -32,11 +44,9 @@ class IndividualsController extends Controller
         return view('individuals');
     }
 
-    public function getIndividuals()
+    public function getIndividuals(): JsonResponse
     {
-        $individuals = Individual::has('documents', '>=', 1)
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $individuals = $this->getIndividualsAction->execute()->getIndividuals();
 
         return response()->json(
             $this->individualPresenter->presentCollection($individuals)
@@ -52,18 +62,16 @@ class IndividualsController extends Controller
 
     public function getIndividualById(string $id)
     {
-        $individual = Individual::find($id);
-
-        if (!$individual) {
-            throw new IndividualNotFoundException();
-        }
+        $individual = $this->getIndividualByIdAction->execute(
+            new GetIndividualByIdRequest((int)$id)
+        )->getIndividual();
 
         return response()->json(
             $this->individualPresenter->present($individual)
         );
     }
 
-    public function save(Request $request)
+    public function save(Request $request): JsonResponse
     {
         $payloadData = $request->payloadData;
         $response = [];
@@ -94,7 +102,6 @@ class IndividualsController extends Controller
             throw new CantCreateWithoutFioException();
         }
 
-        $fieldModels = [];
         foreach ($payloadData as $dbrainTaskKey => $value) {
             $this->checkIfIndividualExists($payloadData[$dbrainTaskKey]);
 
@@ -110,7 +117,7 @@ class IndividualsController extends Controller
                 $document->save();
 
                 History::create([
-                    'type' => 'document_add',
+                    'type' => HistoryTypes::DOCUMENT_ADD,
                     'author_id' => Auth::id(),
                     'document_id' => $document->id,
                     'individual_id' => $individual->id,

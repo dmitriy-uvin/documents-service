@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Task\GetTasksCollectionAction;
+use \Illuminate\Http\JsonResponse;
 
 class TasksController extends Controller
 {
@@ -18,7 +19,7 @@ class TasksController extends Controller
         return view('tasks');
     }
 
-    public function getAllTasks()
+    public function getAllTasks(): JsonResponse
     {
         $tasks = $this->getTasksCollectionAction->execute()->getTasks();
 
