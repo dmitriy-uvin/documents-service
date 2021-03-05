@@ -4,7 +4,7 @@ namespace App\Actions\User;
 
 use App\Repositories\User\UserRepositoryInterface;
 
-class GetUsersCollectionAction
+class GetUserByIdAction
 {
     private UserRepositoryInterface $userRepository;
 
@@ -13,10 +13,10 @@ class GetUsersCollectionAction
         $this->userRepository = $userRepository;
     }
 
-    public function execute(): GetUsersCollectionResponse
+    public function execute(GetUserByIdRequest $request): GetUserByIdResponse
     {
-        $users = $this->userRepository->getAll();
+        $user = $this->userRepository->findById($request->getId());
 
-        return new GetUsersCollectionResponse($users);
+        return new GetUserByIdResponse($user);
     }
 }

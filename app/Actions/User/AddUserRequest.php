@@ -4,29 +4,45 @@ namespace App\Actions\User;
 
 class AddUserRequest
 {
-    private string $name;
+    private string $firstName;
+    private string $secondName;
+    private string $patronymic;
     private string $email;
     private string $password;
     private string $department;
-    private int $roleId;
+    private string $roleAlias;
 
     public function __construct(
-        string $name,
+        string $firstName,
+        string $secondName,
+        string $patronymic,
         string $email,
         string $password,
         string $department,
-        int $roleId
+        string $roleAlias
     ) {
-        $this->name = $name;
+        $this->firstName = $firstName;
+        $this->secondName = $secondName;
+        $this->patronymic = $patronymic;
         $this->email = $email;
         $this->password = $password;
         $this->department = $department;
-        $this->roleId = $roleId;
+        $this->roleAlias = $roleAlias;
     }
 
-    public function getName(): string
+    public function getFirstName(): string
     {
-        return $this->name;
+        return $this->firstName;
+    }
+
+    public function getSecondName(): string
+    {
+        return $this->secondName;
+    }
+
+    public function getPatronymic(): string
+    {
+        return $this->patronymic;
     }
 
     public function getEmail(): string
@@ -44,8 +60,8 @@ class AddUserRequest
         return $this->department;
     }
 
-    public function getRoleId(): int
+    public function getRoleAlias(): string
     {
-        return $this->roleId;
+        return $this->roleAlias;
     }
 }

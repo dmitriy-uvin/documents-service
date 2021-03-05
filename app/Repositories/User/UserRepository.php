@@ -36,4 +36,14 @@ class UserRepository implements UserRepositoryInterface
     {
         return User::all();
     }
+
+    public function findById(int $id): ?User
+    {
+        return User::find($id);
+    }
+
+    public function deleteById(int $id): void
+    {
+        User::destroy($id);
+    }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\Role\RoleRepository;
+use App\Repositories\Role\RoleRepositoryInterface;
 use App\Repositories\User\UserRepository;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
@@ -10,7 +12,8 @@ class AppServiceProvider extends ServiceProvider
 {
 
     public $bindings = [
-        UserRepositoryInterface::class => UserRepository::class
+        UserRepositoryInterface::class => UserRepository::class,
+        RoleRepositoryInterface::class => RoleRepository::class
     ];
 
     /**

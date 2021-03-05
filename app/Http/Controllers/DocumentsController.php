@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Constants\TaskConstants;
+use App\Constants\TaskTypes;
 use App\Exceptions\Document\DocumentAlreadyRestoredException;
 use App\Exceptions\Document\DocumentForAnotherPersonException;
 use App\Exceptions\Document\DocumentNotFoundException;
@@ -62,7 +62,7 @@ class DocumentsController extends Controller
                     'user_id' => Auth::id(),
                     'document_path' => 'documents/' . $name,
                     'task_id' => $taskId,
-                    'type' => TaskConstants::CLASSIFY_TYPE,
+                    'type' => TaskTypes::CLASSIFY_TYPE,
                     'document_type' => $item['document']['type']
                 ]);
                 $responses[] = $task;

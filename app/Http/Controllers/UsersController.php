@@ -3,52 +3,35 @@
 namespace App\Http\Controllers;
 
 use App\Actions\User\AddUserAction;
+use App\Actions\User\BlockUserByIdAction;
+use App\Actions\User\BlockUserByIdRequest;
+use App\Actions\User\DeleteUserByIdAction;
+use App\Actions\User\DeleteUserByIdRequest;
+use App\Actions\User\GetUserByIdAction;
+use App\Actions\User\GetUserByIdRequest;
 use App\Actions\User\GetUsersCollectionAction;
-use App\Constants\Roles;
-use App\Exceptions\User\BlockDeveloperException;
-use App\Exceptions\User\BlockUserWithSameRoleException;
-use App\Exceptions\User\BlockYourselfException;
-use App\Exceptions\User\DeleteDeveloperException;
-use App\Exceptions\User\DeleteUserWithSameRoleException;
-use App\Exceptions\User\DeleteYourselfException;
-use App\Exceptions\User\UserNotFoundException;
-use App\Exceptions\User\UserWithEmailAlreadyExistsException;
-use App\Http\Requests\AddUserRequest;
 use App\Http\Requests\CreateUserRequest;
-use App\Models\Role;
-use App\Models\User;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
     private AddUserAction $addUserAction;
     private GetUsersCollectionAction $getUsersCollectionAction;
+    private GetUserByIdAction $getUserByIdAction;
+    private DeleteUserByIdAction $deleteUserByIdAction;
+    private BlockUserByIdAction $blockUserByIdAction;
 
     public function __construct(
         AddUserAction $addUserAction,
-        GetUsersCollectionAction $getUsersCollectionAction
+        GetUsersCollectionAction $getUsersCollectionAction,
+        GetUserByIdAction $getUserByIdAction,
+        DeleteUserByIdAction $deleteUserByIdAction,
+        BlockUserByIdAction $blockUserByIdAction
     ) {
         $this->addUserAction = $addUserAction;
         $this->getUsersCollectionAction = $getUsersCollectionAction;
-    }
-
-    public function addUser(AddUserRequest $request): \Illuminate\Http\RedirectResponse
-    {
-        $this->addUserAction->execute(
-            new \App\Actions\User\AddUserRequest(
-                $request->name,
-                $request->email,
-                $request->password,
-                $request->department,
-                $request->role_id
-            )
-        );
-
-        return redirect()
-            ->route('home')
-            ->with('user-added', 'Пользователь был создан!');
+        $this->getUserByIdAction = $getUserByIdAction;
+        $this->deleteUserByIdAction = $deleteUserByIdAction;
+        $this->blockUserByIdAction = $blockUserByIdAction;
     }
 
     public function getAllUsers(): \Illuminate\Http\JsonResponse
@@ -65,7 +48,9 @@ class UsersController extends Controller
 
     public function getUserById(string $id)
     {
-        $user = User::find((int)$id);
+        $user = $this->getUserByIdAction->execute(
+            new GetUserByIdRequest((int)$id)
+        );
 
         return view('user', [
             'user' => $user
@@ -75,93 +60,36 @@ class UsersController extends Controller
 
     public function createUser(CreateUserRequest $request): \Illuminate\Http\RedirectResponse
     {
-        $user = User::where('email', '=', $request->email)
-            ->get()
-            ->first();
-
-        if ($user) {
-            throw new UserWithEmailAlreadyExistsException();
-        }
-
-        $user = User::create([
-            'first_name' => $request->first_name,
-            'second_name' => $request->second_name,
-            'patronymic' => $request->patronymic,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'unhashed_password' => $request->password,
-            'department' => $request->department,
-        ]);
-
-        $user
-            ->role()
-            ->attach(Role::where('alias', '=', $request->role)
-                ->get()
-                ->first()
-            );
+        $this->addUserAction->execute(
+            new \App\Actions\User\AddUserRequest(
+                $request->first_name,
+                $request->second_name,
+                $request->patronymic,
+                $request->email,
+                $request->password,
+                $request->department,
+                $request->role
+            )
+        );
 
         return redirect()->route('editor');
     }
 
-    public function deleteUser(string $id): void
+    public function deleteUser(string $id): \Illuminate\Http\JsonResponse
     {
-        $user = User::find($id);
+        $this->deleteUserByIdAction->execute(
+            new DeleteUserByIdRequest((int)$id)
+        );
 
-        $this->isAvailableToBlockOrDeleteUser($user, $id, 'delete');
-
-        $user->delete();
+        return response()->json();
     }
 
-    public function changeUserBlockStatus(string $id): void
+    public function changeUserBlockStatus(string $id): \Illuminate\Http\JsonResponse
     {
-        $user = User::find($id);
+        $response = $this->blockUserByIdAction->execute(
+            new BlockUserByIdRequest((int)$id)
+        );
 
-        $this->isAvailableToBlockOrDeleteUser($user, $id, 'block');
-
-        $user->is_blocked = !$user->is_blocked;
-        $user->save();
-    }
-
-    protected function isAvailableToBlockOrDeleteUser($user, $id, string $action): void
-    {
-        if (!$user) {
-            throw new UserNotFoundException();
-        }
-
-        $authUser = Auth::user();
-
-        if (!$authUser) {
-            throw new AuthenticationException();
-        }
-
-        if ((int)$id === (int)$authUser->id) {
-            if ($action === 'delete') {
-                throw new DeleteYourselfException();
-            }
-            if ($action === 'block') {
-                throw new BlockYourselfException();
-            }
-        }
-
-        if ($user->getRole()->alias === $authUser->getRole()->alias) {
-            if ($action === 'delete') {
-                throw new DeleteUserWithSameRoleException();
-            }
-            if ($action === 'block') {
-                throw new BlockUserWithSameRoleException();
-            }
-        }
-
-        if (
-            $user->getRole()->alias === Roles::DEVELOPER_ALIAS
-            && $authUser->getRole()->alias === Roles::ADMINISTRATOR_ALIAS
-        ) {
-            if ($action === 'delete') {
-                throw new DeleteDeveloperException();
-            }
-            if ($action === 'block') {
-                throw new BlockDeveloperException();
-            }
-        }
+        return response()->json($response->getUser());
     }
 }
