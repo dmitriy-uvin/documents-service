@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\User\AddUserAction;
 use App\Constants\Roles;
 use App\Exceptions\User\BlockDeveloperException;
 use App\Exceptions\User\BlockUserWithSameRoleException;
@@ -21,28 +22,31 @@ use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
-    public function addUser(AddUserRequest $request)
+    private AddUserAction $addUserAction;
+
+    public function __construct(AddUserAction $addUserAction)
     {
-        if (!is_null(User::where('email', '=', $request->email)->get())) {
-            throw new UserWithEmailAlreadyExistsException();
-        }
+        $this->addUserAction = $addUserAction;
+    }
 
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->unhashed_password = $request->password;
-        $user->password = Hash::make($request->password);
-        $user->department = $request->department;
-        $user->save();
-
-        $user->role()->attach($request->role_id);
+    public function addUser(AddUserRequest $request): \Illuminate\Http\RedirectResponse
+    {
+        $this->addUserAction->execute(
+            new \App\Actions\User\AddUserRequest(
+                $request->name,
+                $request->email,
+                $request->password,
+                $request->department,
+                $request->role_id
+            )
+        );
 
         return redirect()
             ->route('home')
             ->with('user-added', 'Пользователь был создан!');
     }
 
-    public function getAllUsers()
+    public function getAllUsers(): \Illuminate\Http\JsonResponse
     {
         $users = User::all();
         return response()->json($users);
@@ -63,7 +67,7 @@ class UsersController extends Controller
     }
 
 
-    public function createUser(CreateUserRequest $request)
+    public function createUser(CreateUserRequest $request): \Illuminate\Http\RedirectResponse
     {
         $user = User::where('email', '=', $request->email)
             ->get()
@@ -93,7 +97,7 @@ class UsersController extends Controller
         return redirect()->route('editor');
     }
 
-    public function deleteUser(string $id)
+    public function deleteUser(string $id): void
     {
         $user = User::find($id);
 
@@ -102,7 +106,7 @@ class UsersController extends Controller
         $user->delete();
     }
 
-    public function changeUserBlockStatus(string $id)
+    public function changeUserBlockStatus(string $id): void
     {
         $user = User::find($id);
 
@@ -112,7 +116,7 @@ class UsersController extends Controller
         $user->save();
     }
 
-    protected function isAvailableToBlockOrDeleteUser($user, $id, string $action)
+    protected function isAvailableToBlockOrDeleteUser($user, $id, string $action): void
     {
         if (!$user) {
             throw new UserNotFoundException();
