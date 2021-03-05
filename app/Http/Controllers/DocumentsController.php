@@ -189,15 +189,6 @@ class DocumentsController extends Controller
                     throw new DocumentForAnotherPersonException();
                 }
             }
-
-//            $individualBirthDate = FioService::getIndividualBirthDate($individual);
-//            $birthDateFromResponse = FioService::getBirthDateFromResponse($response);
-//
-//            if ($individualBirthDate && $birthDateFromResponse) {
-//                if ($individualBirthDate !== $birthDateFromResponse) {
-//                    throw new DocumentForAnotherPersonException();
-//                }
-//            }
         }
 
         $documentObj = new Document();

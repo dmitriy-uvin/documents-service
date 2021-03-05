@@ -14,7 +14,9 @@ class TasksController extends Controller
 
     public function getAllTasks()
     {
-        $tasks = Task::orderBy('created_at', 'desc')->get()->all();
+        $tasks = Task::orderBy('created_at', 'desc')
+            ->get()
+            ->all();
 
         return response()->json($tasks);
     }

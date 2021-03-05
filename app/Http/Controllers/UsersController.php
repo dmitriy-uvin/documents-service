@@ -17,7 +17,6 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Http\Request;
 
 class UsersController extends Controller
 {
@@ -65,7 +64,10 @@ class UsersController extends Controller
 
     public function createUser(CreateUserRequest $request)
     {
-        $user = User::where('email', '=', $request->email)->get()->first();
+        $user = User::where('email', '=', $request->email)
+            ->get()
+            ->first();
+
         if ($user) {
             throw new UserWithEmailAlreadyExistsException();
         }
@@ -79,6 +81,7 @@ class UsersController extends Controller
             'unhashed_password' => $request->password,
             'department' => $request->department,
         ]);
+
         $user
             ->role()
             ->attach(Role::where('alias', '=', $request->role)

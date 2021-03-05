@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Individual\SearchIndividualsAction;
-use App\Actions\Individual\SearchIndividualsRequest;
 use App\Constants\FieldTypes;
 use App\Exceptions\Individual\CantCreateWithoutFioException;
 use App\Exceptions\Individual\IndividualNotFoundException;
 use App\Exceptions\Individual\SuchIndividualAlreadyExistsException;
-use App\Exceptions\SomethingWentWrongException;
 use App\Models\Document;
 use App\Models\DocumentImage;
 use App\Models\Field;
@@ -23,20 +20,11 @@ use Illuminate\Support\Str;
 
 class IndividualsController extends Controller
 {
-    private string $dbrainApiUrl;
-    private string $dbrainToken;
     private IndividualPresenter $individualPresenter;
-    private SearchIndividualsAction $searchIndividualsAction;
 
-    public function __construct(
-        IndividualPresenter $individualPresenter,
-        SearchIndividualsAction $searchIndividualsAction
-    )
+    public function __construct(IndividualPresenter $individualPresenter)
     {
-        $this->dbrainApiUrl = config('dbrain.api_url');
-        $this->dbrainToken = config('dbrain.token');
         $this->individualPresenter = $individualPresenter;
-        $this->searchIndividualsAction = $searchIndividualsAction;
     }
 
     public function individualsView()
@@ -46,7 +34,9 @@ class IndividualsController extends Controller
 
     public function getIndividuals()
     {
-        $individuals = Individual::has('documents', '>=', 1)->orderBy('created_at', 'desc')->get();
+        $individuals = Individual::has('documents', '>=', 1)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return response()->json(
             $this->individualPresenter->presentCollection($individuals)
@@ -296,22 +286,6 @@ class IndividualsController extends Controller
         }
     }
 
-//    public function search(Request $request)
-//    {
-//        $individuals = $this->searchIndividualsAction->execute(
-//            new SearchIndividualsRequest(
-//                $request->snils,
-//                $request->inn,
-//                $request->passport,
-//                $request->name,
-//                $request->surname,
-//                $request->patronymic,
-//            )
-//        )->getIndividuals();
-//
-//        return response()->json($individuals);
-//    }
-
     public function search(Request $request)
     {
         $snilsNumber = $request->snils;
@@ -379,7 +353,8 @@ class IndividualsController extends Controller
                 ->where(DB::raw('LOWER(value)'), 'like', '%' . $fio . '%');
         });
 
-        $individuals = $individuals->merge($documentQuery
+        $individuals = $individuals
+            ->merge($documentQuery
             ->get()
             ->map(fn($document) => $document->individual)
             ->unique('id'))->all();

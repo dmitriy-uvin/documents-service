@@ -13,7 +13,8 @@ class AddUserRequest extends FormRequest
         return [
             'name' => 'required',
             'email' => 'required|string|email',
-            'password' => 'required|string|min:8'
+            'password' => 'required|string|min:8',
+            'department' => 'required|string'
         ];
     }
 }
