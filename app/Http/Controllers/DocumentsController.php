@@ -2,6 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Document\AddDocumentForIndividualAction;
+use App\Actions\Document\AddDocumentForIndividualRequest;
+use App\Actions\Document\DeleteDocumentByIdAction;
+use App\Actions\Document\DeleteDocumentByIdRequest;
+use App\Actions\Field\UpdateFieldByIdAction;
+use App\Actions\Field\UpdateFieldByIdRequest;
 use App\Constants\HistoryTypes;
 use App\Constants\TaskTypes;
 use App\Exceptions\Document\DocumentForAnotherPersonException;
@@ -10,26 +16,47 @@ use App\Exceptions\Document\UnableToDeleteDocumentException;
 use App\Exceptions\Field\FieldNotFoundException;
 use App\Exceptions\Individual\IndividualNotFoundException;
 use App\Exceptions\Task\TaskNotFoundException;
+use App\Http\Requests\AddDocumentForIndividual;
+use App\Http\Requests\UpdateFieldByIdHttpRequest;
 use App\Models\Document;
 use App\Models\DocumentImage;
 use App\Models\Field;
 use App\Models\History;
 use App\Models\Individual;
 use App\Models\Task;
+use App\Presenters\DocumentPresenter;
+use App\Presenters\FieldPresenter;
 use App\Services\DbrainApiService;
 use App\Services\FioService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use \Illuminate\Http\JsonResponse;
 
 class DocumentsController extends Controller
 {
     private DbrainApiService $apiService;
+    private DeleteDocumentByIdAction $deleteDocumentByIdAction;
+    private AddDocumentForIndividualAction $addDocumentForIndividualAction;
+    private DocumentPresenter $documentPresenter;
+    private FieldPresenter $fieldPresenter;
+    private UpdateFieldByIdAction $updateFieldByIdAction;
 
-    public function __construct(DbrainApiService $service)
-    {
+    public function __construct(
+        DbrainApiService $service,
+        DeleteDocumentByIdAction $deleteDocumentByIdAction,
+        AddDocumentForIndividualAction $addDocumentForIndividualAction,
+        UpdateFieldByIdAction $updateFieldByIdAction,
+        DocumentPresenter $documentPresenter,
+        FieldPresenter $fieldPresenter
+    ) {
         $this->apiService = $service;
+        $this->deleteDocumentByIdAction = $deleteDocumentByIdAction;
+        $this->addDocumentForIndividualAction = $addDocumentForIndividualAction;
+        $this->updateFieldByIdAction = $updateFieldByIdAction;
+        $this->documentPresenter = $documentPresenter;
+        $this->fieldPresenter = $fieldPresenter;
     }
 
     public function index()
@@ -37,7 +64,7 @@ class DocumentsController extends Controller
         return view('documents');
     }
 
-    public function getClassifyTasks(Request $request)
+    public function getClassifyTasks(Request $request): JsonResponse
     {
         $documents = $request->file('documents');
 
@@ -72,7 +99,7 @@ class DocumentsController extends Controller
         return response()->json($responses);
     }
 
-    public function getRecognizeTask(string $id)
+    public function getRecognizeTask(string $id): JsonResponse
     {
         $task = Task::find($id);
 
@@ -88,7 +115,7 @@ class DocumentsController extends Controller
         return response()->json($response);
     }
 
-    public function replaceDocument(Request $request)
+    public function replaceDocument(Request $request): JsonResponse
     {
         $task = Task::find($request->task_id);
 
@@ -130,123 +157,41 @@ class DocumentsController extends Controller
             $fieldObj->save();
         }
 
-        return response()->json([
-            "success" => true
-        ]);
+        return response()->json();
     }
 
-    public function addDocumentForIndividual(Request $request)
+    public function addDocumentForIndividual(AddDocumentForIndividual $request): JsonResponse
     {
-        $task = Task::find($request->task_id);
+        $response = $this->addDocumentForIndividualAction->execute(
+            new AddDocumentForIndividualRequest(
+                (int)$request->task_id,
+                (int)$request->individual_id,
+                (bool)$request->force,
+            )
+        );
 
-        if (!$task) {
-            throw new TaskNotFoundException();
-        }
-
-        $individual = Individual::find($request->individual_id);
-
-        if (!$individual) {
-            throw new IndividualNotFoundException();
-        }
-
-        $document = fopen(storage_path('app/public/' . $task->document_path), 'rb');
-        $recognizeTaskId = $this->apiService->getRecognizeTaskId($document);
-        $response = $this->apiService->getRecognizeResponse($recognizeTaskId);
-
-        if (!$request->force) {
-            $individualName = FioService::getIndividualName($individual);
-            $nameFromResponse = FioService::getNameFromResponse($response['items'][0]['fields']);
-
-            if ($individualName && $nameFromResponse) {
-                if ($individualName !== $nameFromResponse) {
-                    throw new DocumentForAnotherPersonException();
-                }
-            }
-
-            $individualSurname = FioService::getIndividualSurname($individual);
-            $surnameFromResponse = FioService::getSurnameFromResponse($response['items'][0]['fields']);
-
-            if ($individualSurname && $surnameFromResponse && $individualSurname !== $surnameFromResponse) {
-                throw new DocumentForAnotherPersonException();
-            }
-
-            $individualPatronymic = FioService::getIndividualPatronymic($individual);
-            $patronymicFromResponse = FioService::getPatronymicFromResponse($response['items'][0]['fields']);
-
-            if ($individualPatronymic && $patronymicFromResponse && $individualPatronymic !== $patronymicFromResponse) {
-                throw new DocumentForAnotherPersonException();
-            }
-
-            $individualFio = FioService::getIndividualFio($individual);
-            $fioFromResponse = FioService::getFioFromResponse($response['items'][0]['fields']);
-
-            if ($individualFio && $fioFromResponse && $individualFio !== $fioFromResponse) {
-                throw new DocumentForAnotherPersonException();
-            }
-        }
-
-        $documentObj = new Document();
-        $documentObj->type = $task->document_type;
-        $documentObj->individual()->associate($individual);
-        $documentObj->save();
-
-        $documentImage = new DocumentImage();
-        $documentImage->path = $task->document_path;
-        $documentImage->document()->associate($documentObj);
-        $documentImage->save();
-
-        foreach ($response['items'][0]['fields'] as $fieldType => $field) {
-            $fieldObj = new Field();
-            $fieldObj->type = $fieldType;
-            $fieldObj->value = $field['text'] ?: '';
-            $fieldObj->confidence = $field['confidence'];
-            $fieldObj->document()->associate($documentObj);
-            $fieldObj->save();
-        }
-
-        History::create([
-            'type' => HistoryTypes::DOCUMENT_ADD,
-            'author_id' => Auth::id(),
-            'document_id' => $documentObj->id,
-            'individual_id' => $individual->id,
-            'before' => $task->document_path
-        ]);
-
-        return response()->json([
-            "success" => true
-        ]);
+        return response()->json(
+            $this->documentPresenter->present($response->getDocument())
+        );
     }
 
-    public function updateField(Request $request)
+    public function updateField(UpdateFieldByIdHttpRequest $request): JsonResponse
     {
-        $field = Field::find($request->field_id);
+        $response = $this->updateFieldByIdAction->execute(
+            new UpdateFieldByIdRequest(
+                (int)$request->field_id,
+                $request->new_value
+            )
+        );
 
-        if (!$field) {
-            throw new FieldNotFoundException();
-        }
-
-        if ($field->value !== $request->new_value) {
-            $field->value = $request->new_value;
-
-            $fHistory = new History();
-            $fHistory->type = HistoryTypes::FIELD;
-            $fHistory->before = $field->getDifference()['before'];
-            $fHistory->after = $field->getDifference()['after'];
-            $fHistory->author()->associate(Auth::id());
-            $fHistory->field()->associate($field);
-            $fHistory->document()->associate($field->document->id);
-            $fHistory->individual()->associate($field->document->individual->id);
-            $fHistory->save();
-
-            $field->save();
-        }
-
-        return response()->json([
-            "success" => true
-        ]);
+        return response()->json(
+            $this->fieldPresenter->present(
+                $response->getField()
+            )
+        );
     }
 
-    public function getRecognizedDataByTaskKey(Request $request)
+    public function getRecognizedDataByTaskKey(Request $request): JsonResponse
     {
         $tasks = Task::where('task_id', '=', $request->task_key)->get()->all();
 
@@ -269,34 +214,16 @@ class DocumentsController extends Controller
         return response()->json($allResponses);
     }
 
-    public function deleteDocument(string $id)
+    public function deleteDocument(string $id): JsonResponse
     {
-        $document = Document::find($id);
-
-        if (!$document) {
-            throw new DocumentNotFoundException();
-        }
-        $individual = $document->individual;
-
-        if ($individual->documents()->count() <= 1) {
-            throw new UnableToDeleteDocumentException();
-        }
-
-        $docId = $document->id;
-
-        $document->delete();
-
-        History::create([
-            'type' => HistoryTypes::DOCUMENT_DELETE,
-            'author_id' => Auth::id(),
-            'individual_id' => $individual->id,
-            'document_id' => $docId
-        ]);
+        $this->deleteDocumentByIdAction->execute(
+            new DeleteDocumentByIdRequest((int)$id)
+        );
 
         return response()->json(null, 204);
     }
 
-    private function saveDocument($document, $name)
+    private function saveDocument($document, $name): void
     {
         Storage::put('public/documents/' . $name, $document);
     }

@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 class FioService
 {
-    public static function getNameFromResponse(array $fields) {
+    public function getNameFromResponse(array $fields) {
         $name = null;
         foreach ($fields as $fieldType => $item) {
             if (in_array($fieldType, FieldTypes::getNameTypes(), true)) {
@@ -18,7 +18,7 @@ class FioService
         return Str::lower($name);
     }
 
-    public static function getSurnameFromResponse(array $fields) {
+    public function getSurnameFromResponse(array $fields) {
         $surname = null;
         foreach ($fields as $fieldType => $item) {
             if (in_array($fieldType, FieldTypes::getSurnameTypes(), true)) {
@@ -28,7 +28,7 @@ class FioService
         return Str::lower($surname);
     }
 
-    public static function getFioFromResponse(array $fields) {
+    public function getFioFromResponse(array $fields) {
         $fio = null;
         $name = null;
         $surname = null;
@@ -55,7 +55,7 @@ class FioService
         return Str::lower($fio);
     }
 
-    public static function getPatronymicFromResponse(array $fields) {
+    public function getPatronymicFromResponse(array $fields) {
         $patronymic = null;
         foreach ($fields as $fieldType => $item) {
             if (in_array($fieldType, FieldTypes::getPatronymicTypes(), true)) {
@@ -65,7 +65,7 @@ class FioService
         return Str::lower($patronymic);
     }
 
-    public static function getBirthDateFromResponse(array $fields) {
+    public function getBirthDateFromResponse(array $fields) {
         $birthDate = null;
         $birthDay = null;
         $birthMonth = null;
@@ -90,7 +90,7 @@ class FioService
         return Str::lower($birthDate);
     }
 
-    public static function getIndividualName(Individual $individual)
+    public function getIndividualName(Individual $individual)
     {
         $name = null;
         $docs = $individual->documents;
@@ -105,7 +105,7 @@ class FioService
         return Str::lower($name);
     }
 
-    public static function getIndividualSurname(Individual $individual)
+    public function getIndividualSurname(Individual $individual)
     {
         $surname = null;
         $docs = $individual->documents;
@@ -120,7 +120,7 @@ class FioService
         return Str::lower($surname);
     }
 
-    public static function getIndividualPatronymic(Individual $individual)
+    public function getIndividualPatronymic(Individual $individual)
     {
         $patronymic = null;
         $docs = $individual->documents;
@@ -135,7 +135,7 @@ class FioService
         return Str::lower($patronymic);
     }
 
-    public static function getIndividualBirthDate(Individual $individual)
+    public function getIndividualBirthDate(Individual $individual)
     {
         $birthDate = null;
         $birthDay = null;
@@ -165,7 +165,7 @@ class FioService
         return Str::lower($birthDate);
     }
 
-    public static function getIndividualFio(Individual $individual)
+    public function getIndividualFio(Individual $individual)
     {
         $fio = null;
         $name = null;

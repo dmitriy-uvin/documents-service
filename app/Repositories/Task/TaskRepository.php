@@ -18,4 +18,9 @@ class TaskRepository implements TaskRepositoryInterface
 
         return $query->get();
     }
+
+    public function findById(int $id): ?Task
+    {
+        return Task::find($id);
+    }
 }
