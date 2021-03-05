@@ -142,7 +142,10 @@ class UsersController extends Controller
             }
         }
 
-        if ($user->getRole()->alias === Roles::DEVELOPER_ALIAS && $authUser->getRole()->alias === Roles::ADMINISTRATOR_ALIAS) {
+        if (
+            $user->getRole()->alias === Roles::DEVELOPER_ALIAS
+            && $authUser->getRole()->alias === Roles::ADMINISTRATOR_ALIAS
+        ) {
             if ($action === 'delete') {
                 throw new DeleteDeveloperException();
             }

@@ -74,15 +74,17 @@ class IndividualsController extends Controller
             foreach ($payloadData[$dbrainTaskKey] as $taskId => $item) {
                 foreach ($item['fields'] as $fieldType => $field) {
                     if (
-                        in_array($fieldType, FieldTypes::getNameTypes())
+                        in_array($fieldType, FieldTypes::getNameTypes(), true)
                         ||
-                        in_array($fieldType, FieldTypes::getSurnameTypes())
+                        in_array($fieldType, FieldTypes::getSurnameTypes(), true)
                         ||
-                        in_array($fieldType, FieldTypes::getPatronymicTypes())
+                        in_array($fieldType, FieldTypes::getPatronymicTypes(), true)
                         ||
-                        in_array($fieldType, FieldTypes::getFioTypes())
+                        in_array($fieldType, FieldTypes::getFioTypes(), true)
                     ) {
-                        if ($field['text']) $canCreate = true;
+                        if ($field['text']) {
+                            $canCreate = true;
+                        }
                     }
                 }
             }
@@ -92,6 +94,7 @@ class IndividualsController extends Controller
             throw new CantCreateWithoutFioException();
         }
 
+        $fieldModels = [];
         foreach ($payloadData as $dbrainTaskKey => $value) {
             $this->checkIfIndividualExists($payloadData[$dbrainTaskKey]);
 
@@ -244,36 +247,47 @@ class IndividualsController extends Controller
                         similar_text($findSurname . ' ' . $findName . ' ' . $findPatronymic, $docFio, $perc);
                         $percents += $perc;
                     }
+                } else if (!$docFio) {
+                    ++$counter;
+                    similar_text($findFio, $docSurname . ' ' . $docName . ' ' . $docPatronymic, $perc);
+                    $percents += $perc;
                 } else {
-                    if (!$docFio) {
-                        ++$counter;
-                        similar_text($findFio, $docSurname . ' ' . $docName . ' ' . $docPatronymic, $perc);
-                        $percents += $perc;
-                    } else {
-                        ++$counter;
-                        similar_text($docFio, $findFio, $perc);
-                        $percents += $perc;
-                    }
+                    ++$counter;
+                    similar_text($docFio, $findFio, $perc);
+                    $percents += $perc;
                 }
 
                 $result = 0;
                 if ($percents && $counter) {
-                    if (($findFio && $docFio) || ($findFio && !$docFio)) {
+                    if (
+                        ($findFio && $docFio)
+                        || ($findFio && !$docFio)
+                    ) {
                         if ($counter === 1) {
                             $result = $percents / $counter;
                         }
                     }
 
-                    if ($findName && $findSurname && $findPatronymic && $docFio) {
-                        if ($counter === 1) {
-                            $result = $percents / $counter;
-                        }
+                    if (
+                        $findName
+                        && $findSurname
+                        && $findPatronymic
+                        && $docFio
+                        && $counter === 1
+                    ) {
+                        $result = $percents / $counter;
                     }
 
-                    if ($findPatronymic && $findName && $findSurname && $docName && $docSurname && $docPatronymic) {
-                        if ($counter === 3) {
-                            $result = $percents / $counter;
-                        }
+                    if (
+                        $findPatronymic
+                        && $findName
+                        && $findSurname
+                        && $docName
+                        && $docSurname
+                        && $docPatronymic
+                        && $counter === 3
+                    ) {
+                        $result = $percents / $counter;
                     }
 
                     if ($result > 85) {
