@@ -10,9 +10,8 @@ use App\Repositories\Document\Criterion\PatronymicCriterion;
 use App\Repositories\Document\Criterion\SecondNameCriterion;
 use App\Repositories\Document\Criterion\SnilsNumberCriterion;
 use App\Repositories\Document\DocumentRepositoryInterface;
-use App\Repositories\Individual\IndividualRepositoryInterface;
 
-class SearchIndividualAction
+final class SearchIndividualAction
 {
     private DocumentRepositoryInterface $documentRepository;
 

@@ -2,7 +2,7 @@
 
 namespace App\Actions\Document;
 
-class GetRecognizedDataByTaskKeyRequest
+final class GetRecognizedDataByTaskKeyRequest
 {
     private string $taskKey;
 

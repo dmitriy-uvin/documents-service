@@ -4,7 +4,7 @@ namespace App\Actions\Document;
 
 use App\Models\Document;
 
-class AddDocumentForIndividualResponse
+final class AddDocumentForIndividualResponse
 {
     private Document $document;
 

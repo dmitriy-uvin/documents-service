@@ -2,7 +2,7 @@
 
 namespace App\Actions\Field;
 
-class UpdateFieldByIdRequest
+final class UpdateFieldByIdRequest
 {
     private int $fieldId;
     private string $fieldValue;

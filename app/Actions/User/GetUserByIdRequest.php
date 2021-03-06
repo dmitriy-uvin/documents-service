@@ -2,7 +2,7 @@
 
 namespace App\Actions\User;
 
-class GetUserByIdRequest
+final class GetUserByIdRequest
 {
     private int $id;
 

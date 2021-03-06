@@ -2,7 +2,7 @@
 
 namespace App\Actions\Document;
 
-class GetClassifyTasksResponse
+final class GetClassifyTasksResponse
 {
     private array $response;
 

@@ -2,7 +2,7 @@
 
 namespace App\Actions\Individual;
 
-class GetIndividualByIdRequest
+final class GetIndividualByIdRequest
 {
     private int $id;
 

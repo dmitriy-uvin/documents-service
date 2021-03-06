@@ -2,7 +2,7 @@
 
 namespace App\Actions\Document;
 
-class GetRecognizeTaskRequest
+final class GetRecognizeTaskRequest
 {
     private int $taskId;
 

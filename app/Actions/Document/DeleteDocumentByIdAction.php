@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Actions\Document;
-
 
 use App\Constants\HistoryTypes;
 use App\Exceptions\Document\DocumentNotFoundException;
@@ -11,7 +9,7 @@ use App\Models\History;
 use App\Repositories\Document\DocumentRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 
-class DeleteDocumentByIdAction
+final class DeleteDocumentByIdAction
 {
     private DocumentRepositoryInterface $documentRepository;
 

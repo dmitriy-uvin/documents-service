@@ -6,7 +6,7 @@ use App\Repositories\Task\Criterion\TaskKeyCriterion;
 use App\Repositories\Task\TaskRepositoryInterface;
 use App\Services\DbrainApiService;
 
-class GetRecognizedDataByTaskKeyAction
+final class GetRecognizedDataByTaskKeyAction
 {
     private TaskRepositoryInterface $taskRepository;
     private DbrainApiService $apiService;

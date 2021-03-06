@@ -2,7 +2,7 @@
 
 namespace App\Actions\User;
 
-class DeleteUserByIdRequest
+final class DeleteUserByIdRequest
 {
     private int $id;
 

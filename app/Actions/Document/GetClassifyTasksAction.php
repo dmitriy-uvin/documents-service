@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class GetClassifyTasksAction
+final class GetClassifyTasksAction
 {
     private DbrainApiService $apiService;
 

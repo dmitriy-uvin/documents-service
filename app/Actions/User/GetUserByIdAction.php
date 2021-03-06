@@ -4,7 +4,7 @@ namespace App\Actions\User;
 
 use App\Repositories\User\UserRepositoryInterface;
 
-class GetUserByIdAction
+final class GetUserByIdAction
 {
     private UserRepositoryInterface $userRepository;
 

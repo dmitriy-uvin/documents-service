@@ -18,7 +18,7 @@ use App\Services\DbrainApiService;
 use App\Services\FioService;
 use Illuminate\Support\Facades\Auth;
 
-class AddDocumentForIndividualAction
+final class AddDocumentForIndividualAction
 {
     private TaskRepositoryInterface $taskRepository;
     private IndividualRepositoryInterface $individualRepository;

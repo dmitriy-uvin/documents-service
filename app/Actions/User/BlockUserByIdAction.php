@@ -6,7 +6,7 @@ use App\Exceptions\User\UserNotFoundException;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Services\UserService;
 
-class BlockUserByIdAction
+final class BlockUserByIdAction
 {
     private UserRepositoryInterface $userRepository;
 

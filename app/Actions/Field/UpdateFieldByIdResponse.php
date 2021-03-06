@@ -4,7 +4,7 @@ namespace App\Actions\Field;
 
 use App\Models\Field;
 
-class UpdateFieldByIdResponse
+final class UpdateFieldByIdResponse
 {
     private Field $field;
 

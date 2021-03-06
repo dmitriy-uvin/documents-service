@@ -4,7 +4,7 @@ namespace App\Actions\Individual;
 
 use Illuminate\Support\Collection;
 
-class GetIndividualCollectionResponse
+final class GetIndividualCollectionResponse
 {
     private Collection $individuals;
 

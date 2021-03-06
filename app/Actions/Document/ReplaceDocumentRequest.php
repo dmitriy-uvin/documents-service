@@ -2,7 +2,7 @@
 
 namespace App\Actions\Document;
 
-class ReplaceDocumentRequest
+final class ReplaceDocumentRequest
 {
     private int $taskId;
     private int $documentId;

@@ -4,7 +4,7 @@ namespace App\Actions\Task;
 
 use Illuminate\Support\Collection;
 
-class GetTasksCollectionResponse
+final class GetTasksCollectionResponse
 {
     private Collection $tasks;
 

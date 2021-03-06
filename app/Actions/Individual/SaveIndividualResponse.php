@@ -2,7 +2,7 @@
 
 namespace App\Actions\Individual;
 
-class SaveIndividualResponse
+final class SaveIndividualResponse
 {
     private array $response;
 

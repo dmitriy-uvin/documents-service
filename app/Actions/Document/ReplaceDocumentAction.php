@@ -13,7 +13,7 @@ use App\Repositories\Task\TaskRepositoryInterface;
 use App\Services\DbrainApiService;
 use Illuminate\Support\Facades\Auth;
 
-class ReplaceDocumentAction
+final class ReplaceDocumentAction
 {
     private DbrainApiService $apiService;
     private FieldRepositoryInterface $fieldRepository;

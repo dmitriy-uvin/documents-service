@@ -8,7 +8,7 @@ use App\Models\History;
 use App\Repositories\Field\FieldRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 
-class UpdateFieldByIdAction
+final class UpdateFieldByIdAction
 {
     private FieldRepositoryInterface $fieldRepository;
 

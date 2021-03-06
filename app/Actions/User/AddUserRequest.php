@@ -2,7 +2,7 @@
 
 namespace App\Actions\User;
 
-class AddUserRequest
+final class AddUserRequest
 {
     private string $firstName;
     private string $secondName;

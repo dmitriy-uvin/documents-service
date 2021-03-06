@@ -2,7 +2,7 @@
 
 namespace App\Actions\Individual;
 
-class SaveIndividualRequest
+final class SaveIndividualRequest
 {
     private array $payloadData;
 

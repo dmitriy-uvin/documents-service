@@ -2,7 +2,7 @@
 
 namespace App\Actions\User;
 
-class BlockUserByIdRequest
+final class BlockUserByIdRequest
 {
     private int $id;
 

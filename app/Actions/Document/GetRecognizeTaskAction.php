@@ -6,7 +6,7 @@ use App\Exceptions\Task\TaskNotFoundException;
 use App\Repositories\Task\TaskRepositoryInterface;
 use App\Services\DbrainApiService;
 
-class GetRecognizeTaskAction
+final class GetRecognizeTaskAction
 {
     private DbrainApiService $apiService;
     private TaskRepositoryInterface $taskRepository;

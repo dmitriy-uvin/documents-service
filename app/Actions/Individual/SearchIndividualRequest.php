@@ -2,7 +2,7 @@
 
 namespace App\Actions\Individual;
 
-class SearchIndividualRequest
+final class SearchIndividualRequest
 {
     private ?string $firstName;
     private ?string $secondName;

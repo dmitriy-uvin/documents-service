@@ -5,13 +5,10 @@ namespace App\Actions\Individual;
 use App\Constants\FieldTypes;
 use App\Constants\HistoryTypes;
 use App\Exceptions\Individual\CantCreateWithoutFioException;
-use App\Exceptions\Task\TaskNotFoundException;
 use App\Models\Document;
 use App\Models\DocumentImage;
-use App\Models\Field;
 use App\Models\History;
 use App\Models\Individual;
-use App\Models\Task;
 use App\Repositories\Document\DocumentRepositoryInterface;
 use App\Repositories\DocumentImage\DocumentImageRepositoryInterface;
 use App\Repositories\Field\FieldRepositoryInterface;
@@ -20,7 +17,7 @@ use App\Repositories\Task\TaskRepositoryInterface;
 use App\Services\IndividualService;
 use Illuminate\Support\Facades\Auth;
 
-class SaveIndividualAction
+final class SaveIndividualAction
 {
     private IndividualRepositoryInterface $individualRepository;
     private TaskRepositoryInterface $taskRepository;

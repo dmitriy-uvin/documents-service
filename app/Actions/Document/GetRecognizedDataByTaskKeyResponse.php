@@ -2,7 +2,7 @@
 
 namespace App\Actions\Document;
 
-class GetRecognizedDataByTaskKeyResponse
+final class GetRecognizedDataByTaskKeyResponse
 {
     private array $response;
 

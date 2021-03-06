@@ -2,7 +2,7 @@
 
 namespace App\Actions\Document;
 
-class AddDocumentForIndividualRequest
+final class AddDocumentForIndividualRequest
 {
     private int $taskId;
     private int $individualId;

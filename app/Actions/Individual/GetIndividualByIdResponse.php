@@ -4,7 +4,7 @@ namespace App\Actions\Individual;
 
 use App\Models\Individual;
 
-class GetIndividualByIdResponse
+final class GetIndividualByIdResponse
 {
     private ?Individual $individual;
 

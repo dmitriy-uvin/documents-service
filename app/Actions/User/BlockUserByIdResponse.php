@@ -4,7 +4,7 @@ namespace App\Actions\User;
 
 use App\Models\User;
 
-class BlockUserByIdResponse
+final class BlockUserByIdResponse
 {
     private User $user;
 

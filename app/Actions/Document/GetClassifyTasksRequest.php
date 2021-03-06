@@ -2,7 +2,7 @@
 
 namespace App\Actions\Document;
 
-class GetClassifyTasksRequest
+final class GetClassifyTasksRequest
 {
     private $uploadedDocuments;
 

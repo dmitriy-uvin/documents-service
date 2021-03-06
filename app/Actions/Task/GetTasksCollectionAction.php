@@ -5,7 +5,7 @@ namespace App\Actions\Task;
 use App\Repositories\Task\Criterion\OrderByCriterion;
 use App\Repositories\Task\TaskRepositoryInterface;
 
-class GetTasksCollectionAction
+final class GetTasksCollectionAction
 {
     private TaskRepositoryInterface $taskRepository;
 

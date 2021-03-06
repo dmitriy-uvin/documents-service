@@ -5,7 +5,7 @@ namespace App\Actions\Individual;
 use App\Exceptions\Individual\IndividualNotFoundException;
 use App\Repositories\Individual\IndividualRepositoryInterface;
 
-class GetIndividualByIdAction
+final class GetIndividualByIdAction
 {
     private IndividualRepositoryInterface $individualRepository;
 

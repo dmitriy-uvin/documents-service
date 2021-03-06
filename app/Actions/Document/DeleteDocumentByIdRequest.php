@@ -2,7 +2,7 @@
 
 namespace App\Actions\Document;
 
-class DeleteDocumentByIdRequest
+final class DeleteDocumentByIdRequest
 {
     private int $id;
 

@@ -4,7 +4,7 @@ namespace App\Actions\User;
 
 use Illuminate\Support\Collection;
 
-class GetUsersCollectionResponse
+final class GetUsersCollectionResponse
 {
     private Collection $users;
 

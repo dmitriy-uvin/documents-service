@@ -10,7 +10,7 @@ use App\Repositories\User\Criterion\EmailCriterion;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Support\Facades\Hash;
 
-class AddUserAction
+final class AddUserAction
 {
     private UserRepositoryInterface $userRepository;
     private RoleRepositoryInterface $roleRepository;

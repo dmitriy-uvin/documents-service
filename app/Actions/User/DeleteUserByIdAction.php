@@ -2,11 +2,10 @@
 
 namespace App\Actions\User;
 
-use App\Exceptions\User\UserNotFoundException;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Services\UserService;
 
-class DeleteUserByIdAction
+final class DeleteUserByIdAction
 {
     private UserRepositoryInterface $userRepository;
 

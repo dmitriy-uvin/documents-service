@@ -6,7 +6,7 @@ use App\Repositories\Individual\Criterion\HasDocumentsCriterion;
 use App\Repositories\Individual\Criterion\OrderByCriterion;
 use App\Repositories\Individual\IndividualRepositoryInterface;
 
-class GetIndividualCollectionAction
+final class GetIndividualCollectionAction
 {
     private IndividualRepositoryInterface $individualRepository;
 
