@@ -48,18 +48,20 @@ class SaveIndividualAction
         $response = [];
         foreach ($request->getPayloadData() as $dbrainTaskKey => $value) {
             foreach ($request->getPayloadData()[$dbrainTaskKey] as $taskId => $item) {
-                foreach ($item['fields'] as $fieldType => $field) {
-                    if (
-                        in_array($fieldType, FieldTypes::getNameTypes(), true)
-                        ||
-                        in_array($fieldType, FieldTypes::getSurnameTypes(), true)
-                        ||
-                        in_array($fieldType, FieldTypes::getPatronymicTypes(), true)
-                        ||
-                        in_array($fieldType, FieldTypes::getFioTypes(), true)
-                    ) {
-                        if ($field['text']) {
-                            $canCreate = true;
+                if (isset($item['fields'])) {
+                    foreach ($item['fields'] as $fieldType => $field) {
+                        if (
+                            in_array($fieldType, FieldTypes::getNameTypes(), true)
+                            ||
+                            in_array($fieldType, FieldTypes::getSurnameTypes(), true)
+                            ||
+                            in_array($fieldType, FieldTypes::getPatronymicTypes(), true)
+                            ||
+                            in_array($fieldType, FieldTypes::getFioTypes(), true)
+                        ) {
+                            if ($field['text']) {
+                                $canCreate = true;
+                            }
                         }
                     }
                 }
@@ -98,14 +100,17 @@ class SaveIndividualAction
                 $this->documentImageRepository->save($documentImage);
 
                 $fieldModels = [];
-                foreach ($item['fields'] as $fieldType => $field) {
-                    $fieldModels[] = [
-                        'type' => $fieldType,
-                        'value' => $field['text'] ?: '',
-                        'confidence' => $field['confidence'],
-                        'document_id' => $document->id
-                    ];
+                if (isset($item['fields'])) {
+                    foreach ($item['fields'] as $fieldType => $field) {
+                        $fieldModels[] = [
+                            'type' => $fieldType,
+                            'value' => $field['text'] ?: '',
+                            'confidence' => $field['confidence'],
+                            'document_id' => $document->id
+                        ];
+                    }
                 }
+
                 $this->fieldRepository->saveButch($fieldModels);
             }
             $response[$dbrainTaskKey] = $individual->id;

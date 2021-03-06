@@ -13,6 +13,8 @@ class Document extends Model
 
     protected $table = 'documents';
 
+    public const PATH = 'public/documents/';
+
     protected $fillable = [
         'individual_id',
         'type'
