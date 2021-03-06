@@ -23,4 +23,10 @@ class IndividualRepository implements IndividualRepositoryInterface
     {
         return Individual::find($id);
     }
+
+    public function save(Individual $individual): Individual
+    {
+        $individual->save();
+        return $individual;
+    }
 }
