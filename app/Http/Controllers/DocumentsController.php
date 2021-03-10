@@ -20,11 +20,16 @@ use App\Http\Requests\AddDocumentForIndividual;
 use App\Http\Requests\GetRecognizedDataHttpRequest;
 use App\Http\Requests\ReplaceDocumentHttpRequest;
 use App\Http\Requests\UpdateFieldByIdHttpRequest;
+use App\Models\Document;
+use App\Models\Task;
 use App\Presenters\DocumentPresenter;
 use App\Presenters\FieldPresenter;
 use App\Services\DbrainApiService;
 use Illuminate\Http\Request;
 use \Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class DocumentsController extends Controller
 {

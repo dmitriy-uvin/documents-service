@@ -16,18 +16,20 @@ class IndividualService
             $findSurname = '';
             $findPatronymic = '';
             $findFio = '';
-            foreach ($item['fields'] as $type => $field) {
-                if (in_array($type, FieldTypes::getNameTypes(), true)) {
-                    $findName = Str::lower($field['text']);
-                }
-                if (in_array($type, FieldTypes::getSurnameTypes(), true)) {
-                    $findSurname = Str::lower($field['text']);
-                }
-                if (in_array($type, FieldTypes::getPatronymicTypes(), true)) {
-                    $findPatronymic = Str::lower($field['text']);
-                }
-                if (in_array($type, FieldTypes::getFioTypes(), true)) {
-                    $findFio = Str::lower($field['text']);
+            if (isset($item['fields'])) {
+                foreach ($item['fields'] as $type => $field) {
+                    if (in_array($type, FieldTypes::getNameTypes(), true)) {
+                        $findName = Str::lower($field['text']);
+                    }
+                    if (in_array($type, FieldTypes::getSurnameTypes(), true)) {
+                        $findSurname = Str::lower($field['text']);
+                    }
+                    if (in_array($type, FieldTypes::getPatronymicTypes(), true)) {
+                        $findPatronymic = Str::lower($field['text']);
+                    }
+                    if (in_array($type, FieldTypes::getFioTypes(), true)) {
+                        $findFio = Str::lower($field['text']);
+                    }
                 }
             }
 

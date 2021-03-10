@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Exceptions\Document\DocumentNotFoundException;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class DbrainApiService
 {
