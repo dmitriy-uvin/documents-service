@@ -2,6 +2,7 @@
 
 namespace App\Actions\Api\Individual;
 
+use App\Exceptions\Api\NoSearchQueryParamsException;
 use App\Exceptions\Api\OnlyBirthDateException;
 use App\Repositories\Document\Criterion\DateBirthCriterion;
 use App\Repositories\Document\Criterion\FioCriterion;
@@ -22,6 +23,15 @@ final class SearchIndividualsPersonModeAction
 
     public function execute(SearchIndividualsPersonModeRequest $request): SearchIndividualsPersonModeResponse
     {
+        if (
+            !$request->getName()
+            && !$request->getSurname()
+            && !$request->getPatronymic()
+            && !$request->getBirthDate()
+        ) {
+            throw new NoSearchQueryParamsException();
+        }
+
         $criteria = [];
 
         if (

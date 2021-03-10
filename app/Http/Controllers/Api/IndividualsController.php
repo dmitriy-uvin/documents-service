@@ -28,8 +28,15 @@ final class IndividualsController extends Controller
         $this->apiPresenter = $apiPresenter;
     }
 
-    public function getDocumentsPersonMode(SearchIndividualsPersonModeHttpRequest $request): JsonResponse
+    public function getDocumentsPersonMode(Request $request): JsonResponse
     {
+        $request->validate([
+            'name' => 'string',
+            'surname' => 'string',
+            'patronymic' => 'string',
+            'date_birth' => 'date_format:d.m.Y'
+        ]);
+
         $response = $this->searchIndividualsPersonModeAction->execute(
             new SearchIndividualsPersonModeRequest(
                 $request->query('name'),
@@ -48,6 +55,12 @@ final class IndividualsController extends Controller
 
     public function getDocumentsDocumentMode(Request $request): JsonResponse
     {
+        $request->validate([
+            'inn_number' => 'string',
+            'snils_number' => 'string',
+            'passport_number' => 'string',
+        ]);
+
         $response = $this->searchIndividualsDocumentModeAction->execute(
             new SearchIndividualsDocumentModeRequest(
                 $request->query('inn_number'),

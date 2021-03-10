@@ -2,6 +2,7 @@
 
 namespace App\Actions\Api\Individual;
 
+use App\Exceptions\Api\NoSearchQueryParamsException;
 use App\Repositories\Document\Criterion\InnNumberCriterion;
 use App\Repositories\Document\Criterion\PassportNumberCriterion;
 use App\Repositories\Document\Criterion\SnilsNumberCriterion;
@@ -18,6 +19,14 @@ final class SearchIndividualsDocumentModeAction
 
     public function execute(SearchIndividualsDocumentModeRequest $request): SearchIndividualsDocumentModeResponse
     {
+        if (
+            !$request->getInnNumber()
+            && !$request->getSnilsNumber()
+            && !$request->getPassport()
+        ) {
+            throw new NoSearchQueryParamsException();
+        }
+
         $criteria = [];
 
         if ($request->getInnNumber()) {
