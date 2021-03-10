@@ -396,4 +396,15 @@ class FieldTypes
             "b_date_of_birth",
         ];
     }
+
+    public static function passportNumberTypes(): array
+    {
+        return [
+            "passport_num",
+            "document_number",
+            "doc_number",
+            "number",
+            "series_and_number",
+        ];
+    }
 }

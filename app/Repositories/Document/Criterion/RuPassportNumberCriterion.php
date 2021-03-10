@@ -2,12 +2,10 @@
 
 namespace App\Repositories\Document\Criterion;
 
-use App\Constants\DocumentTypes;
-use App\Constants\FieldTypes;
 use App\Contracts\EloquentCriterion;
 use Illuminate\Database\Eloquent\Builder;
 
-class PassportNumberCriterion implements EloquentCriterion
+class RuPassportNumberCriterion implements EloquentCriterion
 {
     private string $passportNumber;
 
@@ -19,10 +17,10 @@ class PassportNumberCriterion implements EloquentCriterion
     public function apply(Builder $builder): Builder
     {
         $passportNumber = $this->passportNumber;
-        return $builder->whereIn('type', DocumentTypes::passportTypes())
+        return $builder->whereIn('type', ['passport_main', 'passport_main_handwritten'])
             ->whereHas('fields', function ($query) use ($passportNumber){
                 return $query
-                    ->whereIn('type', FieldTypes::passportNumberTypes())
+                    ->where('type', '=', 'series_and_number')
                     ->where('value', 'like', '%' . $passportNumber . '%');
             });
     }

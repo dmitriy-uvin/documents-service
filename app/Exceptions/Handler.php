@@ -42,7 +42,7 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $exception): Response
     {
-        if ($exception instanceof \DomainException) {
+        if ($exception instanceof BaseException) {
             return new JsonResponse(
                 [
                     'message' => $exception->getMessage(),

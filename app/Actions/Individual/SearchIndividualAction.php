@@ -5,7 +5,7 @@ namespace App\Actions\Individual;
 use App\Repositories\Document\Criterion\FioCriterion;
 use App\Repositories\Document\Criterion\FirstNameCriterion;
 use App\Repositories\Document\Criterion\InnNumberCriterion;
-use App\Repositories\Document\Criterion\PassportNumberCriterion;
+use App\Repositories\Document\Criterion\RuPassportNumberCriterion;
 use App\Repositories\Document\Criterion\PatronymicCriterion;
 use App\Repositories\Document\Criterion\SecondNameCriterion;
 use App\Repositories\Document\Criterion\SnilsNumberCriterion;
@@ -44,7 +44,7 @@ final class SearchIndividualAction
         }
 
         if ($request->getPassportNumber()) {
-            $criteria[] = new PassportNumberCriterion($request->getPassportNumber());
+            $criteria[] = new RuPassportNumberCriterion($request->getPassportNumber());
         }
 
         $individuals = $this->documentRepository->findByCriteria(...$criteria)

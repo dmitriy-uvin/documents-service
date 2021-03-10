@@ -79,4 +79,24 @@ class DocumentTypes
             "vehicle_registration_certificate_front" => "Свидетельство о регистрации ТС: лицевая сторона",
         ];
     }
+
+    public static function passportTypes(): array
+    {
+        return [
+            "ukr_passport_2016_back",
+            "ukr_passport_2016_front",
+            "ukr_passport_main_1994_printed",
+            "uzb_passport_main",
+            "passport_zero_page",
+            "passport_main",
+            "passport_main_handwritten",
+            "passport_registration",
+            "rus_passport_global_2007_main",
+            "rus_passport_global_2014_main",
+            "tjk_passport_main",
+            "kgz_passport_main",
+            "kgz_passport_plastic_blue",
+            "kgz_passport_plastic_red"
+        ];
+    }
 }
