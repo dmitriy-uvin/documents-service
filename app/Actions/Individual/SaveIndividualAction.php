@@ -76,39 +76,41 @@ final class SaveIndividualAction
             $individual = $this->individualRepository->save($individual);
 
             foreach ($request->getPayloadData()[$dbrainTaskKey] as $taskId => $item) {
-                $task = $this->taskRepository->findById($taskId);
+                if (isset($item['document_type'])) {
+                    $task = $this->taskRepository->findById($taskId);
 
-                $document = new Document();
-                $document->type = $item['document_type'];
-                $this->documentRepository->associateWithIndividual($document, $individual);
-                $document = $this->documentRepository->save($document);
+                    $document = new Document();
+                    $document->type = $item['document_type'];
+                    $this->documentRepository->associateWithIndividual($document, $individual);
+                    $document = $this->documentRepository->save($document);
 
-                History::create([
-                    'type' => HistoryTypes::DOCUMENT_ADD,
-                    'author_id' => Auth::id(),
-                    'document_id' => $document->id,
-                    'individual_id' => $individual->id,
-                    'before' => $task->document_path
-                ]);
+                    History::create([
+                        'type' => HistoryTypes::DOCUMENT_ADD,
+                        'author_id' => Auth::id(),
+                        'document_id' => $document->id,
+                        'individual_id' => $individual->id,
+                        'before' => $task->document_path
+                    ]);
 
-                $documentImage = new DocumentImage();
-                $documentImage->path = $task->document_path;
-                $this->documentImageRepository->associateDocument($documentImage, $document);
-                $this->documentImageRepository->save($documentImage);
+                    $documentImage = new DocumentImage();
+                    $documentImage->path = $task->document_path;
+                    $this->documentImageRepository->associateDocument($documentImage, $document);
+                    $this->documentImageRepository->save($documentImage);
 
-                $fieldModels = [];
-                if (isset($item['fields'])) {
-                    foreach ($item['fields'] as $fieldType => $field) {
-                        $fieldModels[] = [
-                            'type' => $fieldType,
-                            'value' => $field['text'] ?: '',
-                            'confidence' => $field['confidence'],
-                            'document_id' => $document->id
-                        ];
+                    $fieldModels = [];
+                    if (isset($item['fields'])) {
+                        foreach ($item['fields'] as $fieldType => $field) {
+                            $fieldModels[] = [
+                                'type' => $fieldType,
+                                'value' => $field['text'] ?: '',
+                                'confidence' => $field['confidence'],
+                                'document_id' => $document->id
+                            ];
+                        }
                     }
-                }
 
-                $this->fieldRepository->saveButch($fieldModels);
+                    $this->fieldRepository->saveButch($fieldModels);
+                }
             }
             $response[$dbrainTaskKey] = $individual->id;
         }
