@@ -3788,6 +3788,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_uploadDocumentsMixin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../mixins/uploadDocumentsMixin */ "./resources/js/mixins/uploadDocumentsMixin.js");
 /* harmony import */ var _constants_documentTypes__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../constants/documentTypes */ "./resources/js/constants/documentTypes.js");
 /* harmony import */ var _History__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./History */ "./resources/js/components/individual/History.vue");
+/* harmony import */ var _mixins_roleMixin__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../mixins/roleMixin */ "./resources/js/mixins/roleMixin.js");
 
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -4114,13 +4115,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "IndividualPage",
   components: {
     DefaultLayout: _layouts_DefaultLayout__WEBPACK_IMPORTED_MODULE_1__.default,
     History: _History__WEBPACK_IMPORTED_MODULE_9__.default
   },
-  mixins: [_mixins_individualsMixin__WEBPACK_IMPORTED_MODULE_3__.default, _mixins_datetimeMixin__WEBPACK_IMPORTED_MODULE_6__.default, _mixins_uploadDocumentsMixin__WEBPACK_IMPORTED_MODULE_7__.default],
+  mixins: [_mixins_individualsMixin__WEBPACK_IMPORTED_MODULE_3__.default, _mixins_datetimeMixin__WEBPACK_IMPORTED_MODULE_6__.default, _mixins_uploadDocumentsMixin__WEBPACK_IMPORTED_MODULE_7__.default, _mixins_roleMixin__WEBPACK_IMPORTED_MODULE_10__.default],
   props: ['id'],
   data: function data() {
     return {
@@ -4292,7 +4294,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       });
     },
     isAvailableToDeleteDocument: function isAvailableToDeleteDocument() {
-      return this.individual.documents.length > 1;
+      var _this4 = this;
+
+      if (this.individual.documents.length > 1) {
+        if (this.isWorker) {
+          var historyItem = this.historyData.find(function (item) {
+            return item.author_id === _this4.authUser.id;
+          });
+          return !!historyItem;
+        }
+
+        return true;
+      }
+
+      return false;
     },
     getDocumentImagePath: function getDocumentImagePath(documentType) {
       var document = this.individual.documents.find(function (document) {
@@ -4301,7 +4316,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return document.document_image.path;
     },
     loadIndividual: function loadIndividual() {
-      var _this4 = this;
+      var _this5 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
         var response;
@@ -4311,12 +4326,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context4.prev = 0;
                 _context4.next = 3;
-                return _services_individual_individualService__WEBPACK_IMPORTED_MODULE_2__.default.getIndividualUserById(_this4.id);
+                return _services_individual_individualService__WEBPACK_IMPORTED_MODULE_2__.default.getIndividualUserById(_this5.id);
 
               case 3:
                 response = _context4.sent;
-                _this4.individual = response;
-                _this4.historyData = response.history;
+                _this5.individual = response;
+                _this5.historyData = response.history;
                 _context4.next = 11;
                 break;
 
@@ -4359,13 +4374,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       if (!this.details.length) this.endUploadingDocuments();
     },
     addFiles: function addFiles(files) {
-      var _this5 = this;
+      var _this6 = this;
 
       _toConsumableArray(files).map(function (file) {
-        if (file.size < _this5.maxFileSize) {
-          if (_this5.availableTypes.includes(file.type)) {
-            if (!_this5.fileNames.includes(file.name)) {
-              _this5.documentFiles.push(file);
+        if (file.size < _this6.maxFileSize) {
+          if (_this6.availableTypes.includes(file.type)) {
+            if (!_this6.fileNames.includes(file.name)) {
+              _this6.documentFiles.push(file);
             }
           }
         }
@@ -4390,7 +4405,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       })));
     },
     onUploadDocuments: function onUploadDocuments() {
-      var _this6 = this;
+      var _this7 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
         var formData;
@@ -4398,16 +4413,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
-                if (!_this6.documentFiles.length) {
+                if (!_this7.documentFiles.length) {
                   _context5.next = 16;
                   break;
                 }
 
                 _context5.prev = 1;
-                _this6.loading = true;
+                _this7.loading = true;
                 formData = new FormData();
 
-                _this6.documentFiles.map(function (file) {
+                _this7.documentFiles.map(function (file) {
                   formData.append('documents[]', file);
                 });
 
@@ -4415,16 +4430,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _services_document_documentService__WEBPACK_IMPORTED_MODULE_4__.default.classifyDocuments(formData);
 
               case 7:
-                _this6.details = _context5.sent;
-                _this6.receivedDetails = true;
-                _this6.loading = false;
+                _this7.details = _context5.sent;
+                _this7.receivedDetails = true;
+                _this7.loading = false;
                 _context5.next = 16;
                 break;
 
               case 12:
                 _context5.prev = 12;
                 _context5.t0 = _context5["catch"](1);
-                _this6.loading = false;
+                _this7.loading = false;
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context5.t0.message);
 
               case 16:
@@ -4436,7 +4451,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     replaceDocument: function replaceDocument(taskId, docType) {
-      var _this7 = this;
+      var _this8 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
         var documentId;
@@ -4447,13 +4462,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context6.prev = 0;
                 documentId = "";
 
-                _this7.individual.documents.map(function (document) {
+                _this8.individual.documents.map(function (document) {
                   if (document.type === docType) {
                     documentId = document.id;
                   }
                 });
 
-                _this7.makeTaskLoading(taskId, true);
+                _this8.makeTaskLoading(taskId, true);
 
                 _context6.next = 6;
                 return _services_document_documentService__WEBPACK_IMPORTED_MODULE_4__.default.replaceDocument({
@@ -4464,12 +4479,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 6:
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('success', 'Документ был успешно заменен!');
 
-                _this7.makeTaskLoading(taskId, false);
+                _this8.makeTaskLoading(taskId, false);
 
-                _this7.dontChange(taskId);
+                _this8.dontChange(taskId);
 
                 _context6.next = 11;
-                return _this7.loadIndividual();
+                return _this8.loadIndividual();
 
               case 11:
                 _context6.next = 17;
@@ -4479,7 +4494,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context6.prev = 13;
                 _context6.t0 = _context6["catch"](0);
 
-                _this7.makeTaskLoading(taskId, false);
+                _this8.makeTaskLoading(taskId, false);
 
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context6.t0.message);
 
@@ -4493,7 +4508,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     },
     addDocument: function addDocument(taskId) {
       var _arguments = arguments,
-          _this8 = this;
+          _this9 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee7() {
         var force;
@@ -4504,25 +4519,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 force = _arguments.length > 1 && _arguments[1] !== undefined ? _arguments[1] : false;
                 _context7.prev = 1;
 
-                _this8.makeTaskLoading(taskId, true);
+                _this9.makeTaskLoading(taskId, true);
 
                 _context7.next = 5;
                 return _services_document_documentService__WEBPACK_IMPORTED_MODULE_4__.default.saveDocumentForIndividual({
                   task_id: taskId,
-                  individual_id: _this8.individual.id,
+                  individual_id: _this9.individual.id,
                   force: force
                 });
 
               case 5:
-                _this8.forceAdd = false;
+                _this9.forceAdd = false;
 
-                _this8.makeTaskLoading(taskId, false);
+                _this9.makeTaskLoading(taskId, false);
 
                 _context7.next = 9;
-                return _this8.loadIndividual();
+                return _this9.loadIndividual();
 
               case 9:
-                _this8.dontChange(taskId);
+                _this9.dontChange(taskId);
 
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('success', 'Документ был успешно добавлен!');
                 _context7.next = 18;
@@ -4533,10 +4548,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context7.t0 = _context7["catch"](1);
 
                 if (_context7.t0.type === 'another_person_document') {
-                  _this8.forceAdd = true;
+                  _this9.forceAdd = true;
                 }
 
-                _this8.makeTaskLoading(taskId, false);
+                _this9.makeTaskLoading(taskId, false);
 
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context7.t0.message);
 
@@ -4554,32 +4569,32 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.editableValue = fieldValue;
     },
     onSave: function onSave(field) {
-      var _this9 = this;
+      var _this10 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee8() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee8$(_context8) {
           while (1) {
             switch (_context8.prev = _context8.next) {
               case 0:
-                if (!(_this9.editableValue !== field.value)) {
+                if (!(_this10.editableValue !== field.value)) {
                   _context8.next = 21;
                   break;
                 }
 
                 _context8.prev = 1;
-                _this9.editLoading = true;
+                _this10.editLoading = true;
                 _context8.next = 5;
                 return _services_document_documentService__WEBPACK_IMPORTED_MODULE_4__.default.updateField({
                   field_id: field.id,
-                  new_value: _this9.editableValue
+                  new_value: _this10.editableValue
                 });
 
               case 5:
-                _this9.editLoading = false;
-                _this9.editing = false;
-                _this9.editableId = '';
+                _this10.editLoading = false;
+                _this10.editing = false;
+                _this10.editableId = '';
                 _context8.next = 10;
-                return _this9.loadIndividual();
+                return _this10.loadIndividual();
 
               case 10:
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('success', 'Поле успешно обновлено!');
@@ -4589,9 +4604,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 13:
                 _context8.prev = 13;
                 _context8.t0 = _context8["catch"](1);
-                _this9.editLoading = false;
-                _this9.editing = false;
-                _this9.editableId = '';
+                _this10.editLoading = false;
+                _this10.editing = false;
+                _this10.editableId = '';
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_5__.default.$emit('error', _context8.t0.message);
 
               case 19:
@@ -4599,8 +4614,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 break;
 
               case 21:
-                _this9.editing = false;
-                _this9.editableId = '';
+                _this10.editing = false;
+                _this10.editableId = '';
 
               case 23:
               case "end":
@@ -6252,23 +6267,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         manager: 2,
         administrator: 3,
         developer: 4
-      }
+      },
+      workerAlias: 'worker',
+      developerAlias: 'developer',
+      administratorAlias: 'administrator',
+      managerAlias: 'manager'
     };
   },
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapGetters)('auth', {
     authUser: _store_modules_auth_types_getters__WEBPACK_IMPORTED_MODULE_0__.GET_USER_DATA
   })), {}, {
     developerOrAdministrator: function developerOrAdministrator() {
-      return this.authUser.role[0].alias === 'developer' || this.authUser.role[0].alias === 'administrator';
+      return this.authUser.role[0].alias === this.developerAlias || this.authUser.role[0].alias === this.administratorAlias;
     },
     canAddNewDocumentType: function canAddNewDocumentType() {
       return this.isDeveloper;
     },
     isDeveloper: function isDeveloper() {
-      return this.authUser.role[0].alias === 'developer';
+      return this.authUser.role[0].alias === this.developerAlias;
     },
     isWorker: function isWorker() {
-      return this.authUser.role[0].alias === 'worker';
+      return this.authUser.role[0].alias === this.workerAlias;
     },
     adminOrMore: function adminOrMore() {
       return this.roleValues[this.authUser.role[0].alias] >= this.roleValues.administrator;

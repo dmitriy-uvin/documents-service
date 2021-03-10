@@ -301,6 +301,8 @@ import datetimeMixin from "../../mixins/datetimeMixin";
 import uploadDocumentsMixin from "../../mixins/uploadDocumentsMixin";
 import documentTypes from "../../constants/documentTypes";
 import History from "./History";
+import roleMixin from "../../mixins/roleMixin";
+
 
 export default {
     name: "IndividualPage",
@@ -308,7 +310,7 @@ export default {
         DefaultLayout,
         History
     },
-    mixins: [individualsMixin, datetimeMixin, uploadDocumentsMixin],
+    mixins: [individualsMixin, datetimeMixin, uploadDocumentsMixin, roleMixin],
     props: ['id'],
     data: () => ({
         recDocTypes: documentTypes.recognizable,
@@ -394,7 +396,16 @@ export default {
             });
         },
         isAvailableToDeleteDocument() {
-            return this.individual.documents.length > 1;
+            if (this.individual.documents.length > 1) {
+                if (this.isWorker) {
+                    const historyItem = this.historyData.find(
+                        item => item.author_id === this.authUser.id
+                    );
+                    return !!historyItem;
+                }
+                return true;
+            }
+            return false;
         },
         getDocumentImagePath(documentType) {
             const document = this.individual.documents.find(document => document.type === documentType);
