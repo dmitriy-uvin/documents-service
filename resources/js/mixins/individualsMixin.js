@@ -44,36 +44,21 @@ const fioKeys = [
     // 'full_name'
 ];
 
+const dateBirthKeys = [
+    "date_of_birth",
+    "a_date_of_birth",
+    "b_date_of_birth",
+];
+
 export default {
     methods: {
         getFullName(individual) {
-            // const name = this.getName(individual);
-            // const surname = this.getSurname(individual);
-            // const patronymic = this.getPatronymic(individual);
-
-            // let fullName = "";
-            //
-            // if (individual.documents) {
-            //     individual.documents.map(document => {
-            //         document.fields.map(field => {
-            //             if (fioKeys.includes(field.type)) fullName = field.value;
-            //         });
-            //     });
-            // }
-            //
-            // if (!fullName) {
-            //     if (!name && !surname && !patronymic) {
-            //         fullName = "Неизвестно"
-            //     } else {
-            //         fullName = surname + " " + name + " " + patronymic;
-            //     }
-            // }
             let name = "";
             let surname = "";
             let patronymic = "";
             let fio = "";
 
-            if (individual.documents) {
+            if (individual.documents.length) {
                 const firstDocument = individual.documents[0];
 
                 firstDocument.fields.map(field => {
@@ -92,6 +77,17 @@ export default {
             }
 
             return fullName ? fullName : 'Неизвестно';
+        },
+        getDateBirth(individual) {
+            let dateBirth = "";
+            if (individual.documents.length && !dateBirth) {
+                individual.documents.map(document => {
+                    document.fields.map(field => {
+                        if (dateBirthKeys.includes(field.type)) dateBirth = field.value;
+                    });
+                });
+            }
+            return dateBirth;
         },
         getName(individual) {
             let name = "";

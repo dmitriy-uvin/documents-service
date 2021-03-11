@@ -103,6 +103,16 @@
                         <a :href="`/individuals/${props.row.id}`">{{ getFullName(props.row) }}</a>
                     </b-table-column>
 
+
+                    <b-table-column
+                        field="id"
+                        label="Дата рождения"
+                        v-slot="props"
+                        centered
+                    >
+                        {{ getDateBirth(props.row) || "Неизвестно" }}
+                    </b-table-column>
+
                     <b-table-column
                         field="created_at"
                         label="Дата создания"

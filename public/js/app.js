@@ -3633,6 +3633,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -6285,35 +6295,16 @@ var surnameKeys = ['surname', 'surname_rus', 'surname_eng', 'surname_ukr', 'a_ve
 var patronymicKeys = ['third_name', 'patronymic', 'patron', 'other_name', 'other_names', 'patter', 'a_vehicle_owner_patronym', 'a_veh_driver_patronym', 'b_vehicle_owner_patronym', 'b_veh_driver_patronym', 'third'];
 var fioKeys = ['fio', 'cardholder_name', 'born_full_name' // 'full_name'
 ];
+var dateBirthKeys = ["date_of_birth", "a_date_of_birth", "b_date_of_birth"];
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   methods: {
     getFullName: function getFullName(individual) {
-      // const name = this.getName(individual);
-      // const surname = this.getSurname(individual);
-      // const patronymic = this.getPatronymic(individual);
-      // let fullName = "";
-      //
-      // if (individual.documents) {
-      //     individual.documents.map(document => {
-      //         document.fields.map(field => {
-      //             if (fioKeys.includes(field.type)) fullName = field.value;
-      //         });
-      //     });
-      // }
-      //
-      // if (!fullName) {
-      //     if (!name && !surname && !patronymic) {
-      //         fullName = "Неизвестно"
-      //     } else {
-      //         fullName = surname + " " + name + " " + patronymic;
-      //     }
-      // }
       var name = "";
       var surname = "";
       var patronymic = "";
       var fio = "";
 
-      if (individual.documents) {
+      if (individual.documents.length) {
         var firstDocument = individual.documents[0];
         firstDocument.fields.map(function (field) {
           if (nameKeys.includes(field.type)) name = field.value;
@@ -6332,6 +6323,19 @@ var fioKeys = ['fio', 'cardholder_name', 'born_full_name' // 'full_name'
       }
 
       return fullName ? fullName : 'Неизвестно';
+    },
+    getDateBirth: function getDateBirth(individual) {
+      var dateBirth = "";
+
+      if (individual.documents.length && !dateBirth) {
+        individual.documents.map(function (document) {
+          document.fields.map(function (field) {
+            if (dateBirthKeys.includes(field.type)) dateBirth = field.value;
+          });
+        });
+      }
+
+      return dateBirth;
     },
     getName: function getName(individual) {
       var name = "";
@@ -86441,6 +86445,36 @@ var render = function() {
                                 null,
                                 false,
                                 1745737634
+                              )
+                            }),
+                            _vm._v(" "),
+                            _c("b-table-column", {
+                              attrs: {
+                                field: "id",
+                                label: "Дата рождения",
+                                centered: ""
+                              },
+                              scopedSlots: _vm._u(
+                                [
+                                  {
+                                    key: "default",
+                                    fn: function(props) {
+                                      return [
+                                        _vm._v(
+                                          "\n                    " +
+                                            _vm._s(
+                                              _vm.getDateBirth(props.row) ||
+                                                "Неизвестно"
+                                            ) +
+                                            "\n                "
+                                        )
+                                      ]
+                                    }
+                                  }
+                                ],
+                                null,
+                                false,
+                                1263649685
                               )
                             }),
                             _vm._v(" "),
