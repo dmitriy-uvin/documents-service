@@ -85038,47 +85038,51 @@ var render = function() {
         key: "content",
         fn: function() {
           return [
-            _c("div", { staticClass: "row" }, [
-              _c(
-                "div",
-                { staticClass: "col-md-4" },
-                [
+            !_vm.isWorker
+              ? _c("div", { staticClass: "row" }, [
                   _c(
-                    "b-field",
-                    { attrs: { label: "API KEY" } },
+                    "div",
+                    { staticClass: "col-md-4" },
                     [
-                      _c("b-input", {
-                        attrs: { readonly: "" },
-                        model: {
-                          value: _vm.apiKey,
-                          callback: function($$v) {
-                            _vm.apiKey = $$v
-                          },
-                          expression: "apiKey"
-                        }
-                      })
+                      _c(
+                        "b-field",
+                        { attrs: { label: "API KEY" } },
+                        [
+                          _c("b-input", {
+                            attrs: { readonly: "" },
+                            model: {
+                              value: _vm.apiKey,
+                              callback: function($$v) {
+                                _vm.apiKey = $$v
+                              },
+                              expression: "apiKey"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      !_vm.apiKey
+                        ? _c(
+                            "b-button",
+                            {
+                              attrs: { type: "is-info", loading: _vm.loading },
+                              on: { click: _vm.generateApiKey }
+                            },
+                            [
+                              _vm._v(
+                                "\n                    Сгенерировать\n                "
+                              )
+                            ]
+                          )
+                        : _vm._e()
                     ],
                     1
-                  ),
-                  _vm._v(" "),
-                  !_vm.apiKey
-                    ? _c(
-                        "b-button",
-                        {
-                          attrs: { type: "is-info", loading: _vm.loading },
-                          on: { click: _vm.generateApiKey }
-                        },
-                        [
-                          _vm._v(
-                            "\n                    Сгенерировать\n                "
-                          )
-                        ]
-                      )
-                    : _vm._e()
-                ],
-                1
-              )
-            ])
+                  )
+                ])
+              : _c("b-message", { attrs: { type: "is-warning" } }, [
+                  _vm._v("В разработке!")
+                ])
           ]
         },
         proxy: true

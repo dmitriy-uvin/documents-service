@@ -7,7 +7,7 @@
             {{ user.role[0].name }}
         </template>
         <template v-slot:content>
-            <div class="row">
+            <div class="row" v-if="!isWorker">
                 <div class="col-md-4">
                     <b-field label="API KEY">
                         <b-input v-model="apiKey" readonly></b-input>
@@ -23,7 +23,7 @@
                     </b-button>
                 </div>
             </div>
-
+            <b-message type="is-warning" v-else>В разработке!</b-message>
         </template>
     </DefaultLayout>
 </template>
