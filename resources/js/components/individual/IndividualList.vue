@@ -138,8 +138,26 @@
                     </template>
 
                     <template #footer>
-                        <div class="has-text-right">
-                            Физических лиц: {{ users.length }}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="has-text-left">
+                                    <b-button
+                                        icon-left="chevron-left"
+                                        @click="pageBefore()"
+                                        :disabled="currentPage === 1"
+                                    />
+                                    <b-button
+                                        icon-right="chevron-right"
+                                        @click="pageNext()"
+                                        :disabled="currentPage === lastPage"
+                                    />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="has-text-right">
+                                    Физических лиц: {{ total }}
+                                </div>
+                            </div>
                         </div>
                     </template>
                 </b-table>
@@ -170,7 +188,11 @@ export default {
         DefaultLayout
     },
     data: () => ({
-       users: [],
+        users: [],
+        perPage: 1,
+        lastPage: 1,
+        currentPage: 1,
+        total: 0,
         isLoading: true,
         showDetailIcon: true,
         searchValue: '',
@@ -187,8 +209,6 @@ export default {
         searchClear: true
     }),
     async mounted() {
-
-        console.log(this.$refs.searchBtn)
         if (!this.isWorker) {
             await this.loadIndividuals();
         }
@@ -202,7 +222,6 @@ export default {
                 self.onSearch();
             }
         });
-
         this.isLoading = false;
     },
     watch: {
@@ -222,10 +241,29 @@ export default {
         }
     },
     methods: {
+        async pageBefore() {
+            if (this.currentPage > 1) {
+                this.currentPage -= 1;
+            }
+            await this.loadIndividuals();
+        },
+        async pageNext() {
+            if (this.currentPage < this.lastPage) {
+                this.currentPage += 1;
+            }
+            await this.loadIndividuals();
+        },
         async loadIndividuals() {
             try {
                 this.isLoading = true;
-                this.users = await individualService.getIndividualUsers();
+                const response = await individualService.getIndividualUsers({
+                    page: this.currentPage,
+                    perPage: this.perPage
+                });
+                this.users = response?.data;
+                this.currentPage = response?.meta?.current_page;
+                this.lastPage = response?.meta?.last_page;
+                this.total = response?.meta?.total;
                 this.isLoading = false;
                 setTimeout(() => {
                     document.getElementById('dadata-input').placeholder = 'ФИО';

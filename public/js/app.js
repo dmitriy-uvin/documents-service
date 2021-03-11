@@ -3615,6 +3615,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3630,6 +3648,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       users: [],
+      perPage: 1,
+      lastPage: 1,
+      currentPage: 1,
+      total: 0,
       isLoading: true,
       showDetailIcon: true,
       searchValue: '',
@@ -3655,17 +3677,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              console.log(_this.$refs.searchBtn);
-
               if (_this.isWorker) {
-                _context.next = 4;
+                _context.next = 3;
                 break;
               }
 
-              _context.next = 4;
+              _context.next = 3;
               return _this.loadIndividuals();
 
-            case 4:
+            case 3:
               setTimeout(function () {
                 document.getElementById('dadata-input').placeholder = 'ФИО';
                 document.querySelector('div.suggestions-suggestions').style.position = 'fixed';
@@ -3678,7 +3698,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               });
               _this.isLoading = false;
 
-            case 8:
+            case 7:
             case "end":
               return _context.stop();
           }
@@ -3707,7 +3727,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   methods: {
-    loadIndividuals: function loadIndividuals() {
+    pageBefore: function pageBefore() {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
@@ -3715,41 +3735,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _context2.prev = 0;
-                _this2.isLoading = true;
-                _context2.next = 4;
-                return _services_individual_individualService__WEBPACK_IMPORTED_MODULE_5__.default.getIndividualUsers();
+                if (_this2.currentPage > 1) {
+                  _this2.currentPage -= 1;
+                }
 
-              case 4:
-                _this2.users = _context2.sent;
-                _this2.isLoading = false;
-                setTimeout(function () {
-                  document.getElementById('dadata-input').placeholder = 'ФИО';
-                  document.querySelector('div.suggestions-suggestions').style.position = 'fixed';
-                }, 1);
-                _context2.next = 12;
-                break;
+                _context2.next = 3;
+                return _this2.loadIndividuals();
 
-              case 9:
-                _context2.prev = 9;
-                _context2.t0 = _context2["catch"](0);
-                _events_eventBus__WEBPACK_IMPORTED_MODULE_6__.default.$emit('error', _context2.t0.message);
-
-              case 12:
-                setTimeout(function () {
-                  document.getElementById('dadata-input').placeholder = 'ФИО';
-                  document.querySelector('div.suggestions-suggestions').style.position = 'fixed';
-                }, 1);
-
-              case 13:
+              case 3:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 9]]);
+        }, _callee2);
       }))();
     },
-    clearSearch: function clearSearch() {
+    pageNext: function pageNext() {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
@@ -3757,24 +3758,98 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                Object.keys(_this3.search).map(function (key) {
-                  _this3.search[key] = '';
+                if (_this3.currentPage < _this3.lastPage) {
+                  _this3.currentPage += 1;
+                }
+
+                _context3.next = 3;
+                return _this3.loadIndividuals();
+
+              case 3:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }))();
+    },
+    loadIndividuals: function loadIndividuals() {
+      var _this4 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+        var _response$meta, _response$meta2, _response$meta3, response;
+
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.prev = 0;
+                _this4.isLoading = true;
+                _context4.next = 4;
+                return _services_individual_individualService__WEBPACK_IMPORTED_MODULE_5__.default.getIndividualUsers({
+                  page: _this4.currentPage,
+                  perPage: _this4.perPage
                 });
 
-                if (_this3.isWorker) {
-                  _context3.next = 6;
+              case 4:
+                response = _context4.sent;
+                _this4.users = response === null || response === void 0 ? void 0 : response.data;
+                _this4.currentPage = response === null || response === void 0 ? void 0 : (_response$meta = response.meta) === null || _response$meta === void 0 ? void 0 : _response$meta.current_page;
+                _this4.lastPage = response === null || response === void 0 ? void 0 : (_response$meta2 = response.meta) === null || _response$meta2 === void 0 ? void 0 : _response$meta2.last_page;
+                _this4.total = response === null || response === void 0 ? void 0 : (_response$meta3 = response.meta) === null || _response$meta3 === void 0 ? void 0 : _response$meta3.total;
+                _this4.isLoading = false;
+                setTimeout(function () {
+                  document.getElementById('dadata-input').placeholder = 'ФИО';
+                  document.querySelector('div.suggestions-suggestions').style.position = 'fixed';
+                }, 1);
+                _context4.next = 16;
+                break;
+
+              case 13:
+                _context4.prev = 13;
+                _context4.t0 = _context4["catch"](0);
+                _events_eventBus__WEBPACK_IMPORTED_MODULE_6__.default.$emit('error', _context4.t0.message);
+
+              case 16:
+                setTimeout(function () {
+                  document.getElementById('dadata-input').placeholder = 'ФИО';
+                  document.querySelector('div.suggestions-suggestions').style.position = 'fixed';
+                }, 1);
+
+              case 17:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, null, [[0, 13]]);
+      }))();
+    },
+    clearSearch: function clearSearch() {
+      var _this5 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                Object.keys(_this5.search).map(function (key) {
+                  _this5.search[key] = '';
+                });
+
+                if (_this5.isWorker) {
+                  _context5.next = 6;
                   break;
                 }
 
-                _context3.next = 4;
-                return _this3.loadIndividuals();
+                _context5.next = 4;
+                return _this5.loadIndividuals();
 
               case 4:
-                _context3.next = 7;
+                _context5.next = 7;
                 break;
 
               case 6:
-                _this3.users = [];
+                _this5.users = [];
 
               case 7:
                 setTimeout(function () {
@@ -3784,50 +3859,50 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 8:
               case "end":
-                return _context3.stop();
+                return _context5.stop();
             }
           }
-        }, _callee3);
+        }, _callee5);
       }))();
     },
     onSearch: function onSearch() {
-      var _this4 = this;
+      var _this6 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
           while (1) {
-            switch (_context4.prev = _context4.next) {
+            switch (_context6.prev = _context6.next) {
               case 0:
-                if (_this4.searchClear) {
-                  _context4.next = 15;
+                if (_this6.searchClear) {
+                  _context6.next = 15;
                   break;
                 }
 
-                _context4.prev = 1;
-                _this4.isLoading = true;
-                _this4.searchLoading = true;
-                _context4.next = 6;
-                return _services_individual_individualService__WEBPACK_IMPORTED_MODULE_5__.default.search(_this4.searchResult);
+                _context6.prev = 1;
+                _this6.isLoading = true;
+                _this6.searchLoading = true;
+                _context6.next = 6;
+                return _services_individual_individualService__WEBPACK_IMPORTED_MODULE_5__.default.search(_this6.searchResult);
 
               case 6:
-                _this4.users = _context4.sent;
-                _this4.searchLoading = false;
-                _this4.isLoading = false;
-                _context4.next = 15;
+                _this6.users = _context6.sent;
+                _this6.searchLoading = false;
+                _this6.isLoading = false;
+                _context6.next = 15;
                 break;
 
               case 11:
-                _context4.prev = 11;
-                _context4.t0 = _context4["catch"](1);
-                _this4.searchLoading = false;
-                _events_eventBus__WEBPACK_IMPORTED_MODULE_6__.default.$emit('error', _context4.t0.message);
+                _context6.prev = 11;
+                _context6.t0 = _context6["catch"](1);
+                _this6.searchLoading = false;
+                _events_eventBus__WEBPACK_IMPORTED_MODULE_6__.default.$emit('error', _context6.t0.message);
 
               case 15:
               case "end":
-                return _context4.stop();
+                return _context6.stop();
             }
           }
-        }, _callee4, null, [[1, 11]]);
+        }, _callee6, null, [[1, 11]]);
       }))();
     }
   }
@@ -6745,7 +6820,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  getIndividualUsers: function getIndividualUsers() {
+  getIndividualUsers: function getIndividualUsers(params) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
       var response;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
@@ -6753,7 +6828,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return _axiosService__WEBPACK_IMPORTED_MODULE_1__.default.get('/individuals/all');
+              return _axiosService__WEBPACK_IMPORTED_MODULE_1__.default.get('/individuals/all', params);
 
             case 2:
               response = _context.sent;
@@ -86237,17 +86312,57 @@ var render = function() {
                                   key: "footer",
                                   fn: function() {
                                     return [
-                                      _c(
-                                        "div",
-                                        { staticClass: "has-text-right" },
-                                        [
-                                          _vm._v(
-                                            "\n                        Физических лиц: " +
-                                              _vm._s(_vm.users.length) +
-                                              "\n                    "
+                                      _c("div", { staticClass: "row" }, [
+                                        _c("div", { staticClass: "col-md-6" }, [
+                                          _c(
+                                            "div",
+                                            { staticClass: "has-text-left" },
+                                            [
+                                              _c("b-button", {
+                                                attrs: {
+                                                  "icon-left": "chevron-left",
+                                                  disabled:
+                                                    _vm.currentPage === 1
+                                                },
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.pageBefore()
+                                                  }
+                                                }
+                                              }),
+                                              _vm._v(" "),
+                                              _c("b-button", {
+                                                attrs: {
+                                                  "icon-right": "chevron-right",
+                                                  disabled:
+                                                    _vm.currentPage ===
+                                                    _vm.lastPage
+                                                },
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.pageNext()
+                                                  }
+                                                }
+                                              })
+                                            ],
+                                            1
                                           )
-                                        ]
-                                      )
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("div", { staticClass: "col-md-6" }, [
+                                          _c(
+                                            "div",
+                                            { staticClass: "has-text-right" },
+                                            [
+                                              _vm._v(
+                                                "\n                                Физических лиц: " +
+                                                  _vm._s(_vm.total) +
+                                                  "\n                            "
+                                              )
+                                            ]
+                                          )
+                                        ])
+                                      ])
                                     ]
                                   },
                                   proxy: true
@@ -86255,7 +86370,7 @@ var render = function() {
                               ],
                               null,
                               false,
-                              1186549419
+                              3478016068
                             )
                           },
                           [

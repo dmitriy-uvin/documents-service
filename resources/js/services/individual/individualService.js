@@ -1,8 +1,8 @@
 import axiosService from "../axiosService";
 
 export default {
-    async getIndividualUsers() {
-        const response = await axiosService.get('/individuals/all');
+    async getIndividualUsers(params) {
+        const response = await axiosService.get('/individuals/all', params);
         return response?.data;
     },
     async getIndividualUserById(id) {

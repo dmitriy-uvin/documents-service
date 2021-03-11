@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Individual\GetIndividualByIdAction;
+use App\Actions\Individual\GetIndividualCollectionRequest;
 use App\Actions\Individual\GetIndividualByIdRequest;
 use App\Actions\Individual\GetIndividualCollectionAction;
 use App\Actions\Individual\SaveIndividualAction;
@@ -41,12 +42,27 @@ class IndividualsController extends Controller
         return view('individuals');
     }
 
-    public function getIndividuals(): JsonResponse
+    public function getIndividuals(Request $request): JsonResponse
     {
-        $individuals = $this->getIndividualsAction->execute()->getIndividuals();
+        $paginator = $this->getIndividualsAction->execute(
+            new GetIndividualCollectionRequest(
+                (int)$request->page,
+                (int)$request->perPage,
+                $request->sorting,
+                $request->direction,
+            )
+        )->getPaginator();
 
         return response()->json(
-            $this->individualPresenter->presentCollection($individuals)
+            [
+                'data' => $paginator->items(),
+                'meta' => [
+                    'total' => $paginator->total(),
+                    'current_page' => $paginator->currentPage(),
+                    'per_page' => $paginator->perPage(),
+                    'last_page' => $paginator->lastPage()
+                ]
+            ]
         );
     }
 

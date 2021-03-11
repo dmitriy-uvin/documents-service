@@ -5,6 +5,7 @@ namespace App\Repositories\User;
 use App\Contracts\EloquentCriterion;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
