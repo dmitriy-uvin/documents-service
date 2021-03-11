@@ -21,8 +21,9 @@ final class SearchIndividualsPersonModeAction
         $this->documentRepository = $documentRepository;
     }
 
-    public function execute(SearchIndividualsPersonModeRequest $request): SearchIndividualsPersonModeResponse
-    {
+    public function execute(
+        SearchIndividualsPersonModeRequest $request
+    ): SearchIndividualsPersonModeResponse {
         if (
             !$request->getName()
             && !$request->getSurname()

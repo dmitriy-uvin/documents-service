@@ -83,7 +83,11 @@ export default {
             if (individual.documents.length && !dateBirth) {
                 individual.documents.map(document => {
                     document.fields.map(field => {
-                        if (dateBirthKeys.includes(field.type)) dateBirth = field.value;
+                        if (dateBirthKeys.includes(field.type)) {
+                            if (field.value) {
+                                dateBirth = field.value;
+                            }
+                        }
                     });
                 });
             }

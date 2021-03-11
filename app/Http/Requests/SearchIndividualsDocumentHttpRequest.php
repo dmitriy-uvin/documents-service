@@ -24,8 +24,8 @@ class SearchIndividualsDocumentHttpRequest extends FormRequest
     {
         return [
             'inn_number.string' => 'ИНН должен быть строкой!',
-            'snils_number.string' => 'ИНН должен быть строкой!',
-            'passport_number.string' => 'ИНН должен быть строкой!',
+            'snils_number.string' => 'СНИЛС должен быть строкой!',
+            'passport_number.string' => 'Паспорт должен быть строкой!',
         ];
     }
 }

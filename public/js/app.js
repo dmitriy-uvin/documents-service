@@ -6330,7 +6330,11 @@ var dateBirthKeys = ["date_of_birth", "a_date_of_birth", "b_date_of_birth"];
       if (individual.documents.length && !dateBirth) {
         individual.documents.map(function (document) {
           document.fields.map(function (field) {
-            if (dateBirthKeys.includes(field.type)) dateBirth = field.value;
+            if (dateBirthKeys.includes(field.type)) {
+              if (field.value) {
+                dateBirth = field.value;
+              }
+            }
           });
         });
       }
