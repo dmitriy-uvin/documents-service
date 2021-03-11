@@ -3648,7 +3648,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       users: [],
-      perPage: 1,
+      perPage: 20,
       lastPage: 1,
       currentPage: 1,
       total: 0,

@@ -189,7 +189,7 @@ export default {
     },
     data: () => ({
         users: [],
-        perPage: 1,
+        perPage: 20,
         lastPage: 1,
         currentPage: 1,
         total: 0,
