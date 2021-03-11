@@ -2455,7 +2455,33 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _layouts_DefaultLayout__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../layouts/DefaultLayout */ "./resources/js/components/layouts/DefaultLayout.vue");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _layouts_DefaultLayout__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../layouts/DefaultLayout */ "./resources/js/components/layouts/DefaultLayout.vue");
+/* harmony import */ var _events_eventBus__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../events/eventBus */ "./resources/js/events/eventBus.js");
+/* harmony import */ var _services_user_userService__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../services/user/userService */ "./resources/js/services/user/userService.js");
+/* harmony import */ var _mixins_roleMixin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../mixins/roleMixin */ "./resources/js/mixins/roleMixin.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2472,28 +2498,71 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
+
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "DashboardComponent",
   props: ['user'],
   components: {
-    DefaultLayout: _layouts_DefaultLayout__WEBPACK_IMPORTED_MODULE_0__.default
+    DefaultLayout: _layouts_DefaultLayout__WEBPACK_IMPORTED_MODULE_1__.default
   },
+  mixins: [_mixins_roleMixin__WEBPACK_IMPORTED_MODULE_4__.default],
   data: function data() {
     return {
-      newUser: {
-        first_name: '',
-        second_name: '',
-        patronymic: '',
-        email: '',
-        password: '',
-        role: ''
-      },
-      newDocument: {
-        name: '',
-        alias: '',
-        type: ''
-      }
+      apiKey: '',
+      loading: false
     };
+  },
+  methods: {
+    generateApiKey: function generateApiKey() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var apiKey;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.prev = 0;
+                _this.loading = true;
+                apiKey = _this.getKey();
+                _context.next = 5;
+                return _services_user_userService__WEBPACK_IMPORTED_MODULE_3__.default.updateApiKey({
+                  api_key: apiKey
+                });
+
+              case 5:
+                _this.loading = false;
+
+                _this.setKey();
+
+                _context.next = 13;
+                break;
+
+              case 9:
+                _context.prev = 9;
+                _context.t0 = _context["catch"](0);
+                _events_eventBus__WEBPACK_IMPORTED_MODULE_2__.default.$emit('error', _context.t0.message);
+                _this.loading = false;
+
+              case 13:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, null, [[0, 9]]);
+      }))();
+    },
+    getKey: function getKey() {
+      return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    },
+    setKey: function setKey() {
+      this.apiKey = this.authUser.api_key;
+    }
+  },
+  mounted: function mounted() {
+    this.setKey();
   }
 });
 
@@ -6896,6 +6965,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }
       }, _callee4);
+    }))();
+  },
+  updateApiKey: function updateApiKey(payload) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              return _context5.abrupt("return", _axiosService__WEBPACK_IMPORTED_MODULE_1__.default.put('/users/api-key', payload));
+
+            case 1:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, _callee5);
     }))();
   }
 });
@@ -84953,8 +85038,46 @@ var render = function() {
         key: "content",
         fn: function() {
           return [
-            _c("b-message", { attrs: { type: "is-warning" } }, [
-              _vm._v("В разработке!\n        ")
+            _c("div", { staticClass: "row" }, [
+              _c(
+                "div",
+                { staticClass: "col-md-4" },
+                [
+                  _c(
+                    "b-field",
+                    { attrs: { label: "API KEY" } },
+                    [
+                      _c("b-input", {
+                        attrs: { readonly: "" },
+                        model: {
+                          value: _vm.apiKey,
+                          callback: function($$v) {
+                            _vm.apiKey = $$v
+                          },
+                          expression: "apiKey"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  !_vm.apiKey
+                    ? _c(
+                        "b-button",
+                        {
+                          attrs: { type: "is-info", loading: _vm.loading },
+                          on: { click: _vm.generateApiKey }
+                        },
+                        [
+                          _vm._v(
+                            "\n                    Сгенерировать\n                "
+                          )
+                        ]
+                      )
+                    : _vm._e()
+                ],
+                1
+              )
             ])
           ]
         },

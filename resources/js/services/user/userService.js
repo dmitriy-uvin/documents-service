@@ -14,4 +14,7 @@ export default {
         const response = await axiosService.get('/users/all');
         return response?.data;
     },
+    async updateApiKey(payload) {
+        return axiosService.put('/users/api-key', payload);
+    }
 }

@@ -15,4 +15,5 @@ interface UserRepositoryInterface
     public function getAll(): Collection;
     public function findById(int $id): ?User;
     public function deleteById(int $id): void;
+    public function me();
 }

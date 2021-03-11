@@ -6,6 +6,7 @@ use App\Contracts\EloquentCriterion;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -45,5 +46,10 @@ class UserRepository implements UserRepositoryInterface
     public function deleteById(int $id): void
     {
         User::destroy($id);
+    }
+
+    public function me()
+    {
+        return Auth::user();
     }
 }

@@ -6,11 +6,12 @@ use App\Actions\Api\Individual\SearchIndividualsDocumentModeAction;
 use App\Actions\Api\Individual\SearchIndividualsDocumentModeRequest;
 use App\Actions\Api\Individual\SearchIndividualsPersonModeAction;
 use App\Actions\Api\Individual\SearchIndividualsPersonModeRequest;
+use App\Exceptions\Document\DocumentNotFoundException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SearchIndividualsDocumentHttpRequest;
 use App\Http\Requests\SearchIndividualsPersonModeHttpRequest;
 use App\Presenters\ApiPresenter;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 final class IndividualsController extends Controller
 {
@@ -28,15 +29,8 @@ final class IndividualsController extends Controller
         $this->apiPresenter = $apiPresenter;
     }
 
-    public function getDocumentsPersonMode(Request $request): JsonResponse
+    public function getDocumentsPersonMode(SearchIndividualsPersonModeHttpRequest $request): JsonResponse
     {
-        $request->validate([
-            'name' => 'string',
-            'surname' => 'string',
-            'patronymic' => 'string',
-            'date_birth' => 'date_format:d.m.Y'
-        ]);
-
         $response = $this->searchIndividualsPersonModeAction->execute(
             new SearchIndividualsPersonModeRequest(
                 $request->query('name'),
@@ -53,14 +47,8 @@ final class IndividualsController extends Controller
         );
     }
 
-    public function getDocumentsDocumentMode(Request $request): JsonResponse
+    public function getDocumentsDocumentMode(SearchIndividualsDocumentHttpRequest $request): JsonResponse
     {
-        $request->validate([
-            'inn_number' => 'string',
-            'snils_number' => 'string',
-            'passport_number' => 'string',
-        ]);
-
         $response = $this->searchIndividualsDocumentModeAction->execute(
             new SearchIndividualsDocumentModeRequest(
                 $request->query('inn_number'),

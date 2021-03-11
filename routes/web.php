@@ -71,6 +71,8 @@ Route::group([
             ->name('users.view');
         Route::get('/users/all', [\App\Http\Controllers\UsersController::class, 'getAllUsers'])
             ->name('users.all');
+        Route::put('/users/api-key', [\App\Http\Controllers\UsersController::class, 'updateApiKey'])
+            ->name('users.api-key.update');
         Route::get('editor', [\App\Http\Controllers\EditorController::class, 'index'])
             ->name('editor');
         Route::post('/users', [\App\Http\Controllers\UsersController::class, 'createUser'])

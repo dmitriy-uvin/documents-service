@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\AdminOrDeveloper;
+use App\Http\Middleware\CanUseApiMiddleware;
 use App\Http\Middleware\NotWorkerMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -65,6 +66,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'admin.or.developer' => AdminOrDeveloper::class,
-        'not.worker' => NotWorkerMiddleware::class
+        'not.worker' => NotWorkerMiddleware::class,
+        'can.use.api' => CanUseApiMiddleware::class
     ];
 }
