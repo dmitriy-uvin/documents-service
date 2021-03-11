@@ -49,11 +49,13 @@ export default {
             try {
                 this.loading = true;
                 const apiKey = this.getKey();
-                await userService.updateApiKey({
+                const response = await userService.updateApiKey({
                     api_key: apiKey
                 });
                 this.loading = false;
-                this.setKey();
+                console.log(response);
+                console.log(response.api_key);
+                this.apiKey = response.api_key;
             } catch (error) {
                 EventBus.$emit('error', error.message);
                 this.loading = false;

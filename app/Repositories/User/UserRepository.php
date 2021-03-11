@@ -49,7 +49,7 @@ class UserRepository implements UserRepositoryInterface
         User::destroy($id);
     }
 
-    public function me()
+    public function me(): User
     {
         return Auth::user();
     }

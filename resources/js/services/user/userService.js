@@ -15,6 +15,7 @@ export default {
         return response?.data;
     },
     async updateApiKey(payload) {
-        return axiosService.put('/users/api-key', payload);
+        const response = await axiosService.put('/users/api-key', payload);
+        return response?.data;
     }
 }
