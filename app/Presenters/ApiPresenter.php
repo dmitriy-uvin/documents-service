@@ -40,7 +40,7 @@ class ApiPresenter
             'id' => $document->id,
             'type' => $document->type,
             'created_at' => $document->created_at,
-            'last_image' => $document->lastDocumentImage()->path,
+            'last_image' => url(Storage::url($document->lastDocumentImage()->path)),
             'all_images' => $this->presentDocumentImages($document->documentImage),
             'fields' => $this->presentFields($document->fields)
         ];
