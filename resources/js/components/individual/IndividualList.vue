@@ -278,6 +278,7 @@ export default {
             }, 1);
         },
         async clearSearch() {
+
             Object.keys(this.search).map(key => {
                 this.search[key] = '';
             });
@@ -286,6 +287,9 @@ export default {
             } else {
                 this.users = [];
             }
+            this.currentPage = 1;
+            this.lastPage = 1;
+
             setTimeout(() => {
                 document.getElementById('dadata-input').placeholder = 'ФИО';
                 document.querySelector('div.suggestions-suggestions').style.position = 'fixed';
@@ -299,6 +303,8 @@ export default {
                     this.users = await individualService.search(this.searchResult);
                     this.searchLoading = false;
                     this.isLoading = false;
+                    this.currentPage = 1;
+                    this.lastPage = 1;
                 } catch (error) {
                     this.searchLoading = false;
                     EventBus.$emit('error', error.message);

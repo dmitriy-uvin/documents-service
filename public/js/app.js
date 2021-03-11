@@ -3852,12 +3852,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this5.users = [];
 
               case 7:
+                _this5.currentPage = 1;
+                _this5.lastPage = 1;
                 setTimeout(function () {
                   document.getElementById('dadata-input').placeholder = 'ФИО';
                   document.querySelector('div.suggestions-suggestions').style.position = 'fixed';
                 }, 1);
 
-              case 8:
+              case 10:
               case "end":
                 return _context5.stop();
             }
@@ -3874,7 +3876,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context6.prev = _context6.next) {
               case 0:
                 if (_this6.searchClear) {
-                  _context6.next = 15;
+                  _context6.next = 17;
                   break;
                 }
 
@@ -3888,21 +3890,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this6.users = _context6.sent;
                 _this6.searchLoading = false;
                 _this6.isLoading = false;
-                _context6.next = 15;
+                _this6.currentPage = 1;
+                _this6.lastPage = 1;
+                _context6.next = 17;
                 break;
 
-              case 11:
-                _context6.prev = 11;
+              case 13:
+                _context6.prev = 13;
                 _context6.t0 = _context6["catch"](1);
                 _this6.searchLoading = false;
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_6__.default.$emit('error', _context6.t0.message);
 
-              case 15:
+              case 17:
               case "end":
                 return _context6.stop();
             }
           }
-        }, _callee6, null, [[1, 11]]);
+        }, _callee6, null, [[1, 13]]);
       }))();
     }
   }
