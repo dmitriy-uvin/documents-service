@@ -305,6 +305,7 @@ export default {
                     this.isLoading = false;
                     this.currentPage = 1;
                     this.lastPage = 1;
+                    this.total = this.users.length;
                 } catch (error) {
                     this.searchLoading = false;
                     EventBus.$emit('error', error.message);

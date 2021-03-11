@@ -3876,7 +3876,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context6.prev = _context6.next) {
               case 0:
                 if (_this6.searchClear) {
-                  _context6.next = 17;
+                  _context6.next = 18;
                   break;
                 }
 
@@ -3892,21 +3892,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this6.isLoading = false;
                 _this6.currentPage = 1;
                 _this6.lastPage = 1;
-                _context6.next = 17;
+                _this6.total = _this6.users.length;
+                _context6.next = 18;
                 break;
 
-              case 13:
-                _context6.prev = 13;
+              case 14:
+                _context6.prev = 14;
                 _context6.t0 = _context6["catch"](1);
                 _this6.searchLoading = false;
                 _events_eventBus__WEBPACK_IMPORTED_MODULE_6__.default.$emit('error', _context6.t0.message);
 
-              case 17:
+              case 18:
               case "end":
                 return _context6.stop();
             }
           }
-        }, _callee6, null, [[1, 13]]);
+        }, _callee6, null, [[1, 14]]);
       }))();
     }
   }
