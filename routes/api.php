@@ -14,7 +14,7 @@ Route::group([
                 'getDocumentsPersonMode'
             ]
         );
-        Route::get(
+        Route::post(
             '/{apiKey}/mode-person/collection',
             [
                 \App\Http\Controllers\Api\IndividualsController::class,
@@ -29,7 +29,7 @@ Route::group([
                 'getDocumentsDocumentMode'
             ]
         );
-        Route::get(
+        Route::post(
             '/{apiKey}/mode-document/collection',
             [
                 \App\Http\Controllers\Api\IndividualsController::class,
